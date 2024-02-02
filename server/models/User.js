@@ -20,6 +20,30 @@ const userSchema = new Schema(
                type: String,
                required: true,
           },
+          firstName: {
+               type: String,
+               required: true,
+          },
+          lastName: {
+               type: String,
+               required: true,
+          },
+          image: {
+               type: String,
+               default: "https://via.placeholder.com/150",
+          },
+          channels: [
+               {
+                    type: Schema.Types.ObjectId,
+                    ref: "Channel",
+               },
+          ],
+          conversations: [
+               {
+                    type: Schema.Types.ObjectId,
+                    ref: "Conversation",
+               },
+          ],
      },
      // set this to use virtual below
      {
@@ -41,6 +65,20 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.isCorrectPassword = async function (password) {
      return bcrypt.compare(password, this.password);
 };
+
+userSchema.virtual("channels", {
+     ref: "Channel",
+     localField: "channels",
+     foreignField: "_id",
+     justOne: false,
+});
+
+userSchema.virtual("conversations", {
+     ref: "Conversation",
+     localField: "conversations",
+     foreignField: "_id",
+     justOne: false,
+});
 
 const User = mongoose.model("User", userSchema);
 
