@@ -2,7 +2,7 @@
 import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
-import Homepage from "./pages/Homepage.jsx";
+import Homepage from "./pages/Homepage/Homepage.jsx";
 
 // COMMENT: defines the router variable to create a new BrowserRouter
 const router = createBrowserRouter([
