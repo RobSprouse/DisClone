@@ -56,6 +56,32 @@ const resolvers = {
                     accessToken: newAccessToken,
                };
           },
+          createConversation: async (_, { name }, { user, res }) => {
+               const conversation = await Conversation.create({
+                    name,
+                    members: [user.id],
+               });
+
+               await User.findByIdAndUpdate(user.id, {
+                    $push: { conversations: conversation.id },
+               });
+
+               const newAccessToken = res.locals.newAccessToken; 
+
+               return {
+                    conversation,
+                    accessToken: newAccessToken,
+               };
+          },
+
+          sendMessage: async (_, { channelId, text }, { user }) => {
+               const message = await Message.create({
+                    text,
+                    userId: user.id,
+                    channelId,
+               });
+               return message;
+          },
      },
 };
 
