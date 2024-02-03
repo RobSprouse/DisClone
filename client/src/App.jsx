@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import AccessTokenContext from "../utils/AccessTokenContext.js";
+import AccessTokenContext from "./utils/AccessTokenContext";
 
 const httpLink = createHttpLink({
      uri: "/graphql",
