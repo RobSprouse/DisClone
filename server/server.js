@@ -18,8 +18,8 @@ const PORT = process.env.PORT || 3001;
 // COMMENT: sets up the Express app middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser()); // COMMENT: adds cookie parser to the middleware stack for use with JWT
-app.use(authMiddleware); // COMMENT: adds the authentication middleware to the middleware stack
+app.use(cookieParser()); // COMMENT: adds cookie parser
+app.use(authMiddleware); // COMMENT: adds the authentication middleware to the middleware stack and is used to authenticate the user
 
 // COMMENT: creates a new Apollo server with the schema and resolvers
 const server = new ApolloServer({
