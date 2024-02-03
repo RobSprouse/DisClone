@@ -43,6 +43,14 @@ const typeDefs = gql`
           image: String
      }
 
+     type Conversation {
+          id: ID!
+          name: String!
+          members: [User!]!
+          messages: [Message!]!
+          
+     }
+
      type Auth {
           accessToken: String
           refreshToken: String
@@ -55,6 +63,8 @@ const typeDefs = gql`
           createChannel(name: String!): Channel!
           sendDirectMessage(text: String!, userId: ID!, recipientId: ID!): DirectMessage!
           joinChannel(userId: ID!, channelId: ID!): User!
+          createConversation(name: String!): Conversation!
+
      }
 `;
 
