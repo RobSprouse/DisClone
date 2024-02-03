@@ -30,23 +30,44 @@ function authMiddleware(req, res, next) {
      const accessToken = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
      if (!accessToken) {
-          return next();
-     }
-
-     try {
           const refreshToken = req.cookies.refresh_token;
           if (!refreshToken) {
-               throw new AuthenticationError("Invalid refresh token");
+               return next();
           }
-          const { data } = jwt.verify(refreshToken, secret, { maxAge: accessExpiration });
 
-          // COMMENT: creates a new access token and attaches it to the response.locals object
-          const newTokens = signToken(data, res);
-          res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
+          try {
+               const { data } = jwt.verify(refreshToken, secret, { maxAge: accessExpiration });
 
-          req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
-     } catch {
-          console.log("Invalid access token");
+               // COMMENT: creates a new access token and attaches it to the response.locals object
+               const newTokens = signToken(data, res);
+               res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
+
+               req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
+          } catch {
+               console.log("Invalid refresh token");
+               return next();
+          }
+     } else {
+          try {
+               const refreshToken = req.cookies.refresh_token;
+               jwt.verify(refreshToken, secret, { maxAge: refreshExpiration });
+
+               try {
+                    const { data } = jwt.verify(accessToken, secret, { maxAge: accessExpiration });
+
+                    // COMMENT: creates a new access token and attaches it to the response.locals object
+                    const newTokens = signToken(data, res);
+                    res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
+
+                    req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
+               } catch {
+                    console.log("Invalid access token");
+                    return next();
+               }
+          } catch {
+               console.log("Invalid refresh token");
+               return next();
+          }
      }
 
      // COMMENT: Call the next middleware function
