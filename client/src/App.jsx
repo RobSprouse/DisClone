@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
 import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import AccessTokenContext from "./utils/AccessTokenContext";
+import { Outlet } from "react-router-dom";
+import LoginForm from "./components/LoginForm/LoginForm.jsx";
 
 const httpLink = createHttpLink({
      uri: "/graphql",
@@ -28,7 +29,7 @@ function App() {
      return (
           <ApolloProvider client={client}>
                <AccessTokenContext.Provider value={setAccessToken}>
-                    <Outlet />
+                    {accessToken ? <Outlet /> : <LoginForm />}
                </AccessTokenContext.Provider>
           </ApolloProvider>
      );

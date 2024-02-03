@@ -1,10 +1,10 @@
-// COMMENT: import the required modules
+// COMMENT: imports the required modules
 import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
 import Homepage from "./pages/Homepage/Homepage.jsx";
 
-// COMMENT: defines the router variable to create a new BrowserRouter
+// COMMENT: sets up the router and paths
 const router = createBrowserRouter([
      {
           path: "/",
@@ -19,5 +19,5 @@ const router = createBrowserRouter([
      },
 ]);
 
-// COMMENT: renders the RouterProvider component and passes the router variable as a prop
+// COMMENT: renders the router
 ReactDom.createRoot(document.getElementById("root")).render(<RouterProvider router={router} />);
