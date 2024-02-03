@@ -32,18 +32,6 @@ const userSchema = new Schema(
                type: String,
                default: "https://via.placeholder.com/150",
           },
-          channels: [
-               {
-                    type: Schema.Types.ObjectId,
-                    ref: "Channel",
-               },
-          ],
-          conversations: [
-               {
-                    type: Schema.Types.ObjectId,
-                    ref: "Conversation",
-               },
-          ],
      },
      // set this to use virtual below
      {
@@ -68,15 +56,15 @@ userSchema.methods.isCorrectPassword = async function (password) {
 
 userSchema.virtual("channels", {
      ref: "Channel",
-     localField: "channels",
-     foreignField: "_id",
+     localField: "_id",
+     foreignField: "members",
      justOne: false,
 });
 
 userSchema.virtual("conversations", {
      ref: "Conversation",
-     localField: "conversations",
-     foreignField: "_id",
+     localField: "_id",
+     foreignField: "members",
      justOne: false,
 });
 
