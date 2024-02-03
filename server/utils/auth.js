@@ -25,7 +25,7 @@ function signToken({ username, email, _id }, res) {
 
 // COMMENT: middleware function for authentication
 function authMiddleware(req, res, next) {
-     // COMMENT: Extract the access token from the Authorization header
+     // COMMENT: Extract a token from the Authorization header which is the access token
      const authHeader = req.headers.authorization;
      const accessToken = authHeader && authHeader.split(" ")[1]; // Bearer <token>
 
@@ -40,7 +40,7 @@ function authMiddleware(req, res, next) {
           }
           const { data } = jwt.verify(refreshToken, secret, { maxAge: accessExpiration });
 
-          // COMMENT: Re-sign the token and attach it to the response
+          // COMMENT: creates a new access token and attaches it to the response.locals object
           const newTokens = signToken(data, res);
           res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
 
