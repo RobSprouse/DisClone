@@ -11,8 +11,6 @@ import cookieParser from "cookie-parser";
 
 dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
 
-// const secret = process.env.TOKEN_SECRET; // COMMENT: assigns secret to the TOKEN_SECRET environment variable
-
 // COMMENT: creates an instance of an Express server and sets the port
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -59,21 +57,23 @@ const startApolloServer = async () => {
 // COMMENT: starts the Apollo server
 startApolloServer(typeDefs, resolvers);
 
+// const secret = process.env.TOKEN_SECRET; // COMMENT: assigns secret to the TOKEN_SECRET environment variable
+
 /* COMMENT: Shouldn't need this because the JWT access token will refresh in the middleware if the access token is valid when the user makes a request
-      // COMMENT: endpoint to refresh the token
-      app.post("/refresh_token", (req, res) => {
-           const refreshToken = req.cookies.refresh_token;
+// COMMENT: endpoint to refresh the token
+app.post("/refresh_token", (req, res) => {
+     const refreshToken = req.cookies.refresh_token;
       
-           if (!refreshToken) {
-                return res.sendStatus(401); // COMMENT: Unauthorized
-           }
-      
-           try {
-                const { data } = jwt.verify(refreshToken, secret);
-                const newTokens = signToken(data, res); // COMMENT: If verification is successful, sign a new token and send it back
-                res.json(newTokens);
-           } catch (err) {
-                console.error("Invalid refresh token", err);
-                res.sendStatus(403); // COMMENT: Forbidden
-           }
-      }); */
+     if (!refreshToken) {
+          return res.sendStatus(401); // COMMENT: Unauthorized
+     }
+     
+     try {
+          const { data } = jwt.verify(refreshToken, secret);
+          const newTokens = signToken(data, res); // COMMENT: If verification is successful, sign a new token and send it back
+          res.json(newTokens);
+     } catch (err) {
+          console.error("Invalid refresh token", err);
+          res.sendStatus(403); // COMMENT: Forbidden
+     }
+}); */
