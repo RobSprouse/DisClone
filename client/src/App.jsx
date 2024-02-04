@@ -1,22 +1,18 @@
-import { useState, useEffect } from "react";
-import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import AccessTokenContext from "./utils/AccessTokenContext";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import LoginForm from "./components/LoginForm/LoginForm.jsx";
-import SignUpForm from "./components/SignUpForm/SignUpForm.jsx";
+import SignUpForm from "./components/SignupForm/SignupForm.jsx";
 import Cookies from "js-cookie";
-import { useLocation } from "react-router-dom";
-
-const httpLink = createHttpLink({
-     uri: "/graphql",
-     credentials: "include",
-});
+import { createApolloClient } from "./utils/apolloClient";
+import { ApolloProvider } from "@apollo/client";
 
 function App() {
-     const location = useLocation();
      const [accessToken, setAccessToken] = useState(null);
      const [showSignUp, setShowSignUp] = useState(false);
+     const location = useLocation();
+
+     const client = useMemo(() => createApolloClient(accessToken), [accessToken]);
 
      useEffect(() => {
           const token = Cookies.get("access_token"); // read the access token from the cookie
@@ -25,28 +21,16 @@ function App() {
           }
      }, [location]);
 
-     const authLink = setContext((_, { headers }) => {
-          return {
-               headers: {
-                    ...headers,
-                    authorization: accessToken ? `Bearer ${accessToken}` : "",
-               },
-          };
-     });
-
-     const client = new ApolloClient({
-          link: authLink.concat(httpLink),
-          cache: new InMemoryCache(),
-     });
+     const toggleShowSignUp = useCallback(() => {
+          setShowSignUp((prevShowSignUp) => !prevShowSignUp);
+     }, []);
 
      return (
           <ApolloProvider client={client}>
                <AccessTokenContext.Provider value={setAccessToken}>
                     {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
                     {!accessToken && (
-                         <button onClick={() => setShowSignUp(!showSignUp)}>
-                              {showSignUp ? "Go to Login" : "Go to Sign Up"}
-                         </button>
+                         <button onClick={toggleShowSignUp}>{showSignUp ? "Go to Login" : "Go to Sign Up"}</button>
                     )}
                </AccessTokenContext.Provider>
           </ApolloProvider>

@@ -1,37 +1,45 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext.js";
 import { LOGIN_USER } from "../../utils/mutations.js";
 
 function LoginForm() {
-          
-     const [userFormData, setUserFormData] = useState({ username: "", password: "" });
      const setAccessToken = useContext(AccessTokenContext);
+     const [userFormData, setUserFormData] = useState({ username: "", password: "" });
+     const [errorMessage, setErrorMessage] = useState(null);
 
-     const [login, { data }] = useMutation(LOGIN_USER, {
-          onCompleted: (data) => {
-               // The login mutation has completed. Set the access token in the state.
-               setAccessToken(data.login.accessToken);
-          },
+     const handleCompleted = (data) => {
+          // The login mutation has completed. Set the access token in the state.
+          setAccessToken(data.login.accessToken);
+     };
+
+     const [login] = useMutation(LOGIN_USER, {
+          onCompleted: handleCompleted,
      });
 
-     const handleInputChange = (event) => {
+     const handleInputChange = useCallback((event) => {
           const { name, value } = event.target;
-          setUserFormData({ ...userFormData, [name]: value });
-     };
+          setUserFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+     }, []);
 
-     const handleSubmit = async (event) => {
-          event.preventDefault();
+     const handleSubmit = useCallback(
+          async (event) => {
+               event.preventDefault();
 
-          try {
-               const response = await login({
-                    variables: { ...userFormData },
-               });
-          } catch (err) {
-               console.error(err);
-          }
-          setUserFormData({ username: "", password: "" });
-     };
+               try {
+                    await login({ variables: { ...userFormData } });
+                    setUserFormData({ username: "", password: "" });
+                    setErrorMessage(null);
+               } catch (err) {
+                    setErrorMessage(
+                         err.message.includes("Invalid username or password")
+                              ? "Invalid username or password"
+                              : err.message,
+                    );
+               }
+          },
+          [login, userFormData],
+     );
 
      return (
           <form onSubmit={handleSubmit}>
@@ -56,6 +64,7 @@ function LoginForm() {
                <button disabled={!(userFormData.username && userFormData.password)} type="submit">
                     Log in
                </button>
+               {errorMessage && <p>{errorMessage}</p>}
           </form>
      );
 }
