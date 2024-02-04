@@ -35,6 +35,19 @@ const resolvers = {
                const { accessToken } = signToken(user, res);
                return { accessToken };
           },
+          logout: (_, __, { res }) => {
+               res.clearCookie("refresh_token", {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === "production",
+                    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+               });
+               res.clearCookie("access_token", {
+                    httpOnly: false, // make it accessible from JavaScript
+                    secure: process.env.NODE_ENV === "production", // use HTTPS in production
+                    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
+               });
+               return true;
+          },
           createChannel: async (_, { name, image }, { user, res }) => {
                const channel = await Channel.create({
                     name,

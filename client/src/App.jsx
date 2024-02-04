@@ -1,11 +1,15 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
-import AccessTokenContext from "./utils/AccessTokenContext";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import LoginForm from "./components/LoginForm/LoginForm.jsx";
-import SignUpForm from "./components/SignupForm/SignupForm.jsx";
 import Cookies from "js-cookie";
 import { createApolloClient } from "./utils/apolloClient";
 import { ApolloProvider } from "@apollo/client";
+import { ThemeProvider } from "@material-tailwind/react";
+import AccessTokenContext from "./utils/AccessTokenContext";
+import Navbar from "./components/Navbar/Navbar.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+import LoginForm from "./components/LoginForm/LoginForm.jsx";
+import SignUpForm from "./components/SignupForm/SignupForm.jsx";
+import "./app.css";
 
 function App() {
      const [accessToken, setAccessToken] = useState(null);
@@ -27,11 +31,19 @@ function App() {
 
      return (
           <ApolloProvider client={client}>
-               <AccessTokenContext.Provider value={setAccessToken}>
-                    {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
-                    {!accessToken && (
-                         <button onClick={toggleShowSignUp}>{showSignUp ? "Go to Login" : "Go to Sign Up"}</button>
-                    )}
+               <AccessTokenContext.Provider value={{ accessToken, setAccessToken }}>
+                    <React.StrictMode>
+                         <ThemeProvider>
+                              <Navbar />
+                              {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
+                              {!accessToken && (
+                                   <button onClick={toggleShowSignUp}>
+                                        {showSignUp ? "Go to Login" : "Go to Sign Up"}
+                                   </button>
+                              )}
+                              <Footer />
+                         </ThemeProvider>
+                    </React.StrictMode>
                </AccessTokenContext.Provider>
           </ApolloProvider>
      );
