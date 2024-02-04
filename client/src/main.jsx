@@ -3,6 +3,7 @@ import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
 import Homepage from "./pages/Homepage/Homepage.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
 
 // COMMENT: sets up the router and paths
 const router = createBrowserRouter([
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
                {
                     index: true,
                     element: <Homepage />,
+               },
+               {
+                    path: "/profile",
+                    element: <Profile />,
                },
           ],
      },

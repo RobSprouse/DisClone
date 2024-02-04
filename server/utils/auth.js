@@ -1,8 +1,11 @@
 // COMMENT: imports the required modules
 import jwt from "jsonwebtoken";
 import { AuthenticationError } from "apollo-server-express";
+import dotenv from "dotenv";
 
-const secret = process.env.TOKEN_SECRET;
+dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
+
+const secret = "disclone"; // process.env.TOKEN_SECRET;
 const accessExpiration = "15m"; // COMMENT: 15 minutes
 const refreshExpiration = "7d"; // COMMENT: 7 days
 
@@ -16,8 +19,17 @@ function signToken({ username, email, _id }, res) {
      // COMMENT: sets the refresh token in a cookie
      res.cookie("refresh_token", refreshToken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production", // COMMENT: use HTTPS in production
-          maxAge: 1000 * 60 * 60 * 24 * 7, // COMMENT: 7 days in milliseconds
+          secure: process.env.NODE_ENV === "production", // use HTTPS in production
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
+     });
+
+     // COMMENT: sets the access token in a cookie
+     res.cookie("access_token", accessToken, {
+          httpOnly: false, // make it accessible from JavaScript
+          secure: process.env.NODE_ENV === "production", // use HTTPS in production
+          sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
+          maxAge: 1000 * 60 * 15, // 15 minutes in milliseconds
      });
 
      return { accessToken };
@@ -45,6 +57,7 @@ function authMiddleware(req, res, next) {
                req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
           } catch {
                console.log("Invalid refresh token");
+               req.user = null;
                return next();
           }
      } else {
@@ -62,10 +75,12 @@ function authMiddleware(req, res, next) {
                     req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
                } catch {
                     console.log("Invalid access token");
+                    req.user = null;
                     return next();
                }
           } catch {
                console.log("Invalid refresh token");
+               req.user = null;
                return next();
           }
      }

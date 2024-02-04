@@ -30,8 +30,8 @@ const resolvers = {
                return { accessToken };
           },
           // COMMENT: signup resolver, takes in the username, email, and password and returns the access and refresh tokens
-          signup: async (_, { username, email, password }, { res }) => {
-               const user = await User.create({ username, email, password });
+          signup: async (_, { username, email, password, firstName, lastName, image }, { res }) => {
+               const user = await User.create({ username, email, password, firstName, lastName, image });
                const { accessToken } = signToken(user, res);
                return { accessToken };
           },
@@ -66,7 +66,7 @@ const resolvers = {
                     $push: { conversations: conversation.id },
                });
 
-               const newAccessToken = res.locals.newAccessToken; 
+               const newAccessToken = res.locals.newAccessToken;
 
                return {
                     conversation,

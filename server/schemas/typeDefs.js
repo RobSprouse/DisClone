@@ -9,14 +9,13 @@ const typeDefs = gql`
      }
 
      type User {
-          _id: ID!
+          _id: ID
           username: String!
           email: String!
+          password: String!
           firstName: String!
           lastName: String!
           image: String
-          channels: [Channel]
-          conversations: [Message]
      }
 
      type DirectMessage {
@@ -48,7 +47,6 @@ const typeDefs = gql`
           name: String!
           members: [User!]!
           messages: [Message!]!
-          
      }
 
      type Auth {
@@ -58,13 +56,19 @@ const typeDefs = gql`
 
      type Mutation {
           login(username: String!, password: String!): Auth
-          signup(username: String!, email: String!, password: String!): Auth
+          signup(
+               username: String!
+               email: String!
+               password: String!
+               firstName: String!
+               lastName: String!
+               image: String
+          ): Auth
           sendMessage(text: String!, userId: ID!, channelId: ID!): Message!
           createChannel(name: String!): Channel!
           sendDirectMessage(text: String!, userId: ID!, recipientId: ID!): DirectMessage!
           joinChannel(userId: ID!, channelId: ID!): User!
           createConversation(name: String!): Conversation!
-
      }
 `;
 

@@ -9,3 +9,26 @@ export const LOGIN_USER = gql`
           }
      }
 `;
+
+// COMMENT: defines the signup mutation and exports it
+export const SIGNUP_USER = gql`
+     mutation SignupUser(
+          $username: String!
+          $email: String!
+          $password: String!
+          $firstName: String!
+          $lastName: String!
+          $image: String
+     ) {
+          signup(
+               username: $username
+               email: $email
+               password: $password
+               firstName: $firstName
+               lastName: $lastName
+               image: $image
+          ) {
+               accessToken
+          }
+     }
+`;
