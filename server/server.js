@@ -4,7 +4,7 @@ import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 import db from "./config/connection.js";
-import { authMiddleware, signToken } from "./utils/auth.js";
+import { authMiddleware } from "./utils/auth.js";
 // import jwt from "jsonwebtoken"; // COMMENT: may not be needed her
 import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
@@ -37,7 +37,7 @@ const server = new ApolloServer({
           credentials: true,
      },
      context: ({ req }) => {
-          return  req ; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
+          return req; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
      },
 });
 
