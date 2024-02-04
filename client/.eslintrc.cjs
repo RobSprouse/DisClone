@@ -10,7 +10,6 @@ module.exports = {
           "plugin:import/warnings",
           "plugin:react-perf/recommended",
           "prettier",
-          "prettier/react",
      ],
      parserOptions: { ecmaVersion: "latest", sourceType: "module" },
      settings: { react: { version: "detect" } },
