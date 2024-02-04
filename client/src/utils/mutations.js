@@ -32,3 +32,9 @@ export const SIGNUP_USER = gql`
           }
      }
 `;
+
+export const LOGOUT_USER = gql`
+     mutation {
+          logout
+     }
+`;

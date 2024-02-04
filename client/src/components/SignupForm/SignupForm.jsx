@@ -2,9 +2,10 @@ import { useState, useContext, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext.js";
 import { SIGNUP_USER } from "../../utils/mutations.js";
+import { Button } from "@material-tailwind/react";
 
 function SignUpForm() {
-     const setAccessToken = useContext(AccessTokenContext);
+     const { setAccessToken } = useContext(AccessTokenContext);
 
      const [userFormData, setUserFormData] = useState({
           username: "",
@@ -59,73 +60,75 @@ function SignUpForm() {
      );
 
      return (
-          <form onSubmit={handleSubmit}>
-               <input
-                    type="text"
-                    placeholder="Username"
-                    name="username"
-                    value={userFormData.username}
-                    onChange={handleInputChange}
-                    required
-                    autoComplete="username"
-               />
-               <input
-                    type="email"
-                    placeholder="Email"
-                    name="email"
-                    value={userFormData.email}
-                    onChange={handleInputChange}
-                    required
-                    autoComplete="email"
-               />
-               <input
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    value={userFormData.password}
-                    onChange={handleInputChange}
-                    required
-                    autoComplete="new-password"
-               />
-               <input
-                    type="text"
-                    placeholder="First Name"
-                    name="firstName"
-                    value={userFormData.firstName}
-                    onChange={handleInputChange}
-                    required
-               />
-               <input
-                    type="text"
-                    placeholder="Last Name"
-                    name="lastName"
-                    value={userFormData.lastName}
-                    onChange={handleInputChange}
-                    required
-               />
-               <input
-                    type="text"
-                    placeholder="Image URL"
-                    name="image"
-                    value={userFormData.image}
-                    onChange={handleInputChange}
-               />
-               <button
-                    disabled={
-                         !(
-                              userFormData.username &&
-                              userFormData.email &&
-                              userFormData.password &&
-                              userFormData.firstName &&
-                              userFormData.lastName
-                         )
-                    }
-                    type="submit"
-               >
-                    Sign Up
-               </button>
-               {errorMessage && <p>{errorMessage}</p>}
-          </form>
+          <>
+               <form onSubmit={handleSubmit}>
+                    <input
+                         type="text"
+                         placeholder="Username"
+                         name="username"
+                         value={userFormData.username}
+                         onChange={handleInputChange}
+                         required
+                         autoComplete="username"
+                    />
+                    <input
+                         type="email"
+                         placeholder="Email"
+                         name="email"
+                         value={userFormData.email}
+                         onChange={handleInputChange}
+                         required
+                         autoComplete="email"
+                    />
+                    <input
+                         type="password"
+                         placeholder="Password"
+                         name="password"
+                         value={userFormData.password}
+                         onChange={handleInputChange}
+                         required
+                         autoComplete="new-password"
+                    />
+                    <input
+                         type="text"
+                         placeholder="First Name"
+                         name="firstName"
+                         value={userFormData.firstName}
+                         onChange={handleInputChange}
+                         required
+                    />
+                    <input
+                         type="text"
+                         placeholder="Last Name"
+                         name="lastName"
+                         value={userFormData.lastName}
+                         onChange={handleInputChange}
+                         required
+                    />
+                    <input
+                         type="text"
+                         placeholder="Image URL"
+                         name="image"
+                         value={userFormData.image}
+                         onChange={handleInputChange}
+                    />
+                    <Button
+                         disabled={
+                              !(
+                                   userFormData.username &&
+                                   userFormData.email &&
+                                   userFormData.password &&
+                                   userFormData.firstName &&
+                                   userFormData.lastName
+                              )
+                         }
+                         type="submit"
+                    >
+                         Sign Up
+                    </Button>
+                    {errorMessage && <p>{errorMessage}</p>}
+               </form>
+          </>
      );
 }
 

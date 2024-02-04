@@ -4,7 +4,7 @@ import AccessTokenContext from "../../utils/AccessTokenContext.js";
 import { LOGIN_USER } from "../../utils/mutations.js";
 
 function LoginForm() {
-     const setAccessToken = useContext(AccessTokenContext);
+     const { setAccessToken } = useContext(AccessTokenContext);
      const [userFormData, setUserFormData] = useState({ username: "", password: "" });
      const [errorMessage, setErrorMessage] = useState(null);
 

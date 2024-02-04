@@ -64,6 +64,7 @@ const typeDefs = gql`
                lastName: String!
                image: String
           ): Auth
+          logout: Boolean!
           sendMessage(text: String!, userId: ID!, channelId: ID!): Message!
           createChannel(name: String!): Channel!
           sendDirectMessage(text: String!, userId: ID!, recipientId: ID!): DirectMessage!
