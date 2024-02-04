@@ -8,6 +8,7 @@ import { authMiddleware, signToken } from "./utils/auth.js";
 // import jwt from "jsonwebtoken"; // COMMENT: may not be needed her
 import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
 
@@ -19,14 +20,24 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser()); // COMMENT: adds cookie parser
+app.use(
+     cors({
+          origin: ["http://localhost:3001", "https://studio.apollographql.com"], // allow requests from both origins
+          credentials: true,
+     }),
+);
 app.use(authMiddleware); // COMMENT: adds the authentication middleware to the middleware stack and is used to authenticate the user
 
 // COMMENT: creates a new Apollo server with the schema and resolvers
 const server = new ApolloServer({
      typeDefs: typeDefs,
      resolvers: resolvers,
+     cors: {
+          origin: "http://localhost:3001", // replace with your GraphQL server's origin
+          credentials: true,
+     },
      context: ({ req }) => {
-          return { user: req.user }; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
+          return  req ; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
      },
 });
 
