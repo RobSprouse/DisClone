@@ -4,6 +4,8 @@ import AccessTokenContext from "../../utils/AccessTokenContext.js";
 import { SIGNUP_USER } from "../../utils/mutations.js";
 
 function SignUpForm() {
+     const setAccessToken = useContext(AccessTokenContext);
+
      const [userFormData, setUserFormData] = useState({
           username: "",
           email: "",
@@ -12,15 +14,15 @@ function SignUpForm() {
           lastName: "",
           image: "",
      });
-     
-     const setAccessToken = useContext(AccessTokenContext);
+
+     const [errorMessage, setErrorMessage] = useState(null);
 
      const handleCompleted = (data) => {
           // The signup mutation has completed. Set the access token in the state.
           setAccessToken(data.signup.accessToken);
      };
 
-     const [signup, { data }] = useMutation(SIGNUP_USER, {
+     const [signup] = useMutation(SIGNUP_USER, {
           onCompleted: handleCompleted,
      });
 
@@ -34,20 +36,24 @@ function SignUpForm() {
                event.preventDefault();
 
                try {
-                    const response = await signup({
-                         variables: { ...userFormData },
+                    await signup({ variables: { ...userFormData } });
+
+                    setUserFormData({
+                         username: "",
+                         email: "",
+                         password: "",
+                         firstName: "",
+                         lastName: "",
+                         image: "",
                     });
+                    setErrorMessage(null);
                } catch (err) {
-                    console.error(err);
+                    setErrorMessage(
+                         err.message.includes("E11000 duplicate key error collection")
+                              ? "Username or email already exists"
+                              : err.message,
+                    );
                }
-               setUserFormData({
-                    username: "",
-                    email: "",
-                    password: "",
-                    firstName: "",
-                    lastName: "",
-                    image: "",
-               });
           },
           [signup, userFormData],
      );
@@ -118,6 +124,7 @@ function SignUpForm() {
                >
                     Sign Up
                </button>
+               {errorMessage && <p>{errorMessage}</p>}
           </form>
      );
 }
