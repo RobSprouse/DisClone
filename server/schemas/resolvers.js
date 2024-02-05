@@ -2,30 +2,66 @@
 import bcrypt from "bcrypt";
 import { UserInputError } from "apollo-server-express";
 import { Channel, Conversation, User, Message } from "../models/models.js";
-import { signToken } from "../utils/auth.js";
+import { signToken, getUser } from "../utils/auth.js";
 
 // COMMENT: defines the resolvers
 const resolvers = {
      Query: {
-          user: async (_, __, { user }) => {
+          user: async (_, __, { res, accessToken }) => {
+               const user = getUser(accessToken);
+
                const userId = user._id;
                const userData = await User.findById(userId).populate("channelsData").populate("conversationsData");
-               return userData;
+
+               return { userData, accessToken };
           },
-          getUsers: async (_, __, { user }) => {
-               const users = await User.find({ _id: { $ne: user._id } }).select("_id username");
-               return users;
+          getUsers: async (_, __, { res }) => {
+               const users = await User.find();
+               const newAccessToken = res.locals.newAccessToken;
+               return { users, accessToken: newAccessToken };
+          },
+          getAllChannels: async (_, __, { res }) => {
+               const channels = await Channel.find();
+               const newAccessToken = res.locals.newAccessToken;
+               return { channels, accessToken: newAccessToken };
+          },
+          getChannels: async (_, __, { user, res }) => {
+               const channels = await Channel.find({ members: user.id });
+               const newAccessToken = res.locals.newAccessToken;
+               return { channels, accessToken: newAccessToken };
+          },
+          getAllConversations: async (_, __, { res }) => {
+               const conversations = await Conversation.find();
+               const newAccessToken = res.locals.newAccessToken;
+               return { conversations, accessToken: newAccessToken };
+          },
+          getConversations: async (_, __, { user, res }) => {
+               const conversations = await Conversation.find({ members: user.id })
+                    .populate("members")
+                    .populate("messages");
+               const newAccessToken = res.locals.newAccessToken;
+               return { conversations, accessToken: newAccessToken };
+          },
+          getChannelMessages: async (_, { channelId }, { res }) => {
+               const messages = await Message.find({ channelId }).populate("user");
+               const newAccessToken = res.locals.newAccessToken;
+               return { messages, accessToken: newAccessToken };
+          },
+          getConversationMessages: async (_, { conversationId }, { res }) => {
+               const messages = await Message.find({ conversationId }).populate("user");
+               const newAccessToken = res.locals.newAccessToken;
+               return { messages, accessToken: newAccessToken };
           },
      },
      Mutation: {
           // COMMENT: login resolver, takes in the username and password and returns the access and refresh tokens
           login: async (_, { username, password }, { res }) => {
                const user = await User.findOne({ username });
-               const valid = user && (await bcrypt.compare(password, user.password));
+               // const valid = user && (await bcrypt.compare(password, user.password));
 
-               if (!user || !valid) {
-                    throw new UserInputError("Invalid username or password");
-               }
+               // if (!user || !valid) {
+               //      throw new UserInputError("Invalid username or password");
+               // }
                const { accessToken } = signToken(user, res);
                return { accessToken };
           },
@@ -35,7 +71,8 @@ const resolvers = {
                const { accessToken } = signToken(user, res);
                return { accessToken };
           },
-          logout: (_, __, { res }) => {
+          logout: (_, __, { res, accessToken }) => {
+               console.log("azzzzzzzzzzzzzzzz ccessToken:", accessToken);
                res.clearCookie("refresh_token", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
@@ -46,37 +83,32 @@ const resolvers = {
                     secure: process.env.NODE_ENV === "production", // use HTTPS in production
                     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
                });
+               console.log("Refresh and access tokens cleared from cookies");
                return true;
           },
           createChannel: async (_, { name, image }, { user, res }) => {
+               // if (!user) {
+               //      throw new Error("Authentication required");
+               // }
+
+               const userId = user.id;
                const channel = await Channel.create({
                     name,
                     image,
-                    members: [user.id],
+                    members: [userId],
                     moderator: user.id,
                });
 
-               await User.findByIdAndUpdate(user.id, {
-                    $push: { channels: channel.id },
-               });
-
-               // COMMENT: Get the new access token from res.locals
                const newAccessToken = res.locals.newAccessToken;
 
-               // COMMENT: Return the new access token along with the channel data
                return {
                     channel,
                     accessToken: newAccessToken,
                };
           },
-          createConversation: async (_, { name }, { user, res }) => {
+          createConversation: async (_, { recipientId }, { user, res }) => {
                const conversation = await Conversation.create({
-                    name,
-                    members: [user.id],
-               });
-
-               await User.findByIdAndUpdate(user.id, {
-                    $push: { conversations: conversation.id },
+                    members: [user.id, recipientId],
                });
 
                const newAccessToken = res.locals.newAccessToken;
@@ -86,14 +118,65 @@ const resolvers = {
                     accessToken: newAccessToken,
                };
           },
+          addToConversation: async (_, { conversationId, recipientId }, { res }) => {
+               const conversation = await Conversation.findByIdAndUpdate(
+                    conversationId,
+                    {
+                         $addToSet: { members: recipientId },
+                    },
+                    { new: true },
+               );
 
-          sendMessage: async (_, { channelId, text }, { user }) => {
+               const newAccessToken = res.locals.newAccessToken;
+
+               return {
+                    conversation,
+                    accessToken: newAccessToken,
+               };
+          },
+          sendChannelMessage: async (_, { channelId, text }, { user, res }) => {
                const message = await Message.create({
                     text,
                     userId: user.id,
                     channelId,
                });
-               return message;
+
+               await Channel.findByIdAndUpdate(
+                    channelId,
+                    {
+                         $addToSet: { messages: message.id },
+                    },
+                    { new: true },
+               );
+
+               const newAccessToken = res.locals.newAccessToken;
+
+               return {
+                    message,
+                    accessToken: newAccessToken,
+               };
+          },
+          sendConversationMessage: async (_, { conversationId, text }, { user, res }) => {
+               const message = await Message.create({
+                    text,
+                    userId: user.id,
+                    conversationId,
+               });
+
+               await Conversation.findByIdAndUpdate(
+                    conversationId,
+                    {
+                         $addToSet: { messages: message.id },
+                    },
+                    { new: true },
+               );
+
+               const newAccessToken = res.locals.newAccessToken;
+
+               return {
+                    message,
+                    accessToken: newAccessToken,
+               };
           },
      },
 };
