@@ -4,11 +4,12 @@ import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 import db from "./config/connection.js";
-import { authMiddleware } from "./utils/auth.js";
+import { authMiddleware, getUser } from "./utils/auth.js";
 // import jwt from "jsonwebtoken"; // COMMENT: may not be needed her
 import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { get } from "http";
 
 dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
 
@@ -33,11 +34,32 @@ const server = new ApolloServer({
      typeDefs: typeDefs,
      resolvers: resolvers,
      cors: {
-          origin: "http://localhost:3001", // replace with your GraphQL server's origin
+          origin: "http://localhost:3001",
           credentials: true,
      },
-     context: ({ req }) => {
-          return req; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
+     context: ({ req, res }) => {
+          const authHeader = req.headers.authorization;
+          // console.log("❓ ~ authHeader:", authHeader);
+
+          const accessToken = authHeader && authHeader.split(" ")[1]; // Bearer <token>
+          // console.log("❓ ~ accessToken:", accessToken);
+
+          if (!accessToken) {
+               const accessToken = res.locals.newAccessToken || null;
+
+               // console.log("❓ ~ newAccessToken:", accessToken);
+               return { req, res, accessToken };
+          }
+          // const user = getUser(accessToken); // COMMENT: gets the user from the access token
+          // console.log("❓ ~ user:", user);
+
+          // req.user = user;
+          // // console.log("❓ ~ req.user:", req);
+
+          // const newAccessToken = res.locals.newAccessToken || null;
+          // console.log("❓ ~ newAccessToken:", newAccessToken);
+
+          return { req, res, accessToken }; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
      },
 });
 

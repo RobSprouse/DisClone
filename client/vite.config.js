@@ -5,9 +5,9 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
      plugins: [react()],
      build: {
-          base: "./", // Add this line
-          outDir: "dist", // Output directory for the build.
-          emptyOutDir: true, // Empty the output directory when the build starts.
+          base: "./", // COMMENT: sets the base path for the build
+          outDir: "dist", // COMMENT: Output directory for the build.
+          emptyOutDir: true, // COMMENT: Empty the output directory when the build starts.
      },
      server: {
           port: 3000,

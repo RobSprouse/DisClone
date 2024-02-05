@@ -3,50 +3,73 @@ import { gql } from "apollo-server-express";
 
 // COMMENT: defines the typeDefs and exports them
 const typeDefs = gql`
-     type Query {
-          user: User
-          getUsers: [User]
-     }
-
      type User {
-          _id: ID
+          _id: ID!
           username: String!
           email: String!
-          password: String!
           firstName: String!
           lastName: String!
-          image: String
+          image: String!
+          channels: [Channel!]!
+          conversations: [Conversation!]!
      }
 
-     type DirectMessage {
-          id: ID!
-          text: String!
-          userId: ID!
-          recipientId: ID!
-          timestamp: String!
+     type UsersResponse {
+          users: [User!]!
+          accessToken: String!
      }
 
      type Message {
-          id: ID!
+          _id: ID!
           text: String!
-          userId: ID!
-          channelId: ID!
+          user: User!
+          channel: Channel!
           timestamp: String!
      }
 
-     type Channel {
-          id: ID!
-          name: String!
+     type MessageData {
           messages: [Message!]!
+          accessToken: String!
+     }
+
+     type Channel {
+          _id: ID!
+          name: String!
+          image: String!
           members: [User!]!
-          image: String
+          moderator: User!
+     }
+
+     type ChannelData {
+          channels: [Channel!]!
+          accessToken: String!
+     }
+
+     type ChannelResponse {
+          channel: Channel!
+          accessToken: String!
      }
 
      type Conversation {
-          id: ID!
-          name: String!
+          _id: ID!
           members: [User!]!
           messages: [Message!]!
+     }
+
+     type ConversationData {
+          conversations: [Conversation!]!
+          accessToken: String!
+     }
+
+     type Query {
+          user(_id: ID!): User!
+          getUsers: UsersResponse!
+          getAllChannels: ChannelData!
+          getChannels: ChannelData!
+          getAllConversations: ConversationData!
+          getConversations: ConversationData!
+          getChannelMessages(channelId: ID!): MessageData!
+          getConversationMessages(conversationId: ID!): MessageData!
      }
 
      type Auth {
@@ -65,11 +88,11 @@ const typeDefs = gql`
                image: String
           ): Auth
           logout: Boolean!
-          sendMessage(text: String!, userId: ID!, channelId: ID!): Message!
-          createChannel(name: String!): Channel!
-          sendDirectMessage(text: String!, userId: ID!, recipientId: ID!): DirectMessage!
-          joinChannel(userId: ID!, channelId: ID!): User!
-          createConversation(name: String!): Conversation!
+          createChannel(name: String!, image: String): ChannelResponse!
+          createConversation(recipientId: ID!): ConversationData!
+          addToConversation(conversationId: ID!, recipientId: ID!): ConversationData!
+          sendChannelMessage(channelId: ID!, text: String!): MessageData!
+          sendConversationMessage(conversationId: ID!, text: String!): MessageData!
      }
 `;
 

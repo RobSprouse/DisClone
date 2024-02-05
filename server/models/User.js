@@ -41,18 +41,18 @@ const userSchema = new Schema(
      },
 );
 
-// Hash the password before saving the user model
-userSchema.pre("save", async function (next) {
-     if (this.isModified("password")) {
-          this.password = await bcrypt.hash(this.password, 10);
-     }
-     next();
-});
+// // Hash the password before saving the user model
+// userSchema.pre("save", async function (next) {
+//      if (this.isModified("password")) {
+//           this.password = await bcrypt.hash(this.password, 10);
+//      }
+//      next();
+// });
 
-// Method to check the entered password against the hash
-userSchema.methods.isCorrectPassword = async function (password) {
-     return bcrypt.compare(password, this.password);
-};
+// // Method to check the entered password against the hash
+// userSchema.methods.isCorrectPassword = async function (password) {
+//      return bcrypt.compare(password, this.password);
+// };
 
 userSchema.virtual("channels", {
      ref: "Channel",
