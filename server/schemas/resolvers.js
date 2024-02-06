@@ -2,18 +2,16 @@
 import bcrypt from "bcrypt";
 import { UserInputError } from "apollo-server-express";
 import { Channel, Conversation, User, Message } from "../models/models.js";
-import { signToken, getUser } from "../utils/auth.js";
+import { signToken } from "../utils/auth.js";
 
 // COMMENT: defines the resolvers
 const resolvers = {
      Query: {
-          user: async (_, __, { res, accessToken }) => {
-               const user = getUser(accessToken);
-
+          user: async (_, __, { user, res }) => {
                const userId = user._id;
                const userData = await User.findById(userId).populate("channelsData").populate("conversationsData");
-
-               return { userData, accessToken };
+               const newAccessToken = res.locals.newAccessToken;
+               return { userData, accessToken: newAccessToken };
           },
           getUsers: async (_, __, { res }) => {
                const users = await User.find();
@@ -71,8 +69,7 @@ const resolvers = {
                const { accessToken } = signToken(user, res);
                return { accessToken };
           },
-          logout: (_, __, { res, accessToken }) => {
-               console.log("azzzzzzzzzzzzzzzz ccessToken:", accessToken);
+          logout: (_, __, { res }) => {
                res.clearCookie("refresh_token", {
                     httpOnly: true,
                     secure: process.env.NODE_ENV === "production",
