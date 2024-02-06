@@ -10,6 +10,7 @@ import Footer from "./components/Footer/Footer.jsx";
 import LoginForm from "./components/LoginForm/LoginForm.jsx";
 import SignUpForm from "./components/SignupForm/SignupForm.jsx";
 import "./app.css";
+import TestNav from "./components/TestNav/TestNav.jsx";
 
 function App() {
      const [accessToken, setAccessToken] = useState(null);
@@ -34,6 +35,7 @@ function App() {
                <AccessTokenContext.Provider value={{ accessToken, setAccessToken }}>
                     <React.StrictMode>
                          <ThemeProvider>
+                              <TestNav />
                               <Navbar />
                               {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
                               {!accessToken && (
