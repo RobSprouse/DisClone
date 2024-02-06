@@ -6,8 +6,6 @@ import { GET_USER } from "../../utils/queries";
 const Homepage = () => {
 
 
-     // COMMENT: Destructure user data
-
      return (
           <div>
                <h1>Welcome home</h1>
