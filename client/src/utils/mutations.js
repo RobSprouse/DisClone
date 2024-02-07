@@ -145,4 +145,3 @@ export const SEND_CONVERSATION_MESSAGE = gql`
           }
      }
 `;
-
