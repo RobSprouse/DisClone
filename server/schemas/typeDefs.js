@@ -62,7 +62,7 @@ const typeDefs = gql`
      }
 
      type Query {
-          user(_id: ID!): User!
+          user: User!
           getUsers: UsersResponse!
           getAllChannels: ChannelData!
           getChannels: ChannelData!
