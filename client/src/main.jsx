@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
 import Homepage from "./pages/Homepage/Homepage.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
+import ChannelList from "./pages/Channel-list/ChannelList.jsx";
 
 // COMMENT: sets up the router and paths
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
                {
                     path: "/profile",
                     element: <Profile />,
+               },
+               {
+                    path: "/channels",
+                    element: <ChannelList />,
                },
           ],
      },

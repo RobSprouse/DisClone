@@ -36,16 +36,7 @@ export const GET_ALL_CHANNELS = gql`
                     _id
                     name
                     image
-                    members {
-                         _id
-                         username
-                    }
-                    moderator {
-                         _id
-                         username
-                    }
                }
-               accessToken
           }
      }
 `;

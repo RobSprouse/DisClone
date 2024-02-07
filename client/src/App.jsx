@@ -15,6 +15,7 @@ import "./app.css";
 function App() {
      const [accessToken, setAccessToken] = useState(null);
      const [showSignUp, setShowSignUp] = useState(false);
+     const [isLoading, setIsLoading] = useState(true);
      const location = useLocation();
 
      const client = useMemo(() => createApolloClient(accessToken), [accessToken]);
@@ -24,11 +25,15 @@ function App() {
           if (token) {
                setAccessToken(token);
           }
+          setIsLoading(false); // Set isLoading to false after reading the token
      }, [location]);
 
      const toggleShowSignUp = useCallback(() => {
           setShowSignUp((prevShowSignUp) => !prevShowSignUp);
      }, []);
+
+     // If isLoading is true, render a loading message or spinner
+     if (isLoading) return <></>;
 
      return (
           <ApolloProvider client={client}>
@@ -36,12 +41,14 @@ function App() {
                     <React.StrictMode>
                          <ThemeProvider>
                               <NavigationBar />
+                              <main>
                               {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
                               {!accessToken && (
                                    <button onClick={toggleShowSignUp}>
                                         {showSignUp ? "Go to Login" : "Go to Sign Up"}
                                    </button>
                               )}
+                              </main>
                               <Footer />
                          </ThemeProvider>
                     </React.StrictMode>
