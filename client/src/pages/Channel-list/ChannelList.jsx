@@ -1,36 +1,30 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client"; // Changed from useMutation to useQuery
 import { GET_ALL_CHANNELS } from "../../utils/queries";
 
 const ChannelList = () => {
-    // Define state variables using React hooks
-    const [getAllChannels] = useMutation(GET_ALL_CHANNELS); // Mutation hook for fetching channels
+    // Use useQuery instead of useMutation to fetch data (GET_ALL_CHANNELS is a query, not a mutation)
+    const { loading, error, data } = useQuery(GET_ALL_CHANNELS); // Use useQuery hook
+
     const [channels, setChannels] = useState([]); // State variable to store fetched channels
 
-    // Effect hook to fetch channels when the component mounts or the getAllChannels function changes
+    // useEffect to update channels state when data changes
     useEffect(() => {
-        // Function to fetch channels from the server
-        const fetchChannels = async () => {
-            try {
-                // Execute the getAllChannels mutation query and await the response
-                const { data } = await getAllChannels();
-                // Update the channels state with the fetched data
-                setChannels(data.getAllChannels);
-            } catch (error) {
-                console.error("Error fetching channels:", error);
-            }
-        };
+        if (data) {
+            setChannels(data.getAllChannels); // Update channels state with fetched data
+        }
+    }, [data]);
 
-        // Call the fetchChannels function when the component mounts or getAllChannels function changes
-        fetchChannels();
-    }, [getAllChannels]); // Dependency array ensures the effect runs only when getAllChannels changes
+    // Render loading state
+    if (loading) return <p>Loading...</p>;
+    // Render error state
+    if (error) return <p>Error fetching channels: {error.message}</p>;
 
     // Render the component
     return (
         <div>
             <h1>Channels</h1>
             <ul>
-                {/* Map over the channels array and render each channel as a list item */}
                 {channels.map((channel) => (
                     // Set a unique key for each list item using the channel's ID
                     <li key={channel.id}>{channel.name}</li>

@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext";
 import { LOGOUT_USER } from "../../utils/mutations";
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 function Navbar() {
      const { accessToken, setAccessToken } = useContext(AccessTokenContext);
@@ -19,7 +20,12 @@ function Navbar() {
 
      return (
           <nav>
+               <ul>
+                    <li>
                <h1>Navbar</h1>
+               <Link to="/">Channels List</Link>
+                    </li>
+               </ul>
                {accessToken && <button onClick={handleLogout}>Logout</button>}
           </nav>
      );
