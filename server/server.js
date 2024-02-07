@@ -4,14 +4,12 @@ import path from "path";
 import { ApolloServer } from "apollo-server-express";
 import dotenv from "dotenv";
 import db from "./config/connection.js";
-import { authMiddleware, getUser } from "./utils/auth.js";
+import { authMiddleware, verifyToken } from "./utils/auth.js";
 // import jwt from "jsonwebtoken"; // COMMENT: may not be needed her
 import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { get } from "http";
-
-dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
 
 // COMMENT: creates an instance of an Express server and sets the port
 const app = express();
@@ -38,15 +36,17 @@ const server = new ApolloServer({
           credentials: true,
      },
      context: ({ req, res }) => {
-          const authHeader = req.headers.authorization;
-          const accessToken = authHeader && authHeader.split(" ")[1]; // Bearer <token>
-          const payLoad = getUser(accessToken);
-          if (!accessToken) {
-               const accessToken = res.locals.newAccessToken || null;
-               const payLoad = getUser(accessToken);
-               return { req, res, payLoad };
+          const accessToken = req.accessToken || null;
+          const context = { req, res };
+          try {
+               if (accessToken) {
+                    context.payLoad = verifyToken(accessToken);
+                    context.accessToken = accessToken;
+               }
+          } catch (error) {
+               console.log("Token verification failed:", error);
           }
-          return { req, res, payLoad }; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
+          return context;
      },
 });
 
@@ -76,24 +76,3 @@ const startApolloServer = async () => {
 
 // COMMENT: starts the Apollo server
 startApolloServer(typeDefs, resolvers);
-
-// const secret = process.env.TOKEN_SECRET; // COMMENT: assigns secret to the TOKEN_SECRET environment variable
-
-/* COMMENT: Shouldn't need this because the JWT access token will refresh in the middleware if the access token is valid when the user makes a request
-// COMMENT: endpoint to refresh the token
-app.post("/refresh_token", (req, res) => {
-     const refreshToken = req.cookies.refresh_token;
-      
-     if (!refreshToken) {
-          return res.sendStatus(401); // COMMENT: Unauthorized
-     }
-     
-     try {
-          const { data } = jwt.verify(refreshToken, secret);
-          const newTokens = signToken(data, res); // COMMENT: If verification is successful, sign a new token and send it back
-          res.json(newTokens);
-     } catch (err) {
-          console.error("Invalid refresh token", err);
-          res.sendStatus(403); // COMMENT: Forbidden
-     }
-}); */

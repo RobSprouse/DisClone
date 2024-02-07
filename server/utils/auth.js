@@ -40,71 +40,48 @@ function signToken({ username, email, _id }, res) {
 
 // COMMENT: middleware function for authentication
 function authMiddleware(req, res, next) {
-     // COMMENT: Extract a token from the Authorization header which is the access token
      const authHeader = req.headers.authorization;
-     const accessToken = authHeader && authHeader.split(" ")[1]; // Bearer <token>
+     const accessToken = authHeader && authHeader.split(" ")[1];
 
      if (!accessToken) {
           const refreshToken = req.cookies.refresh_token;
           if (!refreshToken) {
                return next();
           }
-
           try {
-               const { data } = jwt.verify(refreshToken, secret, { maxAge: accessExpiration });
-
-               // COMMENT: creates a new access token and attaches it to the response.locals object
-               const newTokens = signToken(data, res);
-               res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
-               // console.log(
-               //      "!accessToken, refreshToken, new access token set in locals cookie and refresh token re-signed",
-               // );
-               req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
-          } catch {
-               console.log("Invalid refresh token");
-               req.user = null;
+               const { data } = jwt.verify(refreshToken, secret);
+               const { accessToken: newAccessToken } = signToken(data, res);
+               req.accessToken = newAccessToken;
+               return next();
+          } catch (error) {
+               console.log("Not authenticated: ", error.message);
                return next();
           }
      } else {
+          const refreshToken = req.cookies.refresh_token;
+
           try {
-               const refreshToken = req.cookies.refresh_token;
-               jwt.verify(refreshToken, secret, { maxAge: refreshExpiration });
-
-               try {
-                    const { data } = jwt.verify(accessToken, secret, { maxAge: accessExpiration });
-
-                    // COMMENT: creates a new access token and attaches it to the response.locals object
-                    const newTokens = signToken(data, res);
-                    res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
-                    // console.log(
-                    //      "accessToken, refreshToken, new access token set in locals cookie and refresh token re-signed",
-                    // );
-                    req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
-               } catch {
-                    console.log("Invalid access token");
-                    req.user = null;
-                    return next();
-               }
-          } catch {
-               console.log("Invalid refresh token");
-               req.user = null;
+               jwt.verify(accessToken, secret);
+               const { data } = jwt.verify(refreshToken, secret);
+               const { accessToken: newAccessToken } = signToken(data, res);
+               req.accessToken = newAccessToken;
+               return next();
+          } catch (error) {
+               console.log("Not authenticated: ", error.message);
                return next();
           }
      }
-
-     // COMMENT: Call the next middleware function
-     next();
 }
 
-const getUser = (token) => {
+const verifyToken = (token) => {
      if (token) {
           try {
                return jwt.verify(token, secret);
           } catch (err) {
-               throw new AuthenticationError("Invalid token");
+               throw new AuthenticationError("Not authenticated");
           }
      }
 };
 
 // COMMENT: exports the defined functions and class
-export { authMiddleware, signToken, AuthenticationError, getUser };
+export { authMiddleware, signToken, AuthenticationError, verifyToken };
