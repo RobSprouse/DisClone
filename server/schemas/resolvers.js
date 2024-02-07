@@ -1,17 +1,31 @@
 // COMMENT: imports the required modules
 import bcrypt from "bcrypt";
-import { UserInputError } from "apollo-server-express";
+import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { Channel, Conversation, User, Message } from "../models/models.js";
-import { signToken } from "../utils/auth.js";
+import { signToken, getUser } from "../utils/auth.js";
 
 // COMMENT: defines the resolvers
 const resolvers = {
      Query: {
-          user: async (_, __, { user, res }) => {
-               const userId = user._id;
-               const userData = await User.findById(userId).populate("channelsData").populate("conversationsData");
-               const newAccessToken = res.locals.newAccessToken;
-               return { userData, accessToken: newAccessToken };
+          user: async (_, args, { res, payLoad }) => {
+               if (!payLoad) {
+                    throw new AuthenticationError("Not Authenticated");
+               }
+               const userId = payLoad.data._id;
+               const userData = await User.findById(userId)
+                    .populate({
+                         path: "channels",
+                         model: "Channel",
+                    })
+                    .populate({
+                         path: "conversations",
+                         model: "Conversation",
+                         populate: {
+                              path: "members",
+                              model: "User",
+                         },
+                    });
+               return userData;
           },
           getUsers: async (_, __, { res }) => {
                const users = await User.find();
@@ -80,7 +94,7 @@ const resolvers = {
                     secure: process.env.NODE_ENV === "production", // use HTTPS in production
                     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
                });
-               console.log("Refresh and access tokens cleared from cookies");
+               // console.log("Refresh and access tokens cleared from cookies");
                return true;
           },
           createChannel: async (_, { name, image }, { user, res }) => {

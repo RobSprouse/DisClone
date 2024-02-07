@@ -32,8 +32,8 @@ function signToken({ username, email, _id }, res) {
           maxAge: 1000 * 60 * 15, // 15 minutes in milliseconds
      });
 
-     console.log("New Access token set in cookie");
-     console.log("New Refresh token set in cookie");
+     // console.log("New Access token set in cookie");
+     // console.log("New Refresh token set in cookie");
 
      return { accessToken };
 }
@@ -56,9 +56,9 @@ function authMiddleware(req, res, next) {
                // COMMENT: creates a new access token and attaches it to the response.locals object
                const newTokens = signToken(data, res);
                res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
-               console.log(
-                    "!accessToken, refreshToken, new access token set in locals cookie and refresh token re-signed",
-               );
+               // console.log(
+               //      "!accessToken, refreshToken, new access token set in locals cookie and refresh token re-signed",
+               // );
                req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
           } catch {
                console.log("Invalid refresh token");
@@ -76,9 +76,9 @@ function authMiddleware(req, res, next) {
                     // COMMENT: creates a new access token and attaches it to the response.locals object
                     const newTokens = signToken(data, res);
                     res.locals.newAccessToken = newTokens.accessToken; // COMMENT: attaches the new access token to the response
-                    console.log(
-                         "accessToken, refreshToken, new access token set in locals cookie and refresh token re-signed",
-                    );
+                    // console.log(
+                    //      "accessToken, refreshToken, new access token set in locals cookie and refresh token re-signed",
+                    // );
                     req.user = data; // COMMENT: passed to the context object in ApolloServer for the resolvers to use
                } catch {
                     console.log("Invalid access token");
@@ -99,7 +99,7 @@ function authMiddleware(req, res, next) {
 const getUser = (token) => {
      if (token) {
           try {
-               return jwt.decode(token);
+               return jwt.verify(token, secret);
           } catch (err) {
                throw new AuthenticationError("Invalid token");
           }

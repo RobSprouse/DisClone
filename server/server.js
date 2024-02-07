@@ -39,27 +39,14 @@ const server = new ApolloServer({
      },
      context: ({ req, res }) => {
           const authHeader = req.headers.authorization;
-          // console.log("❓ ~ authHeader:", authHeader);
-
           const accessToken = authHeader && authHeader.split(" ")[1]; // Bearer <token>
-          // console.log("❓ ~ accessToken:", accessToken);
-
+          const payLoad = getUser(accessToken);
           if (!accessToken) {
                const accessToken = res.locals.newAccessToken || null;
-
-               // console.log("❓ ~ newAccessToken:", accessToken);
-               return { req, res, accessToken };
+               const payLoad = getUser(accessToken);
+               return { req, res, payLoad };
           }
-          // const user = getUser(accessToken); // COMMENT: gets the user from the access token
-          // console.log("❓ ~ user:", user);
-
-          // req.user = user;
-          // // console.log("❓ ~ req.user:", req);
-
-          // const newAccessToken = res.locals.newAccessToken || null;
-          // console.log("❓ ~ newAccessToken:", newAccessToken);
-
-          return { req, res, accessToken }; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
+          return { req, res, payLoad }; // COMMENT: adds the user to the context so it can be accessed in the resolvers i.e. req.user.id, req.user.username, req.user.email
      },
 });
 

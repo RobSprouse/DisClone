@@ -3,8 +3,8 @@ import { gql } from "@apollo/client";
 
 // COMMENT: defines the user query and exports it
 export const GET_USER = gql`
-     query GetUser($_id: ID!) {
-          user(_id: $_id) {
+     query GetUser {
+          user {
                _id
                username
                email
@@ -15,29 +15,13 @@ export const GET_USER = gql`
                     _id
                     name
                     image
-                    members {
-                         _id
-                         username
-                    }
-                    moderator {
-                         _id
-                         username
-                    }
                }
                conversations {
                     _id
                     members {
                          _id
                          username
-                    }
-                    messages {
-                         _id
-                         text
-                         user {
-                              _id
-                              username
-                         }
-                         timestamp
+                         image
                     }
                }
           }
