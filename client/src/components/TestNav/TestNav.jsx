@@ -25,14 +25,23 @@ import {
   RocketLaunchIcon,
   Bars2Icon,
 } from "@heroicons/react/24/solid";
-import { useContext, useCallback } from "react";
-import { useMutation } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext";
 import { LOGOUT_USER } from "../../utils/mutations";
+import { useContext, useCallback } from "react";
+import { useMutation } from "@apollo/client";
 import "./Navbar.css";
 
+const { accessToken, setAccessToken } = useContext(AccessTokenContext);
+const [logout] = useMutation(LOGOUT_USER);
 
-
+const handleLogout = useCallback(async () => {
+     try {
+          await logout();
+          setAccessToken(null);
+     } catch (error) {
+          console.error("Failed to logout:", error);
+     }
+}, [logout, setAccessToken]);
  
 // profile menu component
 const profileMenuItems = [
@@ -49,17 +58,7 @@ const profileMenuItems = [
  
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const { accessToken, setAccessToken } = useContext(AccessTokenContext);
-  const [logout] = useMutation(LOGOUT_USER);
-
-  const handleLogout = useCallback(async () => {
-     try {
-          await logout();
-          setAccessToken(null);
-     } catch (error) {
-          console.error("Failed to logout:", error);
-     }
-}, [logout, setAccessToken]);
+ 
   const closeMenu = () => setIsMenuOpen(false);
  
   return (
@@ -102,15 +101,14 @@ function ProfileMenu() {
                 className: `h-4 w-4 ${isLastItem ? "text-red-500" : ""}`,
                 strokeWidth: 2,
               })}
-             {accessToken &&  <Typography
+              <Typography
                 as="span"
                 variant="small"
                 className="font-normal"
                 color={isLastItem ? "red" : "inherit"}
-                onClick={handleLogout}
               >
                 {label}
-              </Typography>}
+              </Typography>
             </MenuItem>
           );
         })}
@@ -121,9 +119,9 @@ function ProfileMenu() {
  
 
  
-function navigationBar() {
-
-const [isNavOpen, setIsNavOpen] = React.useState(false);
+export default function ComplexNavbar() {
+  const [isNavOpen, setIsNavOpen] = React.useState(false);
+ 
   const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
  
   React.useEffect(() => {
@@ -134,7 +132,6 @@ const [isNavOpen, setIsNavOpen] = React.useState(false);
   }, []);
  
   return (
-     <>
     <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6">
       <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
         <Typography
@@ -147,11 +144,21 @@ const [isNavOpen, setIsNavOpen] = React.useState(false);
         <div className="hidden lg:block">
 
         </div>
-         <ProfileMenu />
+ 
+        <ProfileMenu />
       </div>
     </Navbar>
-    </>
   );
 }
 
-export default navigationBar
+
+
+
+
+
+
+
+
+
+
+
