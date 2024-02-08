@@ -1,45 +1,56 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client"; // Changed from useMutation to useQuery
+import { useQuery } from "@apollo/client";
 import { GET_ALL_CHANNELS } from "../../utils/queries";
 
 const ChannelList = () => {
-     // Use useQuery instead of useMutation to fetch data (GET_ALL_CHANNELS is a query, not a mutation)
-     const { loading, error, data } = useQuery(GET_ALL_CHANNELS); // Use useQuery hook
+     const { loading, error, data } = useQuery(GET_ALL_CHANNELS);
+     const [channels, setChannels] = useState([]);
 
-     const [channels, setChannels] = useState([]); // State variable to store fetched channels
-
-     // useEffect to update channels state when data changes
      useEffect(() => {
           if (data) {
-               setChannels(data.getAllChannels.channels); // Update channels state with fetched data
+               setChannels(data.getAllChannels.channels);
           }
      }, [data]);
 
-     // Render loading state
+     const handleAddChannel = async (channelId, payload) => {
+          try {
+               // Your logic for adding a channel with payload data
+               console.log("Adding channel with ID:", channelId);
+               console.log("Payload:", payload);
+          } catch (error) {
+               console.error("Error adding channel:", error);
+          }
+     };
+
      if (loading) return <p>Loading...</p>;
-     // Render error state
      if (error) return <p>Error fetching channels: {error.message}</p>;
 
-/* COMMENT: the channel object inside the channels array will look like this, didn't grab the users in the channel:
-           {
-                __typename: "Channel",
-                _id: "65c2d27e99b04e13a02a0f34",
-                name: "Non Music",
-                image: "https://avatars.githubusercontent.com/u/16698336",
-              } */
+     if (channels.length === 0) {
+          return <p>No channels found.</p>;
+     }
+     const style = {
+          channelName: "font-bold text-2xl",
+          channelImage: "size-1/6 rounded-full object-cover object-center",
+          memberName: "",
+          memberImage: "size-profileImg rounded-full object-cover object-center",
+     };
 
-     // Render the component
      return (
           <div>
                <h1>Channels</h1>
-               {channels.length > 0 && (
-                    <ul>
-                         {channels.map((channel) => (
-                              // Set a unique key for each list item using the channel's ID
-                              <li key={channel.id}>{channel.name}</li>
-                         ))}
-                    </ul>
-               )}
+               <ul>
+                    {channels.map((channel) => (
+                         <li key={channel._id}>
+                              <div key={channel._id}>
+                                   <p className={style.channelName}>{channel.name}</p>
+                                   <img className={style.channelImage} src={channel.image} alt={channel.name} />
+                              </div>
+                              <button onClick={() => handleAddChannel(channel._id, { key: "value" })}>
+                                   Add Channel
+                              </button>
+                         </li>
+                    ))}
+               </ul>
           </div>
      );
 };
