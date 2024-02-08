@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import { GET_ALL_CHANNELS } from "../../utils/queries";
 
 const ChannelList = () => {
      const { loading, error, data } = useQuery(GET_ALL_CHANNELS);
      const [channels, setChannels] = useState([]);
+     const navigate = useNavigate();
 
      useEffect(() => {
           if (data) {
@@ -14,9 +16,11 @@ const ChannelList = () => {
 
      const handleAddChannel = async (channelId, payload) => {
           try {
-               // Your logic for adding a channel with payload data
                console.log("Adding channel with ID:", channelId);
                console.log("Payload:", payload);
+
+               // Navigate to the messages page with specific parameters
+               navigate("/messages", { state: { id: channelId, type: "channel" } });
           } catch (error) {
                console.error("Error adding channel:", error);
           }
