@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import Homepage from "./pages/Homepage/Homepage.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import ChannelList from "./pages/Channel-list/ChannelList.jsx";
+import Messages from "./components/Messages/Messages.jsx";
 
 // COMMENT: sets up the router and paths
 const router = createBrowserRouter([
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
                {
                     path: "/channels",
                     element: <ChannelList />,
+               },
+               {
+                    path: "/messages",
+                    element: <Messages />,
                },
           ],
      },

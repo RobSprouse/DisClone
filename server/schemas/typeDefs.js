@@ -74,7 +74,6 @@ const typeDefs = gql`
 
      type Auth {
           accessToken: String
-          refreshToken: String
      }
 
      type Mutation {

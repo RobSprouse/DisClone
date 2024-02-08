@@ -2,15 +2,24 @@
 import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { Channel, Conversation, User, Message } from "../models/models.js";
-import { signToken, getUser } from "../utils/auth.js";
+import { signToken, verifyToken } from "../utils/auth.js";
+
+const auth = (fn) => async (_, args, context, info) => {
+     if (!context.accessToken) {
+          throw new AuthenticationError("Not Authenticated");
+     }
+     const validToken = verifyToken(context.accessToken);
+     if (!validToken) {
+          throw new AuthenticationError("Invalid token");
+     }
+
+     return fn(_, args, context, info);
+};
 
 // COMMENT: defines the resolvers
 const resolvers = {
      Query: {
-          user: async (_, args, { res, payLoad }) => {
-               if (!payLoad) {
-                    throw new AuthenticationError("Not Authenticated");
-               }
+          user: auth(async (_, args, { __, payLoad }) => {
                const userId = payLoad.data._id;
                const userData = await User.findById(userId)
                     .populate({
@@ -26,44 +35,57 @@ const resolvers = {
                          },
                     });
                return userData;
-          },
-          getUsers: async (_, __, { res }) => {
+          }),
+          getUsers: auth(async (_, __, { res, accessToken }) => {
                const users = await User.find();
-               const newAccessToken = res.locals.newAccessToken;
-               return { users, accessToken: newAccessToken };
-          },
-          getAllChannels: async (_, __, { res }) => {
+               return users;
+          }),
+          getAllChannels: auth(async (_, __, { res, accessToken }) => {
                const channels = await Channel.find();
-               const newAccessToken = res.locals.newAccessToken;
-               return { channels, accessToken: newAccessToken };
-          },
-          getChannels: async (_, __, { user, res }) => {
+               return { channels };
+          }),
+          getChannels: auth(async (_, __, { user, res, accessToken }) => {
+               if (!accessToken) {
+                    throw new AuthenticationError("Not Authenticated");
+               }
                const channels = await Channel.find({ members: user.id });
                const newAccessToken = res.locals.newAccessToken;
                return { channels, accessToken: newAccessToken };
-          },
-          getAllConversations: async (_, __, { res }) => {
+          }),
+          getAllConversations: auth(async (_, __, { res, accessToken }) => {
+               if (!accessToken) {
+                    throw new AuthenticationError("Not Authenticated");
+               }
                const conversations = await Conversation.find();
                const newAccessToken = res.locals.newAccessToken;
                return { conversations, accessToken: newAccessToken };
-          },
-          getConversations: async (_, __, { user, res }) => {
+          }),
+          getConversations: auth(async (_, __, { user, res, accessToken }) => {
+               if (!accessToken) {
+                    throw new AuthenticationError("Not Authenticated");
+               }
                const conversations = await Conversation.find({ members: user.id })
                     .populate("members")
                     .populate("messages");
                const newAccessToken = res.locals.newAccessToken;
                return { conversations, accessToken: newAccessToken };
-          },
-          getChannelMessages: async (_, { channelId }, { res }) => {
+          }),
+          getChannelMessages: auth(async (_, { channelId }, { res, accessToken }) => {
+               if (!accessToken) {
+                    throw new AuthenticationError("Not Authenticated");
+               }
                const messages = await Message.find({ channelId }).populate("user");
                const newAccessToken = res.locals.newAccessToken;
                return { messages, accessToken: newAccessToken };
-          },
-          getConversationMessages: async (_, { conversationId }, { res }) => {
+          }),
+          getConversationMessages: auth(async (_, { conversationId }, { res, accessToken }) => {
+               if (!accessToken) {
+                    throw new AuthenticationError("Not Authenticated");
+               }
                const messages = await Message.find({ conversationId }).populate("user");
                const newAccessToken = res.locals.newAccessToken;
                return { messages, accessToken: newAccessToken };
-          },
+          }),
      },
      Mutation: {
           // COMMENT: login resolver, takes in the username and password and returns the access and refresh tokens
