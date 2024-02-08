@@ -31,8 +31,8 @@ const Homepage = () => {
 
      // TODO: create a function that on click, it will react navigate to the messages component and will pass the conversation _id or channel _id to the messages component
 
-     const retrieveMessages = (id) => {
-          navigate("/messages", { state: { id } });
+     const retrieveMessages = (id, type) => {
+          navigate("/messages", { state: { id, type } });
      };
 
      return (
@@ -42,14 +42,14 @@ const Homepage = () => {
                          <h1>Welcome {user.username}</h1>
                          <h2>Channels</h2>
                          {user.channels.map((channel) => (
-                              <div key={channel._id} onClick={() => retrieveMessages(channel._id)}>
+                              <div key={channel._id} onClick={() => retrieveMessages(channel._id, "channel")}>
                                    <p className={style.channelName}>{channel.name}</p>
                                    <img className={style.channelImage} src={channel.image} alt={channel.name} />
                               </div>
                          ))}
                          <h2>Conversations</h2>
                          {user.conversations.map((conversation) => (
-                              <div key={conversation._id} onClick={() => retrieveMessages(conversation._id)}>
+                              <div key={conversation._id} onClick={() => retrieveMessages(conversation._id, "conversation")}>
                                    <h3>Conversation ID: {conversation._id}</h3>
                                    {conversation.members
                                         .filter((member) => member._id !== user._id)
