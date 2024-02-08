@@ -30,7 +30,7 @@ const userSchema = new Schema(
           },
           image: {
                type: String,
-               default: "https://via.placeholder.com/150",
+               default: "https://avatars.githubusercontent.com/u/47702913",
           },
      },
      // set this to use virtual below
