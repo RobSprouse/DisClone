@@ -35,6 +35,7 @@
      "homepage": "https://github.com/RobSprouse/DisClone#readme",
      "dependencies": {
           "concurrently": "^8.2.2",
+          "faker": "^6.6.6",
           "prettier": "^3.2.4"
      }
 }
