@@ -64,6 +64,7 @@ const typeDefs = gql`
      type Query {
           user: User!
           getUsers: UsersResponse!
+          getAllUsers: UsersResponse!
           getAllChannels: ChannelData!
           getChannels: ChannelData!
           getAllConversations: ConversationData!
