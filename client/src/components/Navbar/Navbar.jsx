@@ -122,6 +122,9 @@ export default function NavigationBar() {
                                    <Link to="/channels" className="mr-4 ml-2 py-1.5 font-medium">
                                         List of Channels
                                    </Link>
+                                   <Link to="/users" className="mr-4 ml-2 py-1.5 font-medium">
+                                        Users
+                                   </Link>
                                    <div className="hidden lg:block"></div>
                                    <ProfileMenu />
                               </>

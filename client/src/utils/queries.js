@@ -28,6 +28,19 @@ export const GET_USER = gql`
      }
 `;
 
+// COMMENT: defines the getAllUsers query and exports it
+export const GET_ALL_USERS = gql`
+     query GetAllUsers {
+          getAllUsers {
+               users {
+                    _id
+                    username
+                    image
+               }
+          }
+     }
+`;
+
 // COMMENT: defines the getAllChannels query and exports it
 export const GET_ALL_CHANNELS = gql`
      query GetAllChannels {
@@ -127,3 +140,5 @@ export const GET_CONVERSATION_MESSAGES = gql`
           }
      }
 `;
+
+
