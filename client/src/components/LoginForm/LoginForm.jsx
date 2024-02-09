@@ -44,7 +44,7 @@ function LoginForm() {
 
      return (
           <>
-            <div className="flex items-center justify-center mt-20">
+            <div className="flex items-center justify-center mt-10">
                <Card color="transparent" shadow={false}>
                     <Typography variant="h4" color="blue-gray">
                          Log In

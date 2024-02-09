@@ -128,112 +128,114 @@ function SignUpForm() {
                     {errorMessage && <p>{errorMessage}</p>}
                </form> */}
 
-               <Card color="transparent" shadow={false}>
-                    <Typography variant="h4" color="blue-gray">
-                         Log In
-                    </Typography>
-                    <Typography color="gray" className="mt-1 font-normal">
-                         Nice to meet you! Enter your details to register.
-                    </Typography>
-                    <form onSubmit={handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-                         <div className="mb-1 flex flex-col gap-6">
-                              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                   First Name
-                              </Typography>
-                              <Input
-                                   type="text"
-                                   name="firstName"
-                                   value={userFormData.firstName}
-                                   onChange={handleInputChange}
-                                   required
-                                   size="lg"
-                                   placeholder="First Name"
-                                   autoComplete="name"
-                                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                   labelProps={{
-                                        className: "before:content-none after:content-none",
-                                   }}
-                              />
-                              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                   Last Name
-                              </Typography>
-                              <Input
-                                   type="text"
-                                   name="lastName"
-                                   value={userFormData.lastName}
-                                   onChange={handleInputChange}
-                                   required
-                                   size="lg"
-                                   placeholder="Last Name"
-                                   autoComplete="lastname"
-                                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                   labelProps={{
-                                        className: "before:content-none after:content-none",
-                                   }}
-                              />
-                              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                   Email
-                              </Typography>
-                              <Input
-                                   type="text"
-                                   name="email"
-                                   value={userFormData.email}
-                                   onChange={handleInputChange}
-                                   required
-                                   size="lg"
-                                   placeholder="email@example.com"
-                                   autoComplete="email"
-                                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                   labelProps={{
-                                        className: "before:content-none after:content-none",
-                                   }}
-                              />
-                              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                   UserName
-                              </Typography>
-                              <Input
-                                   type="text"
-                                   name="username"
-                                   value={userFormData.username}
-                                   onChange={handleInputChange}
-                                   required
-                                   size="lg"
-                                   placeholder="username"
-                                   autoComplete="username"
-                                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                   labelProps={{
-                                        className: "before:content-none after:content-none",
-                                   }}
-                              />
-                              <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                   Password
-                              </Typography>
-                              <Input
-                                   type="password"
-                                   name="password"
-                                   value={userFormData.password}
-                                   onChange={handleInputChange}
-                                   size="lg"
-                                   placeholder="********"
-                                   autoComplete="current-password"
-                                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                   required
-                                   labelProps={{
-                                        className: "before:content-none after:content-none",
-                                   }}
-                              />
-                         </div>
-                         <Button type="submit" className="mt-6" fullWidth>
+               <div className="flex items-center justify-center mt-10">
+                    <Card color="transparent" shadow={false}>
+                         <Typography variant="h4" color="blue-gray">
                               Sign Up
-                         </Button>
-                         <Typography color="gray" className="mt-4 text-center font-normal">
-                              Already have an account?{" "}
-                              <a href="#" className="font-medium text-gray-900">
-                                   Sign In
-                              </a>
                          </Typography>
-                    </form>
-               </Card>
+                         <Typography color="gray" className="mt-1 font-normal">
+                              Welcome to Disclone! Enter your details to register.
+                         </Typography>
+                         <form onSubmit={handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 items-center justify-center">
+                              <div className="mb-1 flex flex-col gap-6">
+                                   <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                        First Name
+                                   </Typography>
+                                   <Input
+                                        type="text"
+                                        name="firstName"
+                                        value={userFormData.firstName}
+                                        onChange={handleInputChange}
+                                        required
+                                        size="lg"
+                                        placeholder="First Name"
+                                        autoComplete="name"
+                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                        labelProps={{
+                                             className: "before:content-none after:content-none",
+                                        }}
+                                   />
+                                   <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                        Last Name
+                                   </Typography>
+                                   <Input
+                                        type="text"
+                                        name="lastName"
+                                        value={userFormData.lastName}
+                                        onChange={handleInputChange}
+                                        required
+                                        size="lg"
+                                        placeholder="Last Name"
+                                        autoComplete="lastname"
+                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                        labelProps={{
+                                             className: "before:content-none after:content-none",
+                                        }}
+                                   />
+                                   <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                        Email
+                                   </Typography>
+                                   <Input
+                                        type="text"
+                                        name="email"
+                                        value={userFormData.email}
+                                        onChange={handleInputChange}
+                                        required
+                                        size="lg"
+                                        placeholder="email@example.com"
+                                        autoComplete="email"
+                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                        labelProps={{
+                                             className: "before:content-none after:content-none",
+                                        }}
+                                   />
+                                   <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                        UserName
+                                   </Typography>
+                                   <Input
+                                        type="text"
+                                        name="username"
+                                        value={userFormData.username}
+                                        onChange={handleInputChange}
+                                        required
+                                        size="lg"
+                                        placeholder="username"
+                                        autoComplete="username"
+                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                        labelProps={{
+                                             className: "before:content-none after:content-none",
+                                        }}
+                                   />
+                                   <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                        Password
+                                   </Typography>
+                                   <Input
+                                        type="password"
+                                        name="password"
+                                        value={userFormData.password}
+                                        onChange={handleInputChange}
+                                        size="lg"
+                                        placeholder="********"
+                                        autoComplete="current-password"
+                                        className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                        required
+                                        labelProps={{
+                                             className: "before:content-none after:content-none",
+                                        }}
+                                   />
+                              </div>
+                              <Button type="submit" className="mt-6" fullWidth>
+                                   Sign Up
+                              </Button>
+                              <Typography color="gray" className="mt-8 text-center font-normal">
+                                   Already have an account?{" "}
+                                   <a href="#" className="font-medium text-gray-900">
+                                        Log In
+                                   </a>
+                              </Typography>
+                         </form>
+                    </Card>
+               </div>
           </>
      );
 }
