@@ -14,21 +14,21 @@ import {
      AccordionBody,
      Alert,
      Avatar,
-   } from "@material-tailwind/react";
-   import {
+} from "@material-tailwind/react";
+import {
      PresentationChartBarIcon,
      ShoppingBagIcon,
      UserCircleIcon,
      Cog6ToothIcon,
      InboxIcon,
      PowerIcon,
-   } from "@heroicons/react/24/solid";
-   import {
+} from "@heroicons/react/24/solid";
+import {
      ChevronRightIcon,
      ChevronDownIcon,
      CubeTransparentIcon,
      MagnifyingGlassIcon,
-   } from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/outline";
 
 const Homepage = () => {
      const [user, setUser] = useState(null);
@@ -56,11 +56,12 @@ const Homepage = () => {
      };
 
      return (
-          <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
+          <>
+               {/* <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
           <div>
                {user && (
                     <>
-                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl">Welcome! {user.username}</Typography>
+                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl mb-5">Welcome! {user.username}</Typography>
                          <Typography varient="h5" color="blue-gray " className="font-bold text-xl">Channels</Typography>
                          {user.channels.map((channel) => (
                               <div  key={channel._id}>
@@ -68,7 +69,7 @@ const Homepage = () => {
                                    <img className={style.channelImage} src={channel.image} alt={channel.name} />
                               </div>
                          ))}
-                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl mt-6">Conversations</Typography>
+                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl mt-8">Conversations</Typography>
                          {user.conversations.map((conversation) => (
                               <div key={conversation._id}>
                                    <h3 className="invisible">{conversation._id}</h3>
@@ -89,9 +90,31 @@ const Homepage = () => {
                     </>
                )}
           </div>
-         </Card> 
+         </Card>  */}
+               <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
+                    <div >
+                         {user && (
+                              <>
+                                   {user.conversations.map((conversation) => (
+                                        <section className="flex items-center -space-x-7 m-1">
+                                             {conversation.members
+                                                  .filter((member) => member._id !== user._id)
+                                                  .map((member) => (
+                                                       <Avatar
+                                                            variant="circular"
+                                                            alt="user 1"
+                                                            className="border-2 border-white hover:z-10 focus:z-10"
+                                                            src={member.image}
+                                                       />
+                                                  ))}
+                                        </section>
+                                   ))}
+                              </>
+                         )}
+                    </div>
+               </Card>
+          </>
      );
 };
-
 
 export default Homepage;
