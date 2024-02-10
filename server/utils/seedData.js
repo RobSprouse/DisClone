@@ -20,10 +20,9 @@ async function seedData() {
                lastName: faker.person.lastName(),
                image: faker.image.avatar(),
           });
+          await user.save(); // Save each user individually
           users.push(user);
      }
-
-     await User.insertMany(users);
 
      for (let i = 0; i < 10; i++) {
           const channel = new Channel({
@@ -35,10 +34,9 @@ async function seedData() {
                     .concat(users.slice(0, 10 - i))
                     .map((user) => user._id),
           });
+          await channel.save(); // Save each channel individually
           channels.push(channel);
      }
-
-     await Channel.insertMany(channels);
 
      for (let i = 0; i < users.length; i++) {
           const numConversations = faker.number.int({ min: 5, max: 10 });
@@ -51,6 +49,7 @@ async function seedData() {
                const conversation = new Conversation({
                     members: members,
                });
+               await conversation.save(); // Save each conversation individually
                conversations.push(conversation);
           }
      }
@@ -64,7 +63,7 @@ async function seedData() {
                     channelId: channels[i]._id,
                     timestamp: faker.date.recent(),
                });
-               await message.save();
+               await message.save(); // Save each message individually
 
                const channel = channels[i];
                channel.messages.push(message._id);
@@ -81,7 +80,7 @@ async function seedData() {
                     conversationId: conversations[i]._id,
                     timestamp: faker.date.recent(),
                });
-               await message.save();
+               await message.save(); // Save each message individually
 
                const conversation = conversations[i];
                conversation.messages.push(message._id);

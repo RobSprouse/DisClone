@@ -8,6 +8,11 @@ dotenv.config(); // COMMENT: loads environment variables from a .env file into p
 const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
 const accessExpiration = "15m"; // COMMENT: 15 minutes
 const refreshExpiration = "7d"; // COMMENT: 7 days
+let consoleLogCount = 0;
+function addToConsoleCount() {
+     consoleLogCount++;
+     return consoleLogCount;
+};
 
 // COMMENT: function to sign a token and return it
 function signToken({ username, email, _id }, res) {
@@ -46,14 +51,18 @@ function authMiddleware(req, res, next) {
 
      if (!accessToken) {
           if (!refreshToken) {
-               console.log("Not authenticated: ", "No token found");
+               console.log("No refresh token");
                return next();
           }
           try {
                const { data } = jwt.verify(refreshToken, secret);
+               console.log("Refresh token verified");
                const { accessToken: newAccessToken, refreshToken: newRefreshToken } = signToken(data, res);
                req.accessToken = newAccessToken;
                req.cookies.refresh_token = newRefreshToken;
+               console.log("New Refresh and Access tokens set in cookie");
+               addToConsoleCount();
+               console.log(consoleLogCount)
                return next();
           } catch (error) {
                console.log("Not authenticated: ", error.message);
@@ -65,9 +74,12 @@ function authMiddleware(req, res, next) {
           try {
                jwt.verify(accessToken, secret);
                const { data } = jwt.verify(refreshToken, secret);
-               const { refreshToken: newRefreshToken } = signToken(data, res);
-               req.cookies.refresh_token = newRefreshToken;
+               // const { refreshToken: newRefreshToken } = signToken(data, res);
+               // req.cookies.refresh_token = newRefreshToken;
                req.accessToken = accessToken;
+               console.log("Access token verified");
+               addToConsoleCount();
+               console.log(consoleLogCount)
                return next();
           } catch (error) {
                console.log("Not authenticated: ", error.message);
