@@ -114,7 +114,7 @@ export default function NavigationBar() {
           <>
                <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6 bg-gray-300">
                     <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-                         <Link to="/" className="mr-10 ml-2 py-1.5 font-large">
+                         <Link to="/" className="mr-10 ml-2 py-1.5 text-3xl font-bold ">
                               Disclone
                          </Link>
                          {accessToken && (
