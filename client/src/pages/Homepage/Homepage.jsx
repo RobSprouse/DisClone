@@ -35,17 +35,17 @@ const Homepage = () => {
      const [user, setUser] = useState(null);
      const { loading, error, data } = useQuery(GET_USER);
      const navigate = useNavigate();
-     
+
      useEffect(() => {
           if (data) {
                setUser(data.user);
           }
      }, [data]);
-     
+
      if (loading) {
           return <div>Loading...</div>;
      }
-     
+
      if (error) {
           return <div>Error! {error.message}</div>;
      }
@@ -98,10 +98,26 @@ const Homepage = () => {
           </div>
          </Card>  */}
                <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
-                    <div >
+                    <div>
                          {user && (
                               <>
+                              <Typography className="font-bold text-xl">Channels</Typography>
+                                   {user.channels.map((channel) => (
+                                        <div key={channel._id} onClick={() => retrieveMessages(channel._id, "channel")}>
+                                             <p className={style.channelName}>{channel.name}</p>
+                                             <Avatar
+                                                            variant="circular"
+                                                            alt="user 1"
+                                                            className="border-2 border-white hover:z-10 focus:z-10"
+                                                            src={channel.image}
+                                                       />
+                                        </div>
+
+                                   
+                                   ))}
+                                   <Typography className="font-bold text-xl">Conversations</Typography>
                                    {user.conversations.map((conversation) => (
+                                        <div key={conversation._id} onClick={() => retrieveMessages(conversation._id, "conversation")}>
                                         <section className="flex items-center -space-x-7 m-1">
                                              {conversation.members
                                                   .filter((member) => member._id !== user._id)
@@ -114,6 +130,7 @@ const Homepage = () => {
                                                        />
                                                   ))}
                                         </section>
+                                        </div>
                                    ))}
                               </>
                          )}
