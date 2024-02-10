@@ -1,0 +1,67 @@
+type User {
+     _id: ID!
+     username: String!
+     email: String!
+     firstName: String!
+     lastName: String!
+     image: String!
+     channels: [Channel!]!
+     conversations: [Conversation!]!
+}
+
+type UsersResponse {
+     users: [User!]!
+}
+
+type Message {
+     _id: ID!
+     text: String!
+     user: User!
+     timestamp: String!
+     updatedAt: String!
+}
+
+union ChannelOrConversation = Channel | Conversation
+
+type MessagesResponse {
+     messages: [Message!]!
+     data: ChannelOrConversation
+}
+
+type Channel {
+     _id: ID!
+     name: String!
+     image: String!
+     members: [User!]!
+     moderator: User!
+}
+
+type Conversation {
+     _id: ID!
+     members: [User!]!
+     messages: [Message!]!
+}
+
+type Query {
+     user: User!
+     getAllUsers: [User!]!
+     getAllChannels: [Channel!]!
+     getMessages(id: ID!, type: String!): MessagesResponse!
+}
+
+type Auth {
+     accessToken: String!
+}
+
+type Mutation {
+     login(username: String!, password: String!): Auth
+     signup(
+          username: String!
+          email: String!
+          password: String!
+          firstName: String!
+          lastName: String!
+          image: String
+     ): Auth
+     logout: Boolean!
+}

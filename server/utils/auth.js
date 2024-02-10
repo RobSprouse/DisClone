@@ -5,9 +5,14 @@ import dotenv from "dotenv";
 
 dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
 
-const secret = "disclone"; // process.env.TOKEN_SECRET;
+const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
 const accessExpiration = "15m"; // COMMENT: 15 minutes
 const refreshExpiration = "7d"; // COMMENT: 7 days
+let consoleLogCount = 0;
+function addToConsoleCount() {
+     consoleLogCount++;
+     return consoleLogCount;
+};
 
 // COMMENT: function to sign a token and return it
 function signToken({ username, email, _id }, res) {
@@ -42,32 +47,44 @@ function signToken({ username, email, _id }, res) {
 function authMiddleware(req, res, next) {
      const authHeader = req.headers.authorization;
      const accessToken = authHeader && authHeader.split(" ")[1];
+     const refreshToken = req.cookies.refresh_token;
 
      if (!accessToken) {
-          const refreshToken = req.cookies.refresh_token;
           if (!refreshToken) {
+               console.log("No refresh token");
                return next();
           }
           try {
                const { data } = jwt.verify(refreshToken, secret);
-               const { accessToken: newAccessToken } = signToken(data, res);
+               console.log("Refresh token verified");
+               const { accessToken: newAccessToken, refreshToken: newRefreshToken } = signToken(data, res);
                req.accessToken = newAccessToken;
+               req.cookies.refresh_token = newRefreshToken;
+               console.log("New Refresh and Access tokens set in cookie");
+               addToConsoleCount();
+               console.log(consoleLogCount)
                return next();
           } catch (error) {
                console.log("Not authenticated: ", error.message);
+               res.clearCookie("access_token");
+               res.clearCookie("refresh_token");
                return next();
           }
      } else {
-          const refreshToken = req.cookies.refresh_token;
-
           try {
                jwt.verify(accessToken, secret);
                const { data } = jwt.verify(refreshToken, secret);
-               const { accessToken: newAccessToken } = signToken(data, res);
-               req.accessToken = newAccessToken;
+               // const { refreshToken: newRefreshToken } = signToken(data, res);
+               // req.cookies.refresh_token = newRefreshToken;
+               req.accessToken = accessToken;
+               console.log("Access token verified");
+               addToConsoleCount();
+               console.log(consoleLogCount)
                return next();
           } catch (error) {
                console.log("Not authenticated: ", error.message);
+               res.clearCookie("access_token");
+               res.clearCookie("refresh_token");
                return next();
           }
      }

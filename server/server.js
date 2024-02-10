@@ -2,14 +2,19 @@
 import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
-import dotenv from "dotenv";
+import { PubSub } from "graphql-subscriptions";
+import { createServer } from "http";
+import { execute, subscribe } from "graphql";
+import { SubscriptionServer } from "subscriptions-transport-ws";
 import db from "./config/connection.js";
 import { authMiddleware, verifyToken } from "./utils/auth.js";
-// import jwt from "jsonwebtoken"; // COMMENT: may not be needed her
 import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { get } from "http";
+import { AuthenticationError } from "apollo-server-express";
+
+// COMMENT: creates an instance of PubSub for subscriptions
+const pubsub = new PubSub();
 
 // COMMENT: creates an instance of an Express server and sets the port
 const app = express();
@@ -21,7 +26,7 @@ app.use(express.json());
 app.use(cookieParser()); // COMMENT: adds cookie parser
 app.use(
      cors({
-          origin: ["http://localhost:3001", "https://studio.apollographql.com"], // allow requests from both origins
+          origin: ["http://localhost:3001", "https://studio.apollographql.com"], // allow requests from both origins // FIXME: change to the production URL when deploying
           credentials: true,
      }),
 );
@@ -37,16 +42,31 @@ const server = new ApolloServer({
      },
      context: ({ req, res }) => {
           const accessToken = req.accessToken || null;
-          const context = { req, res };
-          try {
-               if (accessToken) {
-                    context.payLoad = verifyToken(accessToken);
-                    context.accessToken = accessToken;
-               }
-          } catch (error) {
-               console.log("Token verification failed:", error);
-          }
+          const context = { req, res, pubsub };
+          context.payLoad = verifyToken(accessToken); // FIXME:  get rid of and uncomment to implement authentication
+          // try {
+          //      if (accessToken) {
+          //           context.payLoad = verifyToken(accessToken);
+          //           context.accessToken = accessToken;
+          //      }
+          // } catch (error) {
+          //      console.log("Token verification failed:", error);
+          //      throw new AuthenticationError("Invalid token");
+          // }
           return context;
+     },
+     subscriptions: {
+          onConnect: (connectionParams, webSocket) => {
+               /* FIXME: uncomment to implement authentication
+                     if (connectionParams.accessToken) {
+                          const validToken = verifyToken(connectionParams.accessToken);
+                          if (!validToken) {
+                               throw new AuthenticationError("Invalid token");
+                          }
+                          return { accessToken: connectionParams.accessToken };
+                     }
+                     throw new AuthenticationError("Not Authenticated"); */
+          },
      },
 });
 
@@ -66,13 +86,33 @@ const startApolloServer = async () => {
      await server.start();
      server.applyMiddleware({ app });
 
+     const httpServer = createServer(app);
+     SubscriptionServer.create(
+          {
+               schema: server.schema,
+               execute,
+               subscribe,
+               onConnect: (connectionParams, webSocket, context) => {
+                    console.log("Client connected with params:", connectionParams);
+               },
+               onDisconnect: (webSocket, context) => {
+                    console.log("Client disconnected");
+               },
+          },
+          {
+               server: httpServer,
+               path: server.graphqlPath,
+          },
+     );
+
      db.once("open", () => {
-          app.listen(PORT, () => {
-               console.log(`Server running on port ${PORT}!`);
+          httpServer.listen(PORT, () => {
+               console.log(`Server running on ${PORT}!`);
                console.log(`Use GraphQL at http://localhost:${PORT}${server.graphqlPath}`);
+               console.log(`Subscriptions ready at ws://localhost:${PORT}${server.graphqlPath}`);
           });
      });
 };
 
 // COMMENT: starts the Apollo server
-startApolloServer(typeDefs, resolvers);
+startApolloServer();

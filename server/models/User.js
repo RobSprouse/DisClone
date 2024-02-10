@@ -41,7 +41,7 @@ const userSchema = new Schema(
      },
 );
 
-// // Hash the password before saving the user model
+// // Hash the password before saving the user model // FIXME:  uncomment this code to hash the password
 // userSchema.pre("save", async function (next) {
 //      if (this.isModified("password")) {
 //           this.password = await bcrypt.hash(this.password, 10);
