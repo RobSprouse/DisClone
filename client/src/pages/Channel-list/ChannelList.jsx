@@ -10,7 +10,7 @@ const ChannelList = () => {
 
      useEffect(() => {
           if (data) {
-               setChannels(data.getAllChannels.channels);
+               setChannels(data.getAllChannels);
           }
      }, [data]);
 

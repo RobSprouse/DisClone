@@ -43,27 +43,29 @@ const server = new ApolloServer({
      context: ({ req, res }) => {
           const accessToken = req.accessToken || null;
           const context = { req, res, pubsub };
-          try {
-               if (accessToken) {
-                    context.payLoad = verifyToken(accessToken);
-                    context.accessToken = accessToken;
-               }
-          } catch (error) {
-               console.log("Token verification failed:", error);
-               throw new AuthenticationError("Invalid token");
-          }
+          context.payLoad = verifyToken(accessToken); // FIXME:  get rid of and uncomment to implement authentication
+          // try {
+          //      if (accessToken) {
+          //           context.payLoad = verifyToken(accessToken);
+          //           context.accessToken = accessToken;
+          //      }
+          // } catch (error) {
+          //      console.log("Token verification failed:", error);
+          //      throw new AuthenticationError("Invalid token");
+          // }
           return context;
      },
      subscriptions: {
           onConnect: (connectionParams, webSocket) => {
-               if (connectionParams.accessToken) {
-                    const validToken = verifyToken(connectionParams.accessToken);
-                    if (!validToken) {
-                         throw new AuthenticationError("Invalid token");
-                    }
-                    return { accessToken: connectionParams.accessToken };
-               }
-               throw new AuthenticationError("Not Authenticated");
+               /* FIXME: uncomment to implement authentication
+                     if (connectionParams.accessToken) {
+                          const validToken = verifyToken(connectionParams.accessToken);
+                          if (!validToken) {
+                               throw new AuthenticationError("Invalid token");
+                          }
+                          return { accessToken: connectionParams.accessToken };
+                     }
+                     throw new AuthenticationError("Not Authenticated"); */
           },
      },
 });

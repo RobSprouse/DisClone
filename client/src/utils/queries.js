@@ -32,11 +32,9 @@ export const GET_USER = gql`
 export const GET_ALL_USERS = gql`
      query GetAllUsers {
           getAllUsers {
-               users {
-                    _id
-                    username
-                    image
-               }
+               _id
+               username
+               image
           }
      }
 `;
@@ -45,100 +43,42 @@ export const GET_ALL_USERS = gql`
 export const GET_ALL_CHANNELS = gql`
      query GetAllChannels {
           getAllChannels {
-               channels {
-                    _id
-                    name
-                    image
-               }
+               _id
+               name
+               image
           }
      }
 `;
 
-// COMMENT: defines the getChannels query and exports it
-export const GET_CHANNELS = gql`
-     query GetChannels {
-          getChannels {
-               channels {
-                    _id
-                    name
-                    image
-                    members {
-                         _id
-                         username
-                    }
-                    moderator {
-                         _id
-                         username
-                    }
-               }
-               accessToken
-          }
-     }
-`;
-
-// COMMENT: defines the getConversations query and exports it
-export const GET_CONVERSATIONS = gql`
-     query GetConversations {
-          getConversations {
-               conversations {
-                    _id
-                    members {
-                         _id
-                         username
-                    }
-                    messages {
-                         _id
-                         text
-                         user {
-                              _id
-                              username
-                         }
-                         timestamp
-                    }
-               }
-               accessToken
-          }
-     }
-`;
-
-// COMMENT: defines the getChannelMessages query and exports it
-export const GET_CHANNEL_MESSAGES = gql`
-     query GetChannelMessages($channelId: ID!) {
-          getChannelMessages(channelId: $channelId) {
+export const GET_MESSAGES = gql`
+     query GetMessages($id: ID!, $type: String!) {
+          getMessages(id: $id, type: $type) {
                messages {
                     _id
                     text
                     user {
                          _id
                          username
+                         image
                     }
-                    channel {
+                    timestamp
+                    updatedAt
+               }
+               data {
+                    ... on Channel {
                          _id
                          name
+                         image
                     }
-                    timestamp
-               }
-               accessToken
-          }
-     }
-`;
-
-// COMMENT: defines the getConversationMessages query and exports it
-export const GET_CONVERSATION_MESSAGES = gql`
-     query GetConversationMessages($conversationId: ID!) {
-          getConversationMessages(conversationId: $conversationId) {
-               messages {
-                    _id
-                    text
-                    user {
+                    ... on Conversation {
                          _id
-                         username
+                         members {
+                              _id
+                              username
+                              image
+                         }
                     }
-                    timestamp
                }
-               accessToken
           }
      }
 `;
-
-

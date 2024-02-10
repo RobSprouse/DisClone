@@ -5,31 +5,32 @@ import { gql } from "apollo-server-express";
 const typeDefs = gql`
      type User {
           _id: ID!
-          username: String!
-          email: String!
-          firstName: String!
-          lastName: String!
-          image: String!
-          channels: [Channel!]!
-          conversations: [Conversation!]!
+          username: String
+          email: String
+          firstName: String
+          lastName: String
+          image: String
+          channels: [Channel!]
+          conversations: [Conversation!]
      }
 
      type UsersResponse {
           users: [User!]!
-          accessToken: String!
      }
 
      type Message {
           _id: ID!
           text: String!
           user: User!
-          channel: Channel!
           timestamp: String!
+          updatedAt: String!
      }
 
-     type MessageData {
+     union ChannelOrConversation = Channel | Conversation
+
+     type MessagesResponse {
           messages: [Message!]!
-          accessToken: String!
+          data: ChannelOrConversation
      }
 
      type Channel {
@@ -40,41 +41,21 @@ const typeDefs = gql`
           moderator: User!
      }
 
-     type ChannelData {
-          channels: [Channel!]!
-          accessToken: String!
-     }
-
-     type ChannelResponse {
-          channel: Channel!
-          accessToken: String!
-     }
-
      type Conversation {
           _id: ID!
           members: [User!]!
           messages: [Message!]!
      }
 
-     type ConversationData {
-          conversations: [Conversation!]!
-          accessToken: String!
-     }
-
      type Query {
           user: User!
-          getUsers: UsersResponse!
-          getAllUsers: UsersResponse!
-          getAllChannels: ChannelData!
-          getChannels: ChannelData!
-          getAllConversations: ConversationData!
-          getConversations: ConversationData!
-          getChannelMessages(channelId: ID!): MessageData!
-          getConversationMessages(conversationId: ID!): MessageData!
+          getAllUsers: [User!]!
+          getAllChannels: [Channel!]!
+          getMessages(id: ID!, type: String!): MessagesResponse!
      }
 
      type Auth {
-          accessToken: String
+          accessToken: String!
      }
 
      type Mutation {
@@ -88,11 +69,6 @@ const typeDefs = gql`
                image: String
           ): Auth
           logout: Boolean!
-          createChannel(name: String!, image: String): ChannelResponse!
-          createConversation(recipientId: ID!): ConversationData!
-          addToConversation(conversationId: ID!, recipientId: ID!): ConversationData!
-          sendChannelMessage(channelId: ID!, text: String!): MessageData!
-          sendConversationMessage(conversationId: ID!, text: String!): MessageData!
      }
 `;
 

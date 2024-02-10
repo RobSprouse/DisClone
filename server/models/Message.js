@@ -51,7 +51,7 @@ messageSchema.virtual("user", {
      localField: "userId", // Find people where `localField`
      foreignField: "_id", // is equal to `foreignField`
      justOne: true, // Only get one document
-});
+ });
 
 const Message = mongoose.model("Message", messageSchema);
 

@@ -29,8 +29,6 @@ const Homepage = () => {
           memberImage: "size-profileImg rounded-full object-cover object-center",
      };
 
-     // TODO: create a function that on click, it will react navigate to the messages component and will pass the conversation _id or channel _id to the messages component
-
      const retrieveMessages = (id, type) => {
           navigate("/messages", { state: { id, type } });
      };

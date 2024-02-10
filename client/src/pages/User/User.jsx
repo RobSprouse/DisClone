@@ -11,7 +11,7 @@ const UserList = () => {
 
     useEffect(() => {
         if (data) {
-            setUsers(data.getAllUsers.users);
+            setUsers(data.getAllUsers);
         }
     }, [data]);
 
