@@ -16,9 +16,6 @@ const ChannelList = () => {
 
      const handleAddChannel = async (channelId, payload) => {
           try {
-               console.log("Adding channel with ID:", channelId);
-               
-
                // Navigate to the messages page with specific parameters
                navigate("/messages", { state: { id: channelId, type: "channel" } });
           } catch (error) {

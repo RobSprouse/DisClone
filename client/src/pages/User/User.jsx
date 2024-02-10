@@ -17,8 +17,6 @@ const UserList = () => {
 
     const handleAddUser = async (userId, payload) => {
         try {
-            console.log("Adding user with ID:", userId);
-            // Navigate to the messages page with specific parameters
             navigate("/messages", { state: { id: userId, type: "user" } });
         } catch (error) {
             console.error("Error adding user:", error);

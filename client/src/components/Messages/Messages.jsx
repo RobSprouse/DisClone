@@ -11,15 +11,12 @@ const Messages = () => {
      const [typeData, setTypeData] = useState(); // renamed from data to queryData
      const { type, id } = location.state; // COMMENT: either is conversation or channel
 
-     const { loading, error, data } = useQuery(GET_MESSAGES, { variables: { id, type } });
-     console.log("Data from useQuery:", data);
+     const { loading, error, data } = useQuery(GET_MESSAGES, { variables: { id, type }, fetchPolicy: "no-cache" });
 
      useEffect(() => {
           if (data) {
                setMessages(data.getMessages.messages);
                setTypeData(data.getMessages.data); // use setQueryData here
-               console.log("Messages state:", messages);
-               console.log("TypeData state:", typeData);
           }
      }, [data]);
 
