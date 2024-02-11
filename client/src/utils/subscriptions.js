@@ -1,21 +1,19 @@
 import { gql } from "@apollo/client";
 
-// COMMENT: defines the messageAdded subscription and exports it, 
-/* COMMENT: EXAMPLE:
-      export const CHANNEL_MESSAGE_ADDED = gql`
-           subscription ChannelMessageAdded($channelId: ID!) {
-                channelMessageAdded(channelId: $channelId) {
-                     _id
-                     content
-                     createdAt
-                     user {
-                          _id
-                          username
-                          image
-                     }
-                }
-           }
-      `;
-       */
+// COMMENT: defines the messageAdded subscription and exports it,
+const MESSAGE_ADDED = gql`
+     subscription OnMessageAdded($channelId: String, $conversationId: String) {
+          messageAdded(channelId: $channelId, conversationId: $conversationId) {
+               _id
+               text
+               channelId
+               conversationId
+               user {
+                    _id
+                    username
+               }
+          }
+     }
+`;
 
-      
+export default MESSAGE_ADDED;

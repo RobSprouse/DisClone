@@ -3,6 +3,28 @@ import bcrypt from "bcrypt";
 import { UserInputError, AuthenticationError } from "apollo-server-express";
 import { Channel, Conversation, User, Message } from "../models/models.js";
 import { signToken, verifyToken } from "../utils/auth.js";
+import { withFilter, PubSub } from "graphql-subscriptions";
+
+class MyPubSub extends PubSub {
+     subscribers = new Map();
+
+     asyncIterator(triggerName) {
+          const iterator = super.asyncIterator(triggerName);
+          const id = generateUniqueID()
+          this.subscribers.set(id, iterator);
+          return { id, iterator };
+     }
+
+     unsubscribe(id) {
+          this.subscribers.delete(id);
+     }
+
+     getSubscribers() {
+          return Array.from(this.subscribers.keys());
+     }
+}
+
+const pubsub = new MyPubSub();
 
 const auth = (fn) => async (parent, args, context, info) => {
      /* FIXME: uncomment to implement authentication
@@ -100,9 +122,35 @@ const resolvers = {
                const message = await Message.create({ text, [key]: id, userId: payLoad.data._id });
                const populatedMessage = await Message.findById(message._id).populate("user");
                await Model.findByIdAndUpdate(id, { $push: { messages: message._id } });
+
+               try {
+                    console.log("Current subscribers before publishing:", pubsub.getSubscribers().length);
+                    pubsub.publish("MESSAGE_ADDED", { messageAdded: populatedMessage });
+                    console.log("Message published");
+                    console.log("Current subscribers after publishing:", pubsub.getSubscribers().length);
+               } catch (error) {
+                    console.error("Error publishing message:", error);
+               }
+
                return populatedMessage;
           }),
+     },
+     Subscription: {
+          messageAdded: {
+               subscribe: withFilter(
+                    () => pubsub.asyncIterator("MESSAGE_ADDED"),
+                    (payload, variables) => {
+                         console.log("Filtering MESSAGE_ADDED with payload:", payload, "and variables:", variables);
+                         console.log("subscribers array", subscribers);
+                         return (
+                              payload.messageAdded.channelId === variables.channelId ||
+                              payload.messageAdded.conversationId === variables.conversationId
+                         );
+                    },
+               ),
+          },
      },
 };
 
 export default resolvers;
+export { pubsub };
