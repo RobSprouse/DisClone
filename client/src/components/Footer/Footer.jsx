@@ -1,8 +1,8 @@
 import "./Footer.css";
 function Footer() {
      return (
-          <footer className="bg-gray-200">
-               <p>Footer</p>
+          <footer className="bg-cyan-100 rounded-lg">
+               <p className="ml-5">Footer</p>
           </footer>
      );
 }

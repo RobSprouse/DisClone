@@ -44,16 +44,21 @@ function LoginForm() {
 
      return (
           <>
+          <div>
+               <div
+               className="backgroundImage">
+
+               </div>
             <div className="flex items-center justify-center mt-10">
                <Card color="transparent" shadow={false}>
-                    <Typography variant="h4" color="blue-gray">
+                    <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
                          Log In
                     </Typography>
-                    <Typography color="gray" className="mt-1 font-normal">
+                    <Typography color="gray" className="mt-10 font-normal text-cyan-100 shadow-2xl shadow-cyan-300 text-center">
                          Nice to meet you! Enter your details to register.
                     </Typography>
-                    <form onSubmit={handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
-                         <div className="mb-1 flex flex-col gap-6">
+                    <form onSubmit={handleSubmit} className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl">
+                         <div className="mb-1 flex flex-col gap-5 p-5 ">
                               <Typography variant="h6" color="blue-gray" className="-mb-3">
                                    Username
                               </Typography>
@@ -89,18 +94,21 @@ function LoginForm() {
                                    }}
                               />
                          </div>
-                         <Button type="submit" className="mt-6" fullWidth>
+                         <div className="flex justify-center">
+                         <Button type="submit" className="mt-2" size="lg">
                               Log In
                          </Button>
-                         <Typography color="gray" className="mt-4 text-center font-normal">
+                         </div>
+                         <Typography color="gray" className="mt-3 mb-3 text-center font-normal">
                               New to Disclone?{" "}
                               <a href="#" className="font-medium text-gray-900">
-                                   Creat an account
+                                   Create an account
                               </a>
                          </Typography>
                     </form>
                </Card>
             </div>
+          </div>
           </>
      );
 }
