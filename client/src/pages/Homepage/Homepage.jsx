@@ -70,7 +70,7 @@ const Homepage = () => {
                          {user && (
                               <div className={style.sidebar}>
                                         <Typography className="font-bold text-2xl text-center mb-2">Channels</Typography>
-                                   <div className="flex flex-col min-h-channelBar max-h-channelBar overflow-auto">
+                                   <div className="flex flex-col min-h-channelBar max-h-channelBar overflow-hidden hover:overflow-scroll">
                                         {user.channels.map((channel) => (
                                              <div className={style.channelGroup}
                                              key={channel._id}
@@ -87,8 +87,8 @@ const Homepage = () => {
                                         ))}
                                    </div>
 
-                                   <Typography className="font-bold text-2xl text-center mb-2">Conversations</Typography>
-                                   <div className="flex flex-col min-h-conversationBar max-h-conversationBar overflow-auto">
+                                   <Typography className="font-bold text-2xl text-center mb-2 pt-4">Conversations</Typography>
+                                   <div className="flex flex-col min-h-conversationBar max-h-conversationBar overflow-hidden hover:overflow-scroll">
                                    {user.conversations.map((conversation) => (
                                         <div
                                              key={conversation._id}
@@ -101,7 +101,7 @@ const Homepage = () => {
                                                             <Avatar
                                                                  variant="circular"
                                                                  alt="user 1"
-                                                                 className="border-2 border-white hover:z-10 focus:z-10"
+                                                                 className="border-2 border-white hover:z-10 focus:z-10 cursor-pointer"
                                                                  src={member.image}
                                                             />
                                                        ))}

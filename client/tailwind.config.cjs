@@ -16,8 +16,8 @@ module.exports = withMT({
                     "conversationBar": "18rem",
                },
                maxHeight: {
-                    "channelBar": "39vh",
-                    "conversationBar": "39vh",
+                    "channelBar": "37vh",
+                    "conversationBar": "37vh",
                }
           },
      },
