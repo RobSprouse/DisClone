@@ -46,19 +46,15 @@ const resolvers = {
           getMessages: auth(async (_, { id, type }) => {
                const key = type === "channel" ? "channelId" : "conversationId";
                const Model = type === "channel" ? Channel : Conversation;
-               const messages = await Message.find({ [key]: id }).populate("user");
+               const messages = await Message.find({ [key]: id })
+                    .populate("user")
+                    .sort("timestamp");
                const data = await Model.findById(id);
-           
-               // Log usernames from messages
-               messages.forEach((message) => {
-                   console.log("Username:", message.user.username);
-               });
-           
                return {
-                   messages,
-                   data,
+                    messages,
+                    data,
                };
-           }),
+          }),
      },
      Mutation: {
           // COMMENT: login resolver, takes in the username and password and returns the access and refresh tokens
@@ -96,6 +92,15 @@ const resolvers = {
                user.channels.push(channel._id);
                await user.save();
                return channel;
+          }),
+          // TODO: mutation to add a message to the conversation or channel
+          addMessage: auth(async (_, { text, id, type }, { payLoad }) => {
+               const key = type === "channel" ? "channelId" : "conversationId";
+               const Model = type === "channel" ? Channel : Conversation;
+               const message = await Message.create({ text, [key]: id, userId: payLoad.data._id });
+               const populatedMessage = await Message.findById(message._id).populate("user");
+               await Model.findByIdAndUpdate(id, { $push: { messages: message._id } });
+               return populatedMessage;
           }),
      },
 };

@@ -11,7 +11,6 @@ import LoginForm from "./components/LoginForm/LoginForm.jsx";
 import SignUpForm from "./components/SignupForm/SignupForm.jsx";
 import "./app.css";
 
-
 function App() {
      const [accessToken, setAccessToken] = useState(null);
      const [showSignUp, setShowSignUp] = useState(false);
@@ -19,6 +18,28 @@ function App() {
      const location = useLocation();
 
      const client = useMemo(() => createApolloClient(accessToken), [accessToken]);
+
+     const refreshAccessToken = async () => {
+          try {
+               const response = await fetch("/refresh_token", {
+                    method: "POST",
+                    credentials: "include", // Include cookies
+               });
+               const data = await response.json();
+               console.log("Refreshed access token:", data.accessToken);
+               setAccessToken(data.accessToken);
+          } catch (err) {
+               console.error(err);
+          }
+     };
+
+     // Call the function every 10 minutes
+     useEffect(() => {
+          const intervalId = setInterval(refreshAccessToken, 1000 * 60 * 10); // 10 minutes in milliseconds
+
+          // Clear the interval when the component unmounts
+          return () => clearInterval(intervalId);
+     }, []);
 
      useEffect(() => {
           const token = Cookies.get("access_token"); // read the access token from the cookie
@@ -42,12 +63,12 @@ function App() {
                          <ThemeProvider>
                               <NavigationBar />
                               <main>
-                              {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
-                              {!accessToken && (
-                                   <button onClick={toggleShowSignUp}>
-                                        {showSignUp ? "Go to Login" : "Go to Sign Up"}
-                                   </button>
-                              )}
+                                   {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
+                                   {!accessToken && (
+                                        <button onClick={toggleShowSignUp}>
+                                             {showSignUp ? "Go to Login" : "Go to Sign Up"}
+                                        </button>
+                                   )}
                               </main>
                               <Footer />
                          </ThemeProvider>

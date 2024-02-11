@@ -70,7 +70,7 @@ const typeDefs = gql`
           ): Auth
           logout: Boolean!
           addChannel(name: String!, image: String): Channel
-
+          addMessage(text: String!, id: ID!, type: String!): Message!
      }
 `;
 

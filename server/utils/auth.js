@@ -51,21 +51,21 @@ function authMiddleware(req, res, next) {
 
      if (!accessToken) {
           if (!refreshToken) {
-               console.log("No refresh token");
+               // console.log("No refresh token");
                return next();
           }
           try {
                const { data } = jwt.verify(refreshToken, secret);
-               console.log("Refresh token verified");
+               // console.log("Refresh token verified");
                const { accessToken: newAccessToken, refreshToken: newRefreshToken } = signToken(data, res);
                req.accessToken = newAccessToken;
                req.cookies.refresh_token = newRefreshToken;
-               console.log("New Refresh and Access tokens set in cookie");
+               // console.log("New Refresh and Access tokens set in cookie");
                addToConsoleCount();
-               console.log(consoleLogCount)
+               // console.log(consoleLogCount)
                return next();
           } catch (error) {
-               console.log("Not authenticated: ", error.message);
+               // console.log("Not authenticated: ", error.message);
                res.clearCookie("access_token");
                res.clearCookie("refresh_token");
                return next();
@@ -77,12 +77,12 @@ function authMiddleware(req, res, next) {
                // const { refreshToken: newRefreshToken } = signToken(data, res);
                // req.cookies.refresh_token = newRefreshToken;
                req.accessToken = accessToken;
-               console.log("Access token verified");
+               // console.log("Access token verified");
                addToConsoleCount();
-               console.log(consoleLogCount)
+               // console.log(consoleLogCount)
                return next();
           } catch (error) {
-               console.log("Not authenticated: ", error.message);
+               // console.log("Not authenticated: ", error.message);
                res.clearCookie("access_token");
                res.clearCookie("refresh_token");
                return next();

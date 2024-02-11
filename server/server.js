@@ -12,6 +12,7 @@ import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { AuthenticationError } from "apollo-server-express";
+import jwt from "jsonwebtoken";
 
 // COMMENT: creates an instance of PubSub for subscriptions
 const pubsub = new PubSub();
@@ -31,6 +32,21 @@ app.use(
      }),
 );
 app.use(authMiddleware); // COMMENT: adds the authentication middleware to the middleware stack and is used to authenticate the user
+
+const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
+app.post("/refresh_token", (req, res) => {
+     const refreshToken = req.cookies.refresh_token;
+     if (!refreshToken) return res.sendStatus(401);
+
+     jwt.verify(refreshToken, secret, (err, user) => {
+          if (err) return res.sendStatus(403);
+          const accessToken = jwt.sign({ username: user.username, email: user.email, _id: user._id }, secret, {
+               expiresIn: "15m",
+          });
+          console.log("New Access token set in cookie from post /refresh_token")
+          res.json({ accessToken });
+     });
+});
 
 // COMMENT: creates a new Apollo server with the schema and resolvers
 const server = new ApolloServer({
