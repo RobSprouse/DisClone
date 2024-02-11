@@ -87,7 +87,7 @@ const Homepage = () => {
                                         ))}
                                    </div>
 
-                                   <Typography className="font-bold text-2xl text-center mb-2">Conversations</Typography>
+                                   <Typography className="font-bold text-2xl text-center mb-2 pt-4">Conversations</Typography>
                                    <div className="flex flex-col min-h-conversationBar max-h-conversationBar overflow-auto">
                                    {user.conversations.map((conversation) => (
                                         <div
