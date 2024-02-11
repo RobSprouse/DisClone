@@ -51,13 +51,13 @@ function LoginForm() {
                </div>
             <div className="flex items-center justify-center mt-10">
                <Card color="transparent" shadow={false}>
-                    <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
+                    <Typography variant="h4" color="blue-gray" className="text-teal-100 text-center">
                          Log In
                     </Typography>
-                    <Typography color="gray" className="mt-10 font-normal text-cyan-100 shadow-2xl shadow-cyan-300 text-center">
+                    <Typography color="gray" className="mt-10 font-normal text-teal-100 shadow-2xl shadow-teal-300 text-center">
                          Nice to meet you! Enter your details to register.
                     </Typography>
-                    <form onSubmit={handleSubmit} className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl">
+                    <form onSubmit={handleSubmit} className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-teal-100 shadow-2xl shadow-teal-300 rounded-3xl">
                          <div className="mb-1 flex flex-col gap-5 p-5 ">
                               <Typography variant="h6" color="blue-gray" className="-mb-3">
                                    Username

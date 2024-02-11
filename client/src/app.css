@@ -4,12 +4,15 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
      margin: 2%;
 }
 
 main {
      margin: 2%;
      min-height: 80vh;
-}
+} */
 
+/* * {
+     border: 1px solid red;
+ } */

@@ -12,12 +12,13 @@ module.exports = withMT({
                     "sidebar": "84vh",
                },
                minHeight: {
+                    "sidebar": "80rem",
                     "channelBar": "18rem",
                     "conversationBar": "18rem",
                },
                maxHeight: {
-                    "channelBar": "37vh",
-                    "conversationBar": "37vh",
+                    "channelBar": "35vh",
+                    "conversationBar": "35vh",
                }
           },
      },

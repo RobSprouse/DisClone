@@ -11,7 +11,6 @@ import LoginForm from "./components/LoginForm/LoginForm.jsx";
 import SignUpForm from "./components/SignupForm/SignupForm.jsx";
 import "./app.css";
 
-
 function App() {
      const [accessToken, setAccessToken] = useState(null);
      const [showSignUp, setShowSignUp] = useState(false);
@@ -40,16 +39,25 @@ function App() {
                <AccessTokenContext.Provider value={{ accessToken, setAccessToken }}>
                     <React.StrictMode>
                          <ThemeProvider>
-                              <NavigationBar />
-                              <main>
-                              {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
-                              {!accessToken && (
-                                   <button onClick={toggleShowSignUp}>
-                                        {showSignUp ? "Go to Login" : "Go to Sign Up"}
-                                   </button>
-                              )}
-                              </main>
-                              <Footer />
+                              <div
+                                   style={{
+                                        border: "2px solid lime",
+                                        minHeight: "100vh",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                   }}
+                              >
+                                   <NavigationBar />
+                                   <div style={{ display: "flex", flexDirection: "column", flexGrow: "1" }}>
+                                        {accessToken ? <Outlet /> : showSignUp ? <SignUpForm /> : <LoginForm />}
+                                        {!accessToken && (
+                                             <button onClick={toggleShowSignUp}>
+                                                  {showSignUp ? "Go to Login" : "Go to Sign Up"}
+                                             </button>
+                                        )}
+                                   </div>
+                                   <Footer />
+                              </div>
                          </ThemeProvider>
                     </React.StrictMode>
                </AccessTokenContext.Provider>
