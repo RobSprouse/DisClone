@@ -56,6 +56,7 @@ const Homepage = () => {
           memberName: "",
           memberImage: "size-profileImg rounded-full object-cover object-center cursor-pointer",
           channelGroup: "inline-flex gap-2 items-center cursor-pointer",
+          sidebar: "h-sidebar",
      };
 
      const retrieveMessages = (id, type) => {
@@ -67,9 +68,9 @@ const Homepage = () => {
                <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
                     <div>
                          {user && (
-                              <>
-                                   <div className="flex flex-col">
+                              <div className={style.sidebar}>
                                         <Typography className="font-bold text-2xl text-center mb-2">Channels</Typography>
+                                   <div className="flex flex-col min-h-channelBar max-h-channelBar overflow-auto">
                                         {user.channels.map((channel) => (
                                              <div className={style.channelGroup}
                                              key={channel._id}
@@ -87,6 +88,7 @@ const Homepage = () => {
                                    </div>
 
                                    <Typography className="font-bold text-2xl text-center mb-2">Conversations</Typography>
+                                   <div className="flex flex-col min-h-conversationBar max-h-conversationBar overflow-auto">
                                    {user.conversations.map((conversation) => (
                                         <div
                                              key={conversation._id}
@@ -106,7 +108,8 @@ const Homepage = () => {
                                              </section>
                                         </div>
                                    ))}
-                              </>
+                                   </div>
+                              </div>
                          )}
                     </div>
                </Card>
