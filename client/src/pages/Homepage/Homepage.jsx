@@ -1,98 +1,26 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_USER } from "../../utils/queries";
-import MESSAGE_ADDED from "../../utils/subscriptions";
-import { useSubscription } from "@apollo/client";
-
-import {
-     Card,
-     Typography,
-     List,
-     ListItem,
-     ListItemPrefix,
-     ListItemSuffix,
-     Chip,
-     Accordion,
-     AccordionHeader,
-     AccordionBody,
-     Alert,
-     Avatar,
-     Badge,
-     Button,
-} from "@material-tailwind/react";
-import {
-     PresentationChartBarIcon,
-     ShoppingBagIcon,
-     UserCircleIcon,
-     Cog6ToothIcon,
-     InboxIcon,
-     PowerIcon,
-} from "@heroicons/react/24/solid";
-import {
-     ChevronRightIcon,
-     ChevronDownIcon,
-     CubeTransparentIcon,
-     MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
+import { Card, Typography, Avatar } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Homepage = () => {
      const [user, setUser] = useState(null);
-     const [newChannelMessages, setNewChannelMessages] = useState({});
-     const [newConversationMessages, setNewConversationMessages] = useState({});
+     const { loading, error, data } = useQuery(GET_USER);
      const navigate = useNavigate();
 
-     const { loading: userLoading, error: userError, data: userData } = useQuery(GET_USER);
-
      useEffect(() => {
-          if (userData) {
-               console.log("User data:", userData.user); // Log user data
-               setUser(userData.user);
+          if (data) {
+               setUser(data.user);
           }
-     }, [userData]);
+     }, [data]);
 
-     const {
-          data: subscriptionData,
-          loading: subscriptionLoading,
-          error: subscriptionError,
-     } = useSubscription(MESSAGE_ADDED, {
-          variables: {
-               userId: user ? user._id : null,
-               channelId: user && user.channels.length > 0 ? user.channels[0]._id : null,
-               conversationId: user && user.conversations.length > 0 ? user.conversations[0]._id : null,
-          },
-          skip: !user, // Skip subscription if user is not yet loaded
-          onData: ({ subscriptionData }) => {
-               console.log("onData called", subscriptionData); // Add this line
-               console.log("New message data:", subscriptionData.data);
-               const { messageAdded } = subscriptionData.data;
-               if (messageAdded.channelId) {
-                    setNewChannelMessages((prev) => ({
-                         ...prev,
-                         [messageAdded.channelId]: (prev[messageAdded.channelId] || 0) + 1,
-                    }));
-               } else if (messageAdded.conversationId) {
-                    setNewConversationMessages((prev) => ({
-                         ...prev,
-                         [messageAdded.conversationId]: (prev[messageAdded.conversationId] || 0) + 1,
-                    }));
-               }
-          },
-     });
-
-     useEffect(() => {
-          if (subscriptionData) {
-               console.log("User data:", subscriptionData.user); // Log user data
-               setUser(subscriptionData.user);
-          }
-     }, [subscriptionData]);
-
-     if (userLoading) {
+     if (loading) {
           return <div>Loading...</div>;
      }
 
-     if (userError ) {
-          return <div>Error! {(userError || subscriptionError).message}</div>;
+     if (error) {
+          return <div>Error! {error.message}</div>;
      }
 
      const style = {
@@ -106,17 +34,6 @@ const Homepage = () => {
 
      const retrieveMessages = (id, type) => {
           navigate("/messages", { state: { id, type } });
-          if (type === "channel") {
-               setNewChannelMessages((prev) => ({
-                    ...prev,
-                    [id]: 0,
-               }));
-          } else if (type === "conversation") {
-               setNewConversationMessages((prev) => ({
-                    ...prev,
-                    [id]: 0,
-               }));
-          }
      };
 
      return (
@@ -133,14 +50,12 @@ const Homepage = () => {
                                                   key={channel._id}
                                                   onClick={() => retrieveMessages(channel._id, "channel")}
                                              >
-                                                  <Badge content={newChannelMessages[channel._id] || 0}>
-                                                       <Avatar
-                                                            variant="circular"
-                                                            alt="user 1"
-                                                            className="border-2 border-white hover:z-10 focus:z-10"
-                                                            src={channel.image}
-                                                       />
-                                                  </Badge>
+                                                  <Avatar
+                                                       variant="circular"
+                                                       alt="user 1"
+                                                       className="border-2 border-white hover:z-10 focus:z-10"
+                                                       src={channel.image}
+                                                  />
                                                   <Typography className={style.channelName}>{channel.name}</Typography>
                                              </div>
                                         ))}

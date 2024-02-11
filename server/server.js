@@ -103,7 +103,6 @@ if (process.env.NODE_ENV === "production") {
 const startApolloServer = async () => {
      await server.start();
      const schema = makeExecutableSchema({ typeDefs, resolvers });
-     console.log(printSchema(schema));
      server.applyMiddleware({ app });
 
      const httpServer = createServer(app);

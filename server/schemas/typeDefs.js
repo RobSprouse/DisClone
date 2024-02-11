@@ -76,7 +76,7 @@ const typeDefs = gql`
      }
 
      type Subscription {
-          messageAdded(channelId: ID!, conversationId: ID!): Message
+          messageAdded(channelId: ID!, conversationId: ID!): Message!
      }
 `;
 
