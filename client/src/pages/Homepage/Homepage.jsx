@@ -51,10 +51,12 @@ const Homepage = () => {
      }
 
      const style = {
-          channelName: "font-bold text-2xl",
-          channelImage: "size-1/6 rounded-full object-cover object-center",
+          channelName: "font-bold text-lg cursor-pointer",
+          channelImage: "size-1/6 rounded-full object-cover object-center cursor-pointer",
           memberName: "",
-          memberImage: "size-profileImg rounded-full object-cover object-center",
+          memberImage: "size-profileImg rounded-full object-cover object-center cursor-pointer",
+          channelGroup: "inline-flex gap-2 items-center cursor-pointer",
+          sidebar: "h-sidebar",
      };
 
      const retrieveMessages = (id, type) => {
@@ -63,76 +65,51 @@ const Homepage = () => {
 
      return (
           <>
-               {/* <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
-          <div>
-               {user && (
-                    <>
-                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl mb-5">Welcome! {user.username}</Typography>
-                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl">Channels</Typography>
-                         {user.channels.map((channel) => (
-                              <div key={channel._id} onClick={() => retrieveMessages(channel._id, "channel")}>
-                                   <p className={style.channelName}>{channel.name}</p>
-                                   <img className={style.channelImage} src={channel.image} alt={channel.name} />
-                              </div>
-                         ))}
-                         <Typography varient="h5" color="blue-gray " className="font-bold text-xl mt-8">Conversations</Typography>
-                         {user.conversations.map((conversation) => (
-                              <div key={conversation._id} onClick={() => retrieveMessages(conversation._id, "conversation")}>
-                                   <h3>Conversation ID: {conversation._id}</h3>
-                                   {conversation.members
-                                        .filter((member) => member._id !== user._id)
-                                        .map((member) => (
-                                             <div key={member._id}>
-                                                  <h4 className="invisible">{member.username}</h4>
-                                                  <img
-                                                       className={style.memberImage}
-                                                       src={member.image}
-                                                       alt={member.username}
-                                                  />
-                                             </div>
-                                        ))}
-                              </div>
-                         ))}
-                    </>
-               )}
-          </div>
-         </Card>  */}
                <Card className="h-full w-full max-w-[12rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-gray-100">
                     <div>
                          {user && (
-                              <>
-                              <Typography className="font-bold text-xl">Channels</Typography>
-                                   {user.channels.map((channel) => (
-                                        <div key={channel._id} onClick={() => retrieveMessages(channel._id, "channel")}>
-                                             <p className={style.channelName}>{channel.name}</p>
+                              <div className={style.sidebar}>
+                                        <Typography className="font-bold text-2xl text-center mb-2">Channels</Typography>
+                                   <div className="flex flex-col min-h-channelBar max-h-channelBar overflow-auto">
+                                        {user.channels.map((channel) => (
+                                             <div className={style.channelGroup}
+                                             key={channel._id}
+                                             onClick={() => retrieveMessages(channel._id, "channel")}
+                                             >
                                              <Avatar
-                                                            variant="circular"
-                                                            alt="user 1"
-                                                            className="border-2 border-white hover:z-10 focus:z-10"
-                                                            src={channel.image}
-                                                       />
-                                        </div>
+                                                  variant="circular"
+                                                  alt="user 1"
+                                                  className="border-2 border-white hover:z-10 focus:z-10"
+                                                  src={channel.image}
+                                             />
+                                                  <Typography className={style.channelName}>{channel.name}</Typography>
+                                             </div>
+                                        ))}
+                                   </div>
 
-                                   
-                                   ))}
-                                   <Typography className="font-bold text-xl">Conversations</Typography>
+                                   <Typography className="font-bold text-2xl text-center mb-2">Conversations</Typography>
+                                   <div className="flex flex-col min-h-conversationBar max-h-conversationBar overflow-auto">
                                    {user.conversations.map((conversation) => (
-                                        <div key={conversation._id} onClick={() => retrieveMessages(conversation._id, "conversation")}>
-                                        <section className="flex items-center -space-x-7 m-1">
-                                             {conversation.members
-                                                  .filter((member) => member._id !== user._id)
-                                                  .map((member) => (
-                                                       <Avatar
-                                                            variant="circular"
-                                                            alt="user 1"
-                                                            className="border-2 border-white hover:z-10 focus:z-10"
-                                                            src={member.image}
-                                                       />
-                                                  ))}
-                                        </section>
+                                        <div
+                                             key={conversation._id}
+                                             onClick={() => retrieveMessages(conversation._id, "conversation")}
+                                        >
+                                             <section className="flex items-center -space-x-7 m-1">
+                                                  {conversation.members
+                                                       .filter((member) => member._id !== user._id)
+                                                       .map((member) => (
+                                                            <Avatar
+                                                                 variant="circular"
+                                                                 alt="user 1"
+                                                                 className="border-2 border-white hover:z-10 focus:z-10"
+                                                                 src={member.image}
+                                                            />
+                                                       ))}
+                                             </section>
                                         </div>
                                    ))}
-                              </>
+                                   </div>
+                              </div>
                          )}
                     </div>
                </Card>
