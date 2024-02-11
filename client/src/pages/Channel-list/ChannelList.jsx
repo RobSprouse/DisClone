@@ -47,7 +47,7 @@ const ChannelList = () => {
                                    <img className={style.channelImage} src={channel.image} alt={channel.name} />
                               </div>
                               <button onClick={() => handleAddChannel(channel._id, { key: "value" })}>
-                                   Add Channel
+                                   Enter Channel
                               </button>
                          </li>
                     ))}

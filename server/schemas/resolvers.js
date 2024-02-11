@@ -90,6 +90,13 @@ const resolvers = {
                // console.log("Refresh and access tokens cleared from cookies");
                return true;
           },
+          addChannel: auth(async (_, { name }) => {
+               const channel = await Channel.create({ name });
+               const user = await User.findById(channel.moderator);
+               user.channels.push(channel._id);
+               await user.save();
+               return channel;
+          }),
      },
 };
 
