@@ -47,15 +47,15 @@ const Sidebar = () => {
           titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2",
           typography: "font-bold  text-lg  ",
           outerContainer:
-               "flex flex-col min-h-[25vh] bg-gradient-to-tr from-green-100 to-blue-900 rounded-lg items-center overflow-hidden pt-1 pb-2 ",
+               "flex flex-col min-h-[25vh] bg-gradient-to-tr from-green-100 to-blue-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner", // bg-gradient-to-tr from-green-100 to-blue-900
           groupContainers:
-               " custom-scrollbar flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5",
+               " custom-scrollbar flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5 shadow-lg",
           channelGroup:
-               " flex flex-row items-center backdrop-blur-sm bg-white/15 rounded-lg cursor-pointer motion-safe:hover:animate-bounce -mb-4 static focus:z-50 ",
+               " flex flex-row items-center backdrop-blur-sm bg-white/15 rounded-lg cursor-pointer motion-safe:hover:animate-bounce -mb-4 static focus:z-50   overflow-hidden overflow-x-auto xCustom-scrollbar min-h-[6vh]",
           avatar: "m-1 border-2 border-white",
           conversationGroup: "flex flex-row items-center bg-gradient-to-r from-green-400 to-blue-500 rounded-lg  ",
           groupedAvatars:
-               " flex flex-row items-center backdrop-blur-sm bg-white/15 rounded-lg p-1 mb-1 cursor-pointer mb-2",
+               " flex flex-row backdrop-blur-sm bg-white/15 rounded-lg p-1 mb-1 cursor-pointer mb-2 overflow-hidden justify-center overflow-x-auto xCustom-scrollbar shadow-lg",
           overlappedAvatars: "flex items-center -space-x-6 p-1",
           conversationMember: "motion-safe:hover:animate-bounce focus:z-50 static",
           tooltip: {
