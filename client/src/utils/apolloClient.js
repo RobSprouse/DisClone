@@ -39,6 +39,8 @@ export function createApolloClient(accessToken) {
 
      return new ApolloClient({
           link: link,
-          cache: new InMemoryCache(),
+          cache: new InMemoryCache({
+               dataIdFromObject: (object) => object.key || null,
+          }),
      });
 }

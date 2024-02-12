@@ -1,13 +1,14 @@
-import { useState, useContext, useCallback } from "react";
+import { useState, useContext, useCallback, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext.js";
 import { LOGIN_USER } from "../../utils/mutations.js";
 import "./loginForm.css";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function LoginForm() {
-     const { setAccessToken } = useContext(AccessTokenContext);
+     const { accessToken, setAccessToken } = useContext(AccessTokenContext);
      const [userFormData, setUserFormData] = useState({ username: "", password: "" });
      const [errorMessage, setErrorMessage] = useState(null);
 
@@ -34,7 +35,7 @@ function LoginForm() {
                     await login({ variables: { ...userFormData } });
                     setUserFormData({ username: "", password: "" });
                     setErrorMessage(null);
-                    navigate("/"); 
+                    navigate("/");
                } catch (err) {
                     setErrorMessage(
                          err.message.includes("Invalid username or password")
@@ -45,6 +46,13 @@ function LoginForm() {
           },
           [login, userFormData, navigate],
      );
+
+     useEffect(() => {
+          const token = Cookies.get("access_token"); // read the access token from the cookie
+          if (token) {
+               navigate("/");
+          }
+     }, [navigate]);
 
      return (
           <>

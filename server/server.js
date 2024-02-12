@@ -2,7 +2,6 @@
 import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
-import { PubSub } from "graphql-subscriptions";
 import { createServer } from "http";
 import { execute, subscribe, printSchema } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
@@ -37,10 +36,10 @@ app.use(authMiddleware); // COMMENT: adds the authentication middleware to the m
 
 const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
 app.post("/refresh_token", (req, res) => {
-     const refreshToken = req.cookies.refresh_token;
-     if (!refreshToken) return res.sendStatus(401);
+     const accessToken = req.cookies.accessToken;
+     if (!accessToken) return res.sendStatus(401);
 
-     jwt.verify(refreshToken, secret, (err, user) => {
+     jwt.verify(accessToken, secret, (err, user) => {
           if (err) return res.sendStatus(403);
           const accessToken = jwt.sign({ username: user.username, email: user.email, _id: user._id }, secret, {
                expiresIn: "15m",

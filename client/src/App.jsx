@@ -18,28 +18,6 @@ function App() {
      const client = useMemo(() => createApolloClient(accessToken), [accessToken]);
      const contextValue = useMemo(() => ({ accessToken, setAccessToken }), [accessToken, setAccessToken]);
 
-     const refreshAccessToken = async () => {
-          try {
-               const response = await fetch("/refresh_token", {
-                    method: "POST",
-                    credentials: "include", // Include cookies
-               });
-               const data = await response.json();
-               console.log("Refreshed access token:", data.accessToken);
-               setAccessToken(data.accessToken);
-          } catch (err) {
-               console.error(err);
-          }
-     };
-
-     // Call the function every 10 minutes
-     useEffect(() => {
-          const intervalId = setInterval(refreshAccessToken, 1000 * 60 * 10); // 10 minutes in milliseconds
-
-          // Clear the interval when the component unmounts
-          return () => clearInterval(intervalId);
-     }, []);
-
      useEffect(() => {
           const token = Cookies.get("access_token"); // read the access token from the cookie
           if (token) {
@@ -56,9 +34,11 @@ function App() {
                <AccessTokenContext.Provider value={contextValue}>
                     <React.StrictMode>
                          <ThemeProvider>
-                              <NavigationBar />
-                              <Outlet />
-                              <Footer />
+                              <div className="flex flex-col w-full m-12 max-w-screen-2xl mx-auto px-4 sm:px-8 lg:px-12 2xl:px-0">
+                                   <NavigationBar />
+                                   <Outlet />
+                                   <Footer />
+                              </div>
                          </ThemeProvider>
                     </React.StrictMode>
                </AccessTokenContext.Provider>
