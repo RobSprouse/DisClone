@@ -4,12 +4,26 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* body {
      margin: 2%;
 }
 
 main {
      margin: 2%;
      min-height: 80vh;
+}
+ */
+
+/* TODO: give everything a red border */
+
+* {
+     /* border: 1px solid red; */
+     /* z-index: 0; */
+}
+
+body {
+     display: flex;
+     flex-direction: column;
+
 }
 

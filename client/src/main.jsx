@@ -2,11 +2,14 @@
 import ReactDom from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import App from "./App.jsx";
-import Homepage from "./pages/Homepage/Homepage.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import ChannelList from "./pages/Channel-list/ChannelList.jsx";
 import Messages from "./components/Messages/Messages.jsx";
 import UserList from "./pages/User/User.jsx";
+import PrivateRoute from "./components/privateRoutes/privateRoutes.jsx";
+import LoginForm from "./components/LoginForm/LoginForm.jsx";
+import SignUpForm from "./components/SignupForm/SignupForm.jsx";
+import Home from "./pages/Home/Home.jsx";
 
 // COMMENT: sets up the router and paths
 const router = createBrowserRouter([
@@ -17,24 +20,52 @@ const router = createBrowserRouter([
           children: [
                {
                     index: true,
-                    element: <Homepage />,
+                    element: (
+                         <PrivateRoute>
+                              <Home />
+                         </PrivateRoute>
+                    ),
                },
                {
                     path: "/profile",
-                    element: <Profile />,
+                    element: (
+                         <PrivateRoute>
+                              <Profile />
+                         </PrivateRoute>
+                    ),
                },
                {
                     path: "/channels",
-                    element: <ChannelList />,
+                    element: (
+                         <PrivateRoute>
+                              <ChannelList />
+                         </PrivateRoute>
+                    ),
                },
                {
                     path: "/messages",
-                    element: <Messages />,
+                    element: (
+                         <PrivateRoute>
+                              <Messages />
+                         </PrivateRoute>
+                    ),
                },
                {
                     path: "/users",
-                    element: <UserList />,
-               }
+                    element: (
+                         <PrivateRoute>
+                              <UserList />
+                         </PrivateRoute>
+                    ),
+               },
+               {
+                    path: "/login",
+                    element: <LoginForm />,
+               },
+               {
+                    path: "/signup",
+                    element: <SignUpForm />,
+               },
           ],
      },
 ]);

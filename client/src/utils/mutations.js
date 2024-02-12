@@ -39,4 +39,18 @@ export const LOGOUT_USER = gql`
      }
 `;
 
-
+export const ADD_MESSAGE = gql`
+     mutation AddMessage($text: String!, $id: ID!, $type: String!) {
+          addMessage(text: $text, id: $id, type: $type) {
+               _id
+               text
+               user {
+                    _id
+                    username
+                    image
+               }
+               timestamp
+               updatedAt
+          }
+     }
+`;

@@ -24,6 +24,8 @@ const typeDefs = gql`
           user: User!
           timestamp: String!
           updatedAt: String!
+          channelId: ID
+          conversationId: ID
      }
 
      union ChannelOrConversation = Channel | Conversation
@@ -70,7 +72,11 @@ const typeDefs = gql`
           ): Auth
           logout: Boolean!
           addChannel(name: String!, image: String): Channel
+          addMessage(text: String!, id: ID!, type: String!): Message!
+     }
 
+     type Subscription {
+          messageAdded(channelId: ID!, conversationId: ID!): Message!
      }
 `;
 

@@ -48,16 +48,12 @@ function ProfileMenu() {
           <>
                <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
                     <MenuHandler>
-                         <Button
-                              variant="text"
-                              color="blue-gray"
-                              className="flex items-center gap-1 rounded-full py-0.5 pr-2 pl-0.5 lg:ml-auto"
-                         >
+                         <Button variant="text" color="blue-gray" className="flex items-center gap-1 rounded-full">
                               <Avatar
                                    variant="circular"
                                    size="sm"
                                    alt="tania andrew"
-                                   className="border border-gray-900 p-0.5"
+                                   className="border border-gray-900 p-0.2"
                                    src={data.user.image}
                               />
                               <ChevronDownIcon
@@ -102,34 +98,32 @@ function ProfileMenu() {
 }
 
 export default function NavigationBar() {
-     // const [isNavOpen, setIsNavOpen] = React.useState(false);
-     // const toggleIsNavOpen = () => setIsNavOpen((cur) => !cur);
      const { accessToken } = useContext(AccessTokenContext);
-
-     // React.useEffect(() => {
-     //      window.addEventListener("resize", () => window.innerWidth >= 960 && setIsNavOpen(false));
-     // }, []);
-
      return (
           <>
-               <Navbar className="mx-auto max-w-screen-xl p-2 lg:rounded-full lg:pl-6 bg-teal-100 border-0">
-                    <div className="relative mx-auto flex items-center justify-between text-blue-gray-900">
-                         <Link to="/" className="mr-10 ml-2 py-1.5 text-3xl font-bold ">
-                              Disclone
-                         </Link>
-                         {accessToken && (
-                              <>
-                                   <Link to="/channels" className="mr-4 ml-2 py-1.5 font-medium">
+               <Navbar className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900">
+                    <Link to="/" className="py-1.5 text-3xl font-bold">
+                         Disclone
+                    </Link>
+                    {accessToken && (
+                         <>
+                              <div className="flex gap-7 mt-1">
+                                   <Link
+                                        to="/channels"
+                                        className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
+                                   >
                                         List of Channels
                                    </Link>
-                                   <Link to="/users" className="mr-4 ml-2 py-1.5 font-medium">
+                                   <Link
+                                        to="/users"
+                                        className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700 "
+                                   >
                                         Users
                                    </Link>
-                                   <div className="hidden lg:block"></div>
-                                   <ProfileMenu />
-                              </>
-                         )}
-                    </div>
+                              </div>
+                              <ProfileMenu />
+                         </>
+                    )}
                </Navbar>
           </>
      );

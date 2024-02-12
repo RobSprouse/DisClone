@@ -2,9 +2,8 @@
 import express from "express";
 import path from "path";
 import { ApolloServer } from "apollo-server-express";
-import { PubSub } from "graphql-subscriptions";
 import { createServer } from "http";
-import { execute, subscribe } from "graphql";
+import { execute, subscribe, printSchema } from "graphql";
 import { SubscriptionServer } from "subscriptions-transport-ws";
 import db from "./config/connection.js";
 import { authMiddleware, verifyToken } from "./utils/auth.js";
@@ -12,9 +11,12 @@ import { typeDefs, resolvers } from "./schemas/schemas.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { AuthenticationError } from "apollo-server-express";
+import jwt from "jsonwebtoken";
+import { makeExecutableSchema } from "@graphql-tools/schema";
 
 // COMMENT: creates an instance of PubSub for subscriptions
-const pubsub = new PubSub();
+import { pubsub } from "./schemas/resolvers.js";
+
 
 // COMMENT: creates an instance of an Express server and sets the port
 const app = express();
@@ -31,6 +33,21 @@ app.use(
      }),
 );
 app.use(authMiddleware); // COMMENT: adds the authentication middleware to the middleware stack and is used to authenticate the user
+
+const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
+app.post("/refresh_token", (req, res) => {
+     const accessToken = req.cookies.accessToken;
+     if (!accessToken) return res.sendStatus(401);
+
+     jwt.verify(accessToken, secret, (err, user) => {
+          if (err) return res.sendStatus(403);
+          const accessToken = jwt.sign({ username: user.username, email: user.email, _id: user._id }, secret, {
+               expiresIn: "15m",
+          });
+          console.log("New Access token set in cookie from post /refresh_token");
+          res.json({ accessToken });
+     });
+});
 
 // COMMENT: creates a new Apollo server with the schema and resolvers
 const server = new ApolloServer({
@@ -84,12 +101,13 @@ if (process.env.NODE_ENV === "production") {
 // COMMENT: starts the Apollo server, applies the Express middleware, and connects to the database
 const startApolloServer = async () => {
      await server.start();
+     const schema = makeExecutableSchema({ typeDefs, resolvers });
      server.applyMiddleware({ app });
 
      const httpServer = createServer(app);
      SubscriptionServer.create(
           {
-               schema: server.schema,
+               schema,
                execute,
                subscribe,
                onConnect: (connectionParams, webSocket, context) => {

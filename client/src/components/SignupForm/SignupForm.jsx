@@ -2,9 +2,12 @@ import { useState, useContext, useCallback } from "react";
 import { useMutation } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext.js";
 import { SIGNUP_USER } from "../../utils/mutations.js";
-import { Card, Input, Checkbox, Button, Typography } from "@material-tailwind/react";
+import { Card, Input, Button, Typography } from "@material-tailwind/react";
+import { Link, useNavigate } from "react-router-dom";
+
 function SignUpForm() {
      const { setAccessToken } = useContext(AccessTokenContext);
+     const navigate = useNavigate();
 
      const [userFormData, setUserFormData] = useState({
           username: "",
@@ -47,6 +50,7 @@ function SignUpForm() {
                          image: "",
                     });
                     setErrorMessage(null);
+                    navigate("/");
                } catch (err) {
                     setErrorMessage(
                          err.message.includes("E11000 duplicate key error collection")
@@ -55,78 +59,11 @@ function SignUpForm() {
                     );
                }
           },
-          [signup, userFormData],
+          [signup, userFormData, navigate],
      );
 
      return (
           <>
-               {/* <form onSubmit={handleSubmit}>
-                    <input
-                         type="text"
-                         placeholder="Username"
-                         name="username"
-                         value={userFormData.username}
-                         onChange={handleInputChange}
-                         required
-                         autoComplete="username"
-                    />
-                    <input
-                         type="email"
-                         placeholder="Email"
-                         name="email"
-                         value={userFormData.email}
-                         onChange={handleInputChange}
-                         required
-                         autoComplete="email"
-                    />
-                    <input
-                         type="password"
-                         placeholder="Password"
-                         name="password"
-                         value={userFormData.password}
-                         onChange={handleInputChange}
-                         required
-                         autoComplete="new-password"
-                    />
-                    <input
-                         type="text"
-                         placeholder="First Name"
-                         name="firstName"
-                         value={userFormData.firstName}
-                         onChange={handleInputChange}
-                         required
-                    />
-                    <input
-                         type="text"
-                         placeholder="Last Name"
-                         name="lastName"
-                         value={userFormData.lastName}
-                         onChange={handleInputChange}
-                         required
-                    />
-                    <input
-                         type="text"
-                         placeholder="Image URL"
-                         name="image"
-                         value={userFormData.image}
-                         onChange={handleInputChange}
-                    />
-                    <Button
-                         disabled={
-                              !(
-                                   userFormData.username &&
-                                   userFormData.email &&
-                                   userFormData.password &&
-                                   userFormData.firstName &&
-                                   userFormData.lastName
-                              )
-                         }
-                         type="submit"
-                    >
-                         Sign Up
-                    </Button>
-                    {errorMessage && <p>{errorMessage}</p>}
-               </form> */}
                <div className="backgroundImage"></div>
 
                <div className="flex items-center justify-center mt-10">
@@ -137,7 +74,10 @@ function SignUpForm() {
                          <Typography color="gray" className="mt-1 font-normal text-cyan-100 text-center">
                               Welcome to Disclone! Enter your details to register.
                          </Typography>
-                         <form onSubmit={handleSubmit} className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 items-center justify-center bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl">
+                         <form
+                              onSubmit={handleSubmit}
+                              className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96 items-center justify-center bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl"
+                         >
                               <div className="mb-1 flex flex-col gap-6 p-5">
                                    <Typography variant="h6" color="blue-gray" className="-mb-3">
                                         First Name
@@ -226,15 +166,15 @@ function SignUpForm() {
                                    />
                               </div>
                               <div className="flex justify-center">
-                              <Button type="submit" className="mt-2" size="lg">
-                                   Sign Up
-                              </Button>
+                                   <Button type="submit" className="mt-2" size="lg">
+                                        Sign Up
+                                   </Button>
                               </div>
                               <Typography color="gray" className="mt-4 mb-4 text-center font-normal">
                                    Already have an account?{" "}
-                                   <a href="#" className="font-medium text-gray-900">
+                                   <Link to="/login" className="font-medium text-gray-900">
                                         Log In
-                                   </a>
+                                   </Link>
                               </Typography>
                          </form>
                     </Card>
