@@ -1,0 +1,36 @@
+/* tailwind.css */
+/* @import "../node_modules/normalize.css/normalize.css"; */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* body {
+     margin: 2%;
+}
+
+main {
+     margin: 2%;
+     min-height: 80vh;
+<<<<<<< HEAD
+} */
+=======
+}
+ */
+
+/* TODO: give everything a red border */
+
+* {
+     /* border: 1px solid red; */
+     /* z-index: 0; */
+}
+
+body {
+     display: flex;
+     flex-direction: column;
+
+}
+>>>>>>> main
+
+/* * {
+     border: 1px solid red;
+ } */
