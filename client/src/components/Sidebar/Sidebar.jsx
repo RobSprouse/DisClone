@@ -43,17 +43,16 @@ const Sidebar = () => {
      }
 
      const style = {
-          sidebar: "flex flex-col max-h-[80vh] min-w-[21%] bg-teal-100 mt-3 pl-3 m-3 pr-3 rounded-lg pb-3 dark:bg-sky-950 dark:text-teal-100",
+          sidebar: "flex flex-col flex-grow min-w-[250px] max-w-[25%] bg-teal-100 mt-3 pl-3 m-3 pr-3 rounded-lg pb-3 dark:bg-sky-950 dark:text-teal-100",
           titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2",
           typography: "font-bold  text-lg  ",
           outerContainer:
-               "flex flex-col min-h-[25vh] bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900", // bg-gradient-to-tr from-green-100 to-blue-900
+               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900", // bg-gradient-to-tr from-green-100 to-blue-900
           groupContainers:
-               " custom-scrollbar flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5 shadow-lg",
+               " custom-scrollbar flex-grow  flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5 shadow-lg",
           channelGroup:
-               " flex flex-row items-center backdrop-blur-sm bg-white/15 rounded-lg cursor-pointer motion-safe:hover:animate-bounce -mb-4 static focus:z-50 overflow-hidden overflow-x-auto xCustom-scrollbar min-h-[6vh]",
+               " flex flex-row flex-grow  items-center backdrop-blur-sm bg-white/15 rounded-lg cursor-pointer motion-safe:hover:animate-bounce -mb-4 static focus:z-50 overflow-hidden overflow-x-auto xCustom-scrollbar min-h-[25%]",
           avatar: "m-1 border-2 border-white dark:border-teal-100",
-          conversationGroup: "flex flex-row items-center bg-gradient-to-r from-green-400 to-blue-500 rounded-lg  ",
           groupedAvatars:
                " flex flex-row backdrop-blur-sm bg-white/15 rounded-lg p-1 mb-1 cursor-pointer mb-2 overflow-hidden justify-center overflow-x-auto xCustom-scrollbar shadow-lg",
           overlappedAvatars: "flex items-center -space-x-6 p-1",
@@ -82,12 +81,15 @@ const Sidebar = () => {
                                              tabIndex={0}
                                         >
                                              <Avatar
+                                                  key={channel._id}
                                                   variant="circular"
                                                   alt="user 1"
                                                   className={style.avatar}
                                                   src={channel.image}
                                              />
-                                             <Typography className={style.typography}>{channel.name}</Typography>
+                                             <Typography key={channel.id} className={style.typography}>
+                                                  {channel.name}
+                                             </Typography>
                                         </div>
                                    ))}
                               </div>
@@ -104,13 +106,14 @@ const Sidebar = () => {
                                              role="button"
                                              tabIndex={0}
                                         >
-                                             <div className={style.groupedAvatars}>
-                                                  <div className={style.overlappedAvatars}>
+                                             <div key={conversation._id} className={style.groupedAvatars}>
+                                                  <div key={conversation._id} className={style.overlappedAvatars}>
                                                        {conversation.members
                                                             .filter((member) => member._id !== user._id)
-                                                            .map((member) => (
-                                                                 <>
+                                                            .map((member, index) => (
+                                                                 <div key={index}>
                                                                       <Tooltip
+                                                                           key={member._id}
                                                                            content={member.username}
                                                                            animate={style.tooltip}
                                                                            className={style.tooltipStyle}
@@ -126,7 +129,7 @@ const Sidebar = () => {
                                                                                 src={member.image}
                                                                            />
                                                                       </Tooltip>
-                                                                 </>
+                                                                 </div>
                                                             ))}
                                                   </div>
                                              </div>

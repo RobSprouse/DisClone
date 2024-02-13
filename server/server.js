@@ -18,7 +18,6 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 // COMMENT: creates an instance of PubSub for subscriptions
 import { pubsub } from "./schemas/resolvers.js";
 
-
 // COMMENT: creates an instance of an Express server and sets the port
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -35,21 +34,6 @@ app.use(
 );
 app.use(authMiddleware); // COMMENT: adds the authentication middleware to the middleware stack and is used to authenticate the user
 
-const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
-app.post("/refresh_token", (req, res) => {
-     const accessToken = req.cookies.accessToken;
-     if (!accessToken) return res.sendStatus(401);
-
-     jwt.verify(accessToken, secret, (err, user) => {
-          if (err) return res.sendStatus(403);
-          const accessToken = jwt.sign({ username: user.username, email: user.email, _id: user._id }, secret, {
-               expiresIn: "15m",
-          });
-          console.log("New Access token set in cookie from post /refresh_token");
-          res.json({ accessToken });
-     });
-});
-
 // COMMENT: creates a new Apollo server with the schema and resolvers
 const server = new ApolloServer({
      typeDefs: typeDefs,
@@ -62,28 +46,27 @@ const server = new ApolloServer({
           const accessToken = req.accessToken || null;
           const context = { req, res, pubsub };
           context.payLoad = verifyToken(accessToken); // FIXME:  get rid of and uncomment to implement authentication
-          // try {
-          //      if (accessToken) {
-          //           context.payLoad = verifyToken(accessToken);
-          //           context.accessToken = accessToken;
-          //      }
-          // } catch (error) {
-          //      console.log("Token verification failed:", error);
-          //      throw new AuthenticationError("Invalid token");
-          // }
+          try {
+               if (accessToken) {
+                    context.payLoad = verifyToken(accessToken);
+                    context.accessToken = accessToken;
+               }
+          } catch (error) {
+               console.log("Token verification failed:", error);
+               throw new AuthenticationError("Invalid token");
+          }
           return context;
      },
      subscriptions: {
           onConnect: (connectionParams, webSocket) => {
-               /* FIXME: uncomment to implement authentication
-                     if (connectionParams.accessToken) {
-                          const validToken = verifyToken(connectionParams.accessToken);
-                          if (!validToken) {
-                               throw new AuthenticationError("Invalid token");
-                          }
-                          return { accessToken: connectionParams.accessToken };
-                     }
-                     throw new AuthenticationError("Not Authenticated"); */
+               if (connectionParams.accessToken) {
+                    const validToken = verifyToken(connectionParams.accessToken);
+                    if (!validToken) {
+                         throw new AuthenticationError("Invalid token");
+                    }
+                    return { accessToken: connectionParams.accessToken };
+               }
+               throw new AuthenticationError("Not Authenticated");
           },
      },
 });

@@ -54,6 +54,7 @@ const typeDefs = gql`
           getAllUsers: [User!]!
           getAllChannels: [Channel!]!
           getMessages(id: ID!, type: String!): MessagesResponse!
+          refreshToken: Auth
      }
 
      type Auth {

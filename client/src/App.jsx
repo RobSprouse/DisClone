@@ -2,13 +2,28 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { createApolloClient } from "./utils/apolloClient";
-import { ApolloProvider } from "@apollo/client";
+import { ApolloProvider, useQuery } from "@apollo/client";
 import { ThemeProvider } from "@material-tailwind/react";
 import AccessTokenContext from "./utils/AccessTokenContext";
 import NavigationBar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
+import { REFRESH_TOKEN_QUERY } from "./utils/queries.js";
 
 import "./app.css";
+
+function RefreshTokenComponent() {
+     const { loading, refetch } = useQuery(REFRESH_TOKEN_QUERY, { fetchPolicy: "network-only" });
+
+     useEffect(() => {
+          const interval = setInterval(() => {
+               refetch();
+          }, 600000); // 10 minutes
+          return () => clearInterval(interval);
+     }, [refetch]);
+
+     if (loading) return <></>;
+     return <></>;
+}
 
 function App() {
      const [accessToken, setAccessToken] = useState(null);
@@ -19,14 +34,13 @@ function App() {
      const contextValue = useMemo(() => ({ accessToken, setAccessToken }), [accessToken, setAccessToken]);
 
      useEffect(() => {
-          const token = Cookies.get("access_token"); // read the access token from the cookie
+          const token = Cookies.get("access_token");
           if (token) {
                setAccessToken(token);
           }
-          setIsLoading(false); // Set isLoading to false after reading the token
+          setIsLoading(false);
      }, [location]);
 
-     // If isLoading is true, render a loading message or spinner
      if (isLoading) return <></>;
 
      return (
@@ -34,10 +48,11 @@ function App() {
                <AccessTokenContext.Provider value={contextValue}>
                     <React.StrictMode>
                          <ThemeProvider>
-                              <div  className="flex flex-col dark:bg-slate-950 min-h-screen">
+                              <div className="flex flex-col dark:bg-slate-950 min-h-screen">
                                    <NavigationBar />
                                    <Outlet />
                                    <Footer />
+                                   <RefreshTokenComponent />
                               </div>
                          </ThemeProvider>
                     </React.StrictMode>

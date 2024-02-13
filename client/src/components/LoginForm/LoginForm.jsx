@@ -59,81 +59,84 @@ function LoginForm() {
           <>
                <div>
                     <div className="backgroundImage"></div>
-                    <div>
-                         <h2 className="text-3xl text-center mt-5 text-teal-100">
-                              <TypeAnimation
-                                   sequence={["Welcome to DISCLONE", 2000]}
-                                   wrapper="span"
-                                   speed={50}
-                                   style={{ fontSize: "1em", display: "inline-block" }}
-                                   repeat={0}
-                              />
-                         </h2>
-                    </div>
-                    <div className="flex items-center justify-center mt-10">
-                         <Card color="transparent" shadow={false}>
-                              <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
-                                   Log In
-                              </Typography>
-                              <Typography
-                                   color="gray"
-                                   className="mt-10 font-normal text-cyan-100 shadow-2xl shadow-cyan-300 text-center"
-                              >
-                                   Nice to meet you! Enter your details to register.
-                              </Typography>
-                              <form
-                                   onSubmit={handleSubmit}
-                                   className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl"
-                              >
-                                   <div className="mb-1 flex flex-col gap-5 p-5 ">
-                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                             Username
-                                        </Typography>
-                                        <Input
-                                             type="text"
-                                             name="username"
-                                             value={userFormData.username}
-                                             onChange={handleInputChange}
-                                             required
-                                             size="lg"
-                                             placeholder="name@mail.com"
-                                             autoComplete="username"
-                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                             labelProps={{
-                                                  className: "before:content-none after:content-none",
-                                             }}
-                                        />
-                                        <Typography variant="h6" color="blue-gray" className="-mb-3">
-                                             Password
-                                        </Typography>
-                                        <Input
-                                             type="password"
-                                             name="password"
-                                             value={userFormData.password}
-                                             onChange={handleInputChange}
-                                             size="lg"
-                                             placeholder="********"
-                                             autoComplete="current-password"
-                                             className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                                             required
-                                             labelProps={{
-                                                  className: "before:content-none after:content-none",
-                                             }}
-                                        />
-                                   </div>
-                                   <div className="flex justify-center">
-                                        <Button type="submit" viewbox="0 0 24 24" size="lg">
-                                             Log In
-                                        </Button>
-                                   </div>
-                                   <Typography color="gray" className="mt-3 mb-3 text-center font-normal">
-                                        New to Disclone?{" "}
-                                        <Link to="/signup" className="font-medium text-gray-900">
-                                             Create an account
-                                        </Link>
+                    <div className="zIndex">
+                         <div>
+                              <h2 className="text-3xl text-center mt-5 text-teal-100">
+                                   <TypeAnimation
+                                        sequence={["Welcome to DISCLONE", 2000]}
+                                        wrapper="span"
+                                        speed={50}
+                                        style={{ fontSize: "1em", display: "inline-block" }}
+                                        repeat={0}
+                                        className="zIndex"
+                                   />
+                              </h2>
+                         </div>
+                         <div className="flex items-center justify-center mt-10">
+                              <Card color="transparent" shadow={false}>
+                                   <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
+                                        Log In
                                    </Typography>
-                              </form>
-                         </Card>
+                                   <Typography
+                                        color="gray"
+                                        className="mt-10 font-normal text-cyan-100 shadow-2xl shadow-cyan-300 text-center"
+                                   >
+                                        Nice to meet you! Enter your details to register.
+                                   </Typography>
+                                   <form
+                                        onSubmit={handleSubmit}
+                                        className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl"
+                                   >
+                                        <div className="mb-1 flex flex-col gap-5 p-5 ">
+                                             <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                                  Username
+                                             </Typography>
+                                             <Input
+                                                  type="text"
+                                                  name="username"
+                                                  value={userFormData.username}
+                                                  onChange={handleInputChange}
+                                                  required
+                                                  size="lg"
+                                                  placeholder="name@mail.com"
+                                                  autoComplete="username"
+                                                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                  labelProps={{
+                                                       className: "before:content-none after:content-none",
+                                                  }}
+                                             />
+                                             <Typography variant="h6" color="blue-gray" className="-mb-3">
+                                                  Password
+                                             </Typography>
+                                             <Input
+                                                  type="password"
+                                                  name="password"
+                                                  value={userFormData.password}
+                                                  onChange={handleInputChange}
+                                                  size="lg"
+                                                  placeholder="********"
+                                                  autoComplete="current-password"
+                                                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                                                  required
+                                                  labelProps={{
+                                                       className: "before:content-none after:content-none",
+                                                  }}
+                                             />
+                                        </div>
+                                        <div className="flex justify-center">
+                                             <Button type="submit" viewbox="0 0 24 24" size="lg">
+                                                  Log In
+                                             </Button>
+                                        </div>
+                                        <Typography color="gray" className="mt-3 mb-3 text-center font-normal">
+                                             New to Disclone?{" "}
+                                             <Link to="/signup" className="font-medium text-gray-900">
+                                                  Create an account
+                                             </Link>
+                                        </Typography>
+                                   </form>
+                              </Card>
+                         </div>
                     </div>
                </div>
           </>

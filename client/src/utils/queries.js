@@ -82,3 +82,11 @@ export const GET_MESSAGES = gql`
           }
      }
 `;
+
+export const REFRESH_TOKEN_QUERY = gql`
+     query RefreshToken {
+          refreshToken {
+               accessToken
+          }
+     }
+`;

@@ -5,20 +5,17 @@ import { Channel, Conversation, User, Message } from "../models/models.js";
 import { signToken, verifyToken } from "../utils/auth.js";
 import { withFilter, PubSub } from "graphql-subscriptions";
 
-
-
 const pubsub = new PubSub();
 
 const auth = (fn) => async (parent, args, context, info) => {
-     /* FIXME: uncomment to implement authentication
-           if (!context.accessToken) {
-                throw new AuthenticationError("Not Authenticated");
-           }
-           const validToken = verifyToken(context.accessToken);
-           if (!validToken) {
-                throw new AuthenticationError("Invalid token");
-           }
-       */
+     if (!context.accessToken) {
+          throw new AuthenticationError("Not Authenticated");
+     }
+     const validToken = verifyToken(context.accessToken);
+     if (!validToken) {
+          throw new AuthenticationError("Invalid token");
+     }
+
      return fn(parent, args, context, info);
 };
 
@@ -38,6 +35,10 @@ const resolvers = {
           },
      },
      Query: {
+          refreshToken: (_, __, { req, res }) => {
+               return;
+          },
+
           user: auth(async (_, __, { payLoad }) => {
                return await User.findById(payLoad.data._id)
                     .populate("channels")
@@ -95,7 +96,6 @@ const resolvers = {
                const channel = await Channel.create({ name, image });
                channel.members.push(payLoad.data._id);
                await channel.save();
-               console.log("Channel:", channel);
                return channel;
           }),
           // TODO: mutation to add a message to the conversation or channel
