@@ -36,6 +36,7 @@
      "dependencies": {
           "concurrently": "^8.2.2",
           "faker": "^6.6.6",
+          "jwt-decode": "^4.0.0",
           "prettier": "^3.2.4"
      }
 }
