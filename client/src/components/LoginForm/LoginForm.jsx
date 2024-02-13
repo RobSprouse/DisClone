@@ -57,16 +57,19 @@ function LoginForm() {
 
      return (
           <>
-          <h2 className="text-3xl text-center mt-5 dark:text-teal-100">Welcome to 
-           <TypeAnimation
-                         sequence={["DISCLONE", 2000]}
-                         wrapper="span"
-                         speed={50}
-                         style={{ fontSize: "1em", display: "inline-block" }}
-                    />
-          </h2>
                <div>
                     <div className="backgroundImage"></div>
+                    <div>
+                         <h2 className="text-3xl text-center mt-5 text-teal-100">
+                              <TypeAnimation
+                                   sequence={["Welcome to DISCLONE", 2000]}
+                                   wrapper="span"
+                                   speed={50}
+                                   style={{ fontSize: "1em", display: "inline-block" }}
+                                   repeat={0}
+                              />
+                         </h2>
+                    </div>
                     <div className="flex items-center justify-center mt-10">
                          <Card color="transparent" shadow={false}>
                               <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
