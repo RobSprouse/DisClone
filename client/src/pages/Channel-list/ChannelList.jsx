@@ -30,15 +30,15 @@ const ChannelList = () => {
           return <p>No channels found.</p>;
      }
      const style = {
-          channelName: "font-bold text-2xl",
-          channelImage: "size-1/6 rounded-full object-cover object-center",
+          channelName: "font-bold text-xl dark:text-teal-100 ml-5",
+          channelImage: "size-1/6 rounded-full object-cover object-center ml-5",
           memberName: "",
           memberImage: "size-profileImg rounded-full object-cover object-center",
      };
 
      return (
           <div>
-               <h1>Channels</h1>
+               <h1 className="text-3xl text-center mt-5 dark:text-teal-100">Channels</h1>
                <ul>
                     {channels.map((channel) => (
                          <li key={channel._id}>
@@ -47,7 +47,6 @@ const ChannelList = () => {
                                    <img className={style.channelImage} src={channel.image} alt={channel.name} />
                               </div>
                               <button onClick={() => handleAddChannel(channel._id, { key: "value" })}>
-                                   Enter Channel
                               </button>
                          </li>
                     ))}

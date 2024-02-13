@@ -39,7 +39,7 @@ const Home = () => {
 
      return (
           <MessageProvider>
-               <div className="backgroundImage"></div>
+               <div></div>
                <div className="flex flex-row  shrink-0 m-w-full max-h-[81vh]">
                     <Sidebar />
                     <Messages className="flex-grow" />

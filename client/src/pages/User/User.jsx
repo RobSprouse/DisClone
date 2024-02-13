@@ -32,15 +32,14 @@ const UserList = () => {
 
     return (
         <div>
-            <h1>Users</h1>
+            <h1 className="text-3xl text-center mt-5 dark:text-teal-100">Users</h1>
             <ul>
                 {users.map((user) => (
                     <li key={user._id}>
                         <div>
-                            <p>{user.username}</p>
+                            <p className="text-lg dark:text-teal-100 ml-5">{user.username}</p>
                         </div>
                         <button onClick={() => handleAddUser(user._id, { key: "value" })}>
-                            Add User
                         </button>
                     </li>
                 ))}

@@ -6,6 +6,7 @@ import "./loginForm.css";
 import { Card, Input, Button, Typography } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { TypeAnimation } from "react-type-animation";
 
 function LoginForm() {
      const { accessToken, setAccessToken } = useContext(AccessTokenContext);
@@ -58,6 +59,17 @@ function LoginForm() {
           <>
                <div>
                     <div className="backgroundImage"></div>
+                    <div>
+                         <h2 className="text-3xl text-center mt-5 text-teal-100">
+                              <TypeAnimation
+                                   sequence={["Welcome to DISCLONE", 2000]}
+                                   wrapper="span"
+                                   speed={50}
+                                   style={{ fontSize: "1em", display: "inline-block" }}
+                                   repeat={0}
+                              />
+                         </h2>
+                    </div>
                     <div className="flex items-center justify-center mt-10">
                          <Card color="transparent" shadow={false}>
                               <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
@@ -110,7 +122,7 @@ function LoginForm() {
                                         />
                                    </div>
                                    <div className="flex justify-center">
-                                        <Button type="submit" className="mt-2" size="lg">
+                                        <Button type="submit" viewbox="0 0 24 24" size="lg">
                                              Log In
                                         </Button>
                                    </div>
