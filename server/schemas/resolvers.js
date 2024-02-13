@@ -96,6 +96,7 @@ const resolvers = {
                const user = await User.findById(channel.moderator);
                user.channels.push(channel._id);
                await user.save();
+               console.log("Added channel:", channel);
                return channel;
           }),
           // TODO: mutation to add a message to the conversation or channel

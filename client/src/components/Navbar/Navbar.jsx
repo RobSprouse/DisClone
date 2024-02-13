@@ -1,12 +1,12 @@
 import { Navbar, Typography, Button, Menu, MenuHandler, MenuList, MenuItem, Avatar } from "@material-tailwind/react";
-import { UserCircleIcon, ChevronDownIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { UserCircleIcon, ChevronDownIcon, PowerIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import React, { useContext, useCallback } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext";
 import { LOGOUT_USER } from "../../utils/mutations";
 import { GET_USER } from "../../utils/queries";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // profile menu component
 const profileMenuItems = [
@@ -14,11 +14,16 @@ const profileMenuItems = [
           label: "My Profile",
           icon: UserCircleIcon,
      },
+     {
+          label: "Add Channel",
+          icon:  PlusCircleIcon,
+     },
 
      {
           label: "Sign Out",
           icon: PowerIcon,
      },
+     
 ];
 
 function ProfileMenu() {
@@ -99,6 +104,12 @@ function ProfileMenu() {
 
 export default function NavigationBar() {
      const { accessToken } = useContext(AccessTokenContext);
+     const navigate = useNavigate(); // Move useNavigate to the top level of the component
+
+     const handleAddChannel = () => {
+          navigate("/channels");
+     };
+
      return (
           <>
                <Navbar className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900">
@@ -120,6 +131,10 @@ export default function NavigationBar() {
                                    >
                                         Users
                                    </Link>
+                                   <Link to="/add-channel" onClick={handleAddChannel} className="font-medium  px-4 py-2 rounded-lg hover:bg-blue-700">
+                                    Add Channel
+                                   </Link>
+
                               </div>
                               <ProfileMenu />
                          </>
