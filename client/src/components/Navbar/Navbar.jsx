@@ -1,6 +1,6 @@
 import { Navbar, Typography, Button, Menu, MenuHandler, MenuList, MenuItem, Avatar } from "@material-tailwind/react";
 import { UserCircleIcon, ChevronDownIcon, PowerIcon } from "@heroicons/react/24/solid";
-import React, { useContext, useCallback, useState, useEffect} from "react";
+import React, { useContext, useCallback, useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext";
 import { LOGOUT_USER } from "../../utils/mutations";
@@ -49,7 +49,7 @@ function ProfileMenu() {
           <>
                <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
                     <MenuHandler>
-                         <Button variant="text" color="blue-gray" className="flex items-center gap-1 rounded-full">
+                         <Button variant="text" color="blue-gray" className="flex items-center gap-1 rounded-full ">
                               <Avatar
                                    variant="circular"
                                    size="sm"
@@ -112,22 +112,22 @@ export default function NavigationBar() {
      }, [darkMode]);
      return (
           <>
-               <Navbar className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900">
-                    <Link to="/" className="py-1.5 text-3xl font-bold">
+               <Navbar className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100">
+                    <Link to="/" className="py-1.5 text-3xl font-bold ml-5">
                          Disclone
                     </Link>
                     {accessToken && (
                          <>
                               <div className="flex gap-7 mt-1">
-                                   <Link to="/channels" className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700">
+                                   <Link to="/channels" className="font-medium px-4 py-2 rounded-lg hover:bg-sky-800">
                                         List of Channels
                                    </Link>
-                                   <Link to="/users" className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700 ">
+                                   <Link to="/users" className="font-medium px-4 py-2 rounded-lg hover:bg-sky-800 ">
                                         Users
                                    </Link>
                               </div>
                               <HiOutlineLightBulb
-                                   className="size-6"
+                                   className="size-6 cursor-pointer"
                                    onClick={() => setDarkMode((prevMode) => !prevMode)}
                               />
                               <ProfileMenu />

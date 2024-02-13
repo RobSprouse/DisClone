@@ -9,7 +9,7 @@
 
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-     background: #0fb3aa;
+     background: #ccfbf1;
      border-radius: 20px
 }
 
@@ -24,6 +24,7 @@
 
 
 .xCustom-scrollbar::-webkit-scrollbar-thumb {
-     background: #0fb3aa;
+     background: #ccfbf1;
      border-radius: 20px
+     
 }
