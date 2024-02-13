@@ -1,6 +1,7 @@
 // COMMENT: imports the required modules
 import express from "express";
 import path from "path";
+
 import { ApolloServer } from "apollo-server-express";
 import { createServer } from "http";
 import { execute, subscribe, printSchema } from "graphql";
@@ -90,11 +91,11 @@ const server = new ApolloServer({
 // COMMENT: serves the static files from the React app
 // Only serve the static files from the React app in production
 if (process.env.NODE_ENV === "production") {
-     app.use(express.static(path.resolve("../client/dist")));
+     app.use(express.static(path.resolve("./client/dist")));
 
      // COMMENT: sends all requests to the React app
      app.get("*", (req, res) => {
-          res.sendFile(path.resolve("../client/dist/index.html"));
+          res.sendFile(path.resolve("./client/dist/index.html"));
      });
 }
 
