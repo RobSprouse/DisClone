@@ -34,7 +34,7 @@ function App() {
                <AccessTokenContext.Provider value={contextValue}>
                     <React.StrictMode>
                          <ThemeProvider>
-                              <div className="flex flex-col w-full m-12 max-w-screen-2xl mx-auto px-4 sm:px-8 lg:px-12 2xl:px-0">
+                              <div  className="flex flex-col dark:bg-slate-950 min-h-screen">
                                    <NavigationBar />
                                    <Outlet />
                                    <Footer />

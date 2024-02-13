@@ -12,7 +12,7 @@ let consoleLogCount = 0;
 function addToConsoleCount() {
      consoleLogCount++;
      return consoleLogCount;
-};
+}
 
 // COMMENT: function to sign a token and return it
 function signToken({ username, email, _id }, res) {
@@ -34,7 +34,7 @@ function signToken({ username, email, _id }, res) {
           httpOnly: false, // make it accessible from JavaScript
           secure: process.env.NODE_ENV === "production", // use HTTPS in production
           sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
-          maxAge: 1000 * 60 * 15, // 15 minutes in milliseconds
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 1000 * 60 * 15,  15 minutes in milliseconds // FIXME: change to 15 minutes in production
      });
 
      // console.log("New Access token set in cookie");

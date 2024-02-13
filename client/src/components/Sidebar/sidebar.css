@@ -9,6 +9,22 @@
 
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-     background: #0fb3aa;
+     background: #ccfbf1;
      border-radius: 20px
+}
+
+
+.xCustom-scrollbar::-webkit-scrollbar {
+     height: 6px;
+}
+
+.xCustom-scrollbar::-webkit-scrollbar-track {
+     background: transparent;
+}
+
+
+.xCustom-scrollbar::-webkit-scrollbar-thumb {
+     background: #ccfbf1;
+     border-radius: 20px
+     
 }
