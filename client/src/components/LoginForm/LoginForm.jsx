@@ -124,7 +124,7 @@ function LoginForm() {
                                              />
                                         </div>
                                         <div className="flex justify-center">
-                                             <Button type="submit" viewbox="0 0 24 24" size="lg">
+                                             <Button type="submit"  size="lg">
                                                   Log In
                                              </Button>
                                         </div>
