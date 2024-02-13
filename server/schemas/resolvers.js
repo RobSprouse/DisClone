@@ -91,11 +91,11 @@ const resolvers = {
                // console.log("Refresh and access tokens cleared from cookies");
                return true;
           },
-          addChannel: auth(async (_, { name }) => {
-               const channel = await Channel.create({ name });
-               const user = await User.findById(channel.moderator);
-               user.channels.push(channel._id);
-               await user.save();
+          addChannel: auth(async (_, { name, image }, { payLoad }) => {
+               const channel = await Channel.create({ name, image });
+               channel.members.push(payLoad.data._id);
+               await channel.save();
+               console.log("Channel:", channel);
                return channel;
           }),
           // TODO: mutation to add a message to the conversation or channel

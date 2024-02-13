@@ -39,6 +39,16 @@ export const LOGOUT_USER = gql`
      }
 `;
 
+export const ADD_CHANNEL = gql`
+     mutation AddChannel($name: String!, $image: String) {
+          addChannel(name: $name, image: $image) {
+               _id
+               name
+               image
+          }
+     }
+`;
+
 export const ADD_MESSAGE = gql`
      mutation AddMessage($text: String!, $id: ID!, $type: String!) {
           addMessage(text: $text, id: $id, type: $type) {

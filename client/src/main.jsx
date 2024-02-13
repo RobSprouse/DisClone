@@ -9,6 +9,7 @@ import UserList from "./pages/User/User.jsx";
 import PrivateRoute from "./components/privateRoutes/privateRoutes.jsx";
 import LoginForm from "./components/LoginForm/LoginForm.jsx";
 import SignUpForm from "./components/SignupForm/SignupForm.jsx";
+import AddChannel from "./components/AddChannel/AddChannel.jsx";
 import Home from "./pages/Home/Home.jsx";
 
 // COMMENT: sets up the router and paths
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
                               <UserList />
                          </PrivateRoute>
                     ),
+               },
+               {
+                    path: "/add-channel",
+                    element: (
+                         <PrivateRoute>
+                              <AddChannel />
+                         </PrivateRoute>
+                    )
                },
                {
                     path: "/login",

@@ -112,10 +112,10 @@ const startApolloServer = async () => {
                execute,
                subscribe,
                onConnect: (connectionParams, webSocket, context) => {
-                    console.log("Client connected with params:", connectionParams);
+                    // console.log("Client connected with params:", connectionParams);
                },
                onDisconnect: (webSocket, context) => {
-                    console.log("Client disconnected");
+                    // console.log("Client disconnected");
                },
           },
           {

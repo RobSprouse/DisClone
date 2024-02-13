@@ -1,12 +1,12 @@
 import { Navbar, Typography, Button, Menu, MenuHandler, MenuList, MenuItem, Avatar } from "@material-tailwind/react";
-import { UserCircleIcon, ChevronDownIcon, PowerIcon } from "@heroicons/react/24/solid";
+import { UserCircleIcon, ChevronDownIcon, PowerIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
 import React, { useContext, useCallback, useState, useEffect } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext";
 import { LOGOUT_USER } from "../../utils/mutations";
 import { GET_USER } from "../../utils/queries";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineLightBulb } from "react-icons/hi";
 
 // profile menu component
@@ -100,6 +100,12 @@ function ProfileMenu() {
 
 export default function NavigationBar() {
      const { accessToken } = useContext(AccessTokenContext);
+
+     const navigate = useNavigate(); // Move useNavigate to the top level of the component
+
+     const handleAddChannel = () => {
+          navigate("/channels");
+     };
      const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
      const [darkMode, setDarkMode] = useState(prefersDark);
 
@@ -110,6 +116,7 @@ export default function NavigationBar() {
                document.documentElement.classList.remove("dark");
           }
      }, [darkMode]);
+
      return (
           <>
                <Navbar className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100">
@@ -125,6 +132,10 @@ export default function NavigationBar() {
                                    <Link to="/users" className="font-medium px-4 py-2 rounded-lg hover:bg-sky-800 ">
                                         Users
                                    </Link>
+                                   <Link to="/add-channel" onClick={handleAddChannel} className="font-medium  px-4 py-2 rounded-lg hover:bg-blue-700">
+                                    Add Channel
+                                   </Link>
+
                               </div>
                               <HiOutlineLightBulb
                                    className="size-6 cursor-pointer"
