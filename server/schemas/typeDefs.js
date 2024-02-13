@@ -36,7 +36,7 @@ const typeDefs = gql`
      }
 
      type Channel {
-          _id: ID
+          _id: ID!
           name: String
           image: String
           members: [User]

@@ -42,7 +42,6 @@ export const LOGOUT_USER = gql`
 export const ADD_CHANNEL = gql`
      mutation AddChannel($name: String!, $image: String) {
           addChannel(name: $name, image: $image) {
-               _id
                name
                image
           }
