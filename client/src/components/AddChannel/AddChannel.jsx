@@ -1,9 +1,7 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_CHANNEL } from "../../utils/mutations";
-import AccessTokenContext from "../../utils/AccessTokenContext";
-import { jwtDecode } from "jwt-decode";
 import { GET_ALL_CHANNELS, GET_USER } from "../../utils/queries";
 
 const AddChannel = () => {
