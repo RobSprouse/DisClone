@@ -1,12 +1,13 @@
 import { Navbar, Typography, Button, Menu, MenuHandler, MenuList, MenuItem, Avatar } from "@material-tailwind/react";
 import { UserCircleIcon, ChevronDownIcon, PowerIcon } from "@heroicons/react/24/solid";
-import React, { useContext, useCallback } from "react";
+import React, { useContext, useCallback, useState, useEffect} from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import AccessTokenContext from "../../utils/AccessTokenContext";
 import { LOGOUT_USER } from "../../utils/mutations";
 import { GET_USER } from "../../utils/queries";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
+import { HiOutlineLightBulb } from "react-icons/hi";
 
 // profile menu component
 const profileMenuItems = [
@@ -99,6 +100,16 @@ function ProfileMenu() {
 
 export default function NavigationBar() {
      const { accessToken } = useContext(AccessTokenContext);
+     const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+     const [darkMode, setDarkMode] = useState(prefersDark);
+
+     useEffect(() => {
+          if (darkMode) {
+               document.documentElement.classList.add("dark");
+          } else {
+               document.documentElement.classList.remove("dark");
+          }
+     }, [darkMode]);
      return (
           <>
                <Navbar className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900">
@@ -108,19 +119,17 @@ export default function NavigationBar() {
                     {accessToken && (
                          <>
                               <div className="flex gap-7 mt-1">
-                                   <Link
-                                        to="/channels"
-                                        className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700"
-                                   >
+                                   <Link to="/channels" className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700">
                                         List of Channels
                                    </Link>
-                                   <Link
-                                        to="/users"
-                                        className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700 "
-                                   >
+                                   <Link to="/users" className="font-medium px-4 py-2 rounded-lg hover:bg-blue-700 ">
                                         Users
                                    </Link>
                               </div>
+                              <HiOutlineLightBulb
+                                   className="size-6"
+                                   onClick={() => setDarkMode((prevMode) => !prevMode)}
+                              />
                               <ProfileMenu />
                          </>
                     )}
