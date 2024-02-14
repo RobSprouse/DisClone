@@ -37,9 +37,9 @@ const UserList = () => {
                 {users.map((user) => (
                     <li key={user._id}>
                         <div>
-                            <p className="text-lg dark:text-teal-100 ml-5">{user.username}</p>
+                            <p className="text-xl dark:text-teal-100 ml-5">{user.username}</p>
                         </div>
-                        <button onClick={() => handleAddUser(user._id, { key: "value" })}>
+                        <button className="text-md dark:text-teal-100 px-4 py-2 rounded-xl hover:bg-sky-800 dark:hover:bg-sky-800" onClick={() => handleAddUser(user._id, { key: "value" })}> Add User
                         </button>
                     </li>
                 ))}

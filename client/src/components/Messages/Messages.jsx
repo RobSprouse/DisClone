@@ -20,7 +20,7 @@ const Messages = () => {
 
      const style = {
           messagesContainer:
-               "flex flex-col custom-scrollbar shrink-0 overflow-auto max-h-[90%] max-w-[900px] bg-teal-100 mt-3 pl-3 rounded-lg ",
+               "flex flex-col flex-end custom-scrollbar shrink-0 overflow-auto max-h-[90%] flex bg-teal-100 mt-3 pl-3 rounded-lg ",
           avatar: "m-1 border-2 border-white",
           typography: " flex  font-bold text-sm text-wrap ",
           inputForm: "flex flex-row items-center rounded-lg w-full bg-teal-100 rounded-lg max-h-[55px] mt-3 p-1",

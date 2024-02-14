@@ -34,3 +34,34 @@ body {
      }
 }
 
+
+.rootDiv {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     min-height: 100vh;
+     min-width: 100%;
+}
+
+
+@media screen and (min-width: 1440px) {
+     .appDiv {
+          margin: 2% 18%;
+     }
+}
+
+@media screen and (max-width: 1440px) {
+     .appDiv {
+          margin: 2% 5%;
+     }
+}
+
+@media screen and (max-width: 500px) {
+     * {
+          font-size: 0.805rem;
+     }
+
+     .appDiv {
+          margin: 2% 5%;
+     }
+}
