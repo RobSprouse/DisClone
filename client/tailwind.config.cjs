@@ -1,8 +1,10 @@
 const withMT = require("@material-tailwind/react/utils/withMT");
+const plugin = require("tailwindcss/plugin");
 
 module.exports = withMT({
      content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
      theme: {
+          
           colors: {
                sky: {
                     50: "#f0f9ff",
@@ -30,11 +32,19 @@ module.exports = withMT({
                     900: "#0f172a",
                     950: "#020617",
                },
+         
+
           },
           extend: {
+               textShadow: {
+                    sm: '0 1px 2px var(--tw-shadow-color)',
+                    DEFAULT: '0 2px 4px var(--tw-shadow-color)',
+                    lg: '0 8px 16px var(--tw-shadow-color)',
+               },
                boxShadow: {
                     inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)",
                },
+               
                scrollbar: (theme) => ({
                     thin: {
                          width: "6px",
@@ -44,8 +54,25 @@ module.exports = withMT({
                          thumbRadius: "full",
                     },
                }),
+               fontFamily: {
+                    'PressStart2P': ['"Press Start 2P"'],
+          },
+          
+         
           },
      },
      
-     plugins: [require("tailwind-scrollbar")],
+     plugins: [require("tailwind-scrollbar"),
+          plugin(function ({ matchUtilities, theme }) {
+            matchUtilities(
+              {
+                'text-shadow': (value) => ({
+                  textShadow: value,
+                }),
+              },
+              { values: theme('textShadow') }
+            )
+          }),
+     ],
+     
 });

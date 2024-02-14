@@ -25,6 +25,15 @@ body {
      display: flex;
      flex-direction: column;
 }
+@layer base {
+     .font-outline-2 {
+          -webkit-text-stroke: 0.3px black;
+     }
+     .font-outline-4 {
+          -webkit-text-stroke: 4px teal;
+     }
+}
+
 
 .rootDiv {
      display: flex;
