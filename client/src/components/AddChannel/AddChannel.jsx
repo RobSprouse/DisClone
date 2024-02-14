@@ -49,7 +49,7 @@ const AddChannel = () => {
     return (
       <div>
         <h1 className="text-3xl text-center mt-5 dark:text-teal-100">Add Channel</h1>
-        <div className="flex justify-center">
+        <div className="flex justify-center ">
         <button className="text-xl dark:text-teal-100 px-4 py-2 rounded-xl hover:bg-sky-800 dark:hover:bg-sky-800" onClick={openModal}>Create Channel</button>
         </div>
         {showModal && (
