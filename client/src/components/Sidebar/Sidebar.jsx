@@ -7,9 +7,9 @@ import { MessageContext } from "../../utils/MessageContext.jsx";
 
 const Sidebar = () => {
      const [user, setUser] = useState(null);
-     const { loading, error, data } = useQuery(GET_USER);
+     const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "network-only" });
 
-     const { setMessageData } = useContext(MessageContext);
+     const { messageData, setMessageData } = useContext(MessageContext);
 
      const retrieveMessages = useCallback(
           (id, type) => () => {
@@ -17,6 +17,9 @@ const Sidebar = () => {
           },
           [setMessageData],
      );
+     const handleImageError = (e) => {
+          e.target.src = "https://avatars.githubusercontent.com/u/47702913";
+     };
 
      const handleKeyDown = useCallback(
           (id, type) => (event) => {
@@ -34,6 +37,10 @@ const Sidebar = () => {
           }
      }, [data]);
 
+     useEffect(() => {
+          refetch();
+     }, [messageData, refetch]);
+
      if (loading) {
           return <div>Loading...</div>;
      }
@@ -47,7 +54,7 @@ const Sidebar = () => {
           titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2 font-PressStart2P text-md",
           typography: "font-bold  text-lg ",
           outerContainer:
-               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]", // bg-gradient-to-tr from-green-100 to-blue-900
+               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]", 
           groupContainers:
                " custom-scrollbar flex-grow  flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5 shadow-lg",
           channelGroup:
@@ -86,6 +93,7 @@ const Sidebar = () => {
                                                   alt="user 1"
                                                   className={style.avatar}
                                                   src={channel.image}
+                                                  onError={handleImageError}
                                              />
                                              <Typography key={channel.id} className={style.typography}>
                                                   {channel.name}
@@ -127,10 +135,11 @@ const Sidebar = () => {
                                                                                      style.conversationMember)
                                                                                 }
                                                                                 src={member.image}
+                                                                                onError={handleImageError}
                                                                            />
                                                                       </Tooltip>
                                                                  </div>
-                                                      ))}
+                                                            ))}
                                                   </div>
                                              </div>
                                         </div>

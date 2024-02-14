@@ -63,3 +63,15 @@ export const ADD_MESSAGE = gql`
           }
      }
 `;
+
+export const ADD_CHANNEL_MEMBER = gql`
+     mutation AddChannelMember($channelId: ID!) {
+          addChannelMember(channelId: $channelId) {
+               _id
+               name
+               members {
+                    _id
+               }
+          }
+     }
+`;

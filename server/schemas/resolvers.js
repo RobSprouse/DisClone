@@ -112,6 +112,13 @@ const resolvers = {
                }
                return populatedMessage;
           }),
+          addChannelMember: auth(async (_, { channelId }, { payLoad }) => {
+               const userId = payLoad.data._id;
+               const channel = await Channel.findById(channelId);
+               channel.members.push(userId);
+               await channel.save();
+               return channel;
+          }),
      },
      Subscription: {
           messageAdded: {

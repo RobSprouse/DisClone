@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { GET_ALL_CHANNELS } from "../../utils/queries";
 import { Dialog, DialogBody, Avatar } from "@material-tailwind/react";
 import { MessageContext } from "../../utils/MessageContext.jsx";
+import { ADD_CHANNEL_MEMBER } from "../../utils/mutations.js";
 
 const ChannelList = ({ open, handleOpen }) => {
-     const { loading, error, data } = useQuery(GET_ALL_CHANNELS);
+     const { loading, error, data } = useQuery(GET_ALL_CHANNELS, { fetchPolicy: "network-only" });
+     const [addChannelMember] = useMutation(ADD_CHANNEL_MEMBER, { fetchPolicy: "network-only" });
      const [channels, setChannels] = useState([]);
      const { setMessageData } = useContext(MessageContext);
      const navigate = useNavigate();
@@ -20,6 +22,7 @@ const ChannelList = ({ open, handleOpen }) => {
      const handleAddChannel = async (channelId) => {
           try {
                navigate("/");
+               addChannelMember({ variables: { channelId } });
                setMessageData({ id: channelId, type: "channel" });
                handleOpen(); // Close the dialog
           } catch (error) {
