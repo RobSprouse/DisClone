@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config(); // COMMENT: loads environment variables from a .env file into process.env
 
-const secret = "disclone"; // FIXME: change to process.env.TOKEN_SECRET in production and make sure to set it in the .env file
+const secret = process.env.TOKEN_SECRET; // COMMENT: sets the secret key for the tokens
 const accessExpiration = "15m"; // COMMENT: 15 minutes
 const refreshExpiration = "7d"; // COMMENT: 7 days
 let consoleLogCount = 0;
@@ -34,11 +34,9 @@ function signToken({ username, email, _id }, res) {
           httpOnly: false, // make it accessible from JavaScript
           secure: process.env.NODE_ENV === "production", // use HTTPS in production
           sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // 'none' for cross-origin, 'lax' for same-origin
-          maxAge: 1000 * 60 * 60 * 24 * 7, // 1000 * 60 * 15,  15 minutes in milliseconds // FIXME: change to 15 minutes in production
+          maxAge: 1000 * 60 * 15,  
      });
 
-     // console.log("New Access token set in cookie");
-     // console.log("New Refresh token set in cookie");
 
      return { accessToken };
 }
