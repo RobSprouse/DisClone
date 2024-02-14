@@ -60,19 +60,20 @@ function LoginForm() {
                <div>
                     <div className="backgroundImage"></div>
                     <div className="zIndex">
-                         <div>
+                         <div className="flex items-center justify-center">
                               <h2
                                    id="typeAnimation"
-                                   className="text-3xl text-center mt-5 text-teal-100 shadow-2xl
+                                   className="text-3xl text-center mb-5 text-teal-100 shadow-2xl lg:text-9xl 2xl:text-9xl 2xl:grid 2xl:place-content-center md:text-7xl
                               "
                               >
                                    <TypeAnimation
+                                        id="animationSize"
                                         sequence={["Welcome to DISCLONE", 2000]}
                                         wrapper="span"
                                         speed={50}
-                                        style={{display: "inline-block" }}
+                                        style={{ display: "inline-block" }}
                                         repeat={0}
-                                        className="zIndex font-PressStart2P "
+                                        className="zIndex font-PressStart2P  text"
                                    />
                               </h2>
                          </div>

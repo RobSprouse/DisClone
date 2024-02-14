@@ -34,7 +34,6 @@ body {
      }
 }
 
-
 .rootDiv {
      display: flex;
      flex-direction: column;
@@ -42,7 +41,6 @@ body {
      min-height: 100vh;
      min-width: 100%;
 }
-
 
 @media screen and (min-width: 1440px) {
      .appDiv {
@@ -63,5 +61,10 @@ body {
 
      .appDiv {
           margin: 2% 5%;
+     }
+}
+@media screen and (max-width: 1513px) {
+     #animationSize {
+          font-size: .1rem;
      }
 }

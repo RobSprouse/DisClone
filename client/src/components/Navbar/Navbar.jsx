@@ -142,7 +142,7 @@ export default function NavigationBar() {
 
      return (
           <>
-               <nav className="flex flex-row justify-between gap-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100 font-PressStart2P">
+               <nav id="navbar" className="flex flex-row justify-between gap-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100 font-PressStart2P">
                     <div>
                          <Link
                               to="/"

@@ -47,19 +47,19 @@ const AddChannel = () => {
     };
   
     return (
-      <div>
+      <div className="h-screen">
         <h1 className="text-3xl text-center mt-5 dark:text-teal-100">Add Channel</h1>
         <div className="flex justify-center ">
         <button className="text-xl dark:text-teal-100 px-4 py-2 rounded-xl hover:bg-sky-800 dark:hover:bg-sky-800" onClick={openModal}>Create Channel</button>
         </div>
         {showModal && (
           <div className="modal-overlay">
-            <div className="modal">
+            <div className="modal bg-teal-100 dark:bg-sky-900">
               <button className="exit-button" onClick={closeModal}>
                 &times;
               </button>
-              <h2 className="text-center">Add Channel</h2>
-              <form onSubmit={handleSubmit}>
+              <h2 className="text-center dark:text-teal-100">Add Channel</h2>
+              <form onSubmit={handleSubmit} className="bg-teal-100 dark:bg-sky-900 dark:text-teal-100">
                 <label>
                   Name:
                   <input type="text" value={name} onChange={handleNameChange} placeholder="Enter Channel Name" />
