@@ -14,16 +14,22 @@
 .zIndex {
      position: relative;
      z-index: 1;
+     font-size: 3rem;
 }
-/* #typeAnimation {
+#typeAnimation {
      text-shadow:
-          0 0 5px #ffa500,
-          0 0 15px #ffa500,
-          0 0 20px #ffa500,
-          0 0 40px #ffa500,
-          0 0 60px #ff0000,
-          0 0 10px #ff8d00,
-          0 0 98px #ff0000;
-     color: #fff6a9;
+          0 0 5px #06B6D4,
+          0 0 15px #06B6D4,
+          0 0 20px #06B6D4,
+          0 0 40px #06B6D4,
+          0 0 60px #0E7490,
+          0 0 10px #06B6D4,
+          0 0 98px #0E7490;
+     color: #CCFBF1;
      font-family: "Press Start 2P";
-} */
+}
+@media screen and (max-width: 904px) {
+     .zIndex {
+          font-size: 1.7rem;
+     }
+}

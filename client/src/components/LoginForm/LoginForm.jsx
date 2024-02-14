@@ -61,15 +61,18 @@ function LoginForm() {
                     <div className="backgroundImage"></div>
                     <div className="zIndex">
                          <div>
-                              <h2 id="typeAnimstion" className="text-3xl text-center mt-5 text-teal-100 text-shadow-[0_4px_8px_var(--tw-shadow-color)] shadow-light-blue-100 font-outline-2
-                              ">
+                              <h2
+                                   id="typeAnimation"
+                                   className="text-3xl text-center mt-5 text-teal-100 
+                              "
+                              >
                                    <TypeAnimation
                                         sequence={["Welcome to DISCLONE", 2000]}
                                         wrapper="span"
                                         speed={50}
-                                        style={{ fontSize: "1em", display: "inline-block" }}
+                                        style={{display: "inline-block" }}
                                         repeat={0}
-                                        className="zIndex font-PressStart2P"
+                                        className="zIndex font-PressStart2P  "
                                    />
                               </h2>
                          </div>
@@ -125,9 +128,7 @@ function LoginForm() {
                                              />
                                         </div>
                                         <div className="flex justify-center">
-                                             <Button 
-                                             className="hover:animate-pulse"
-                                             type="submit" size="lg">
+                                             <Button className="hover:animate-pulse" type="submit" size="lg">
                                                   Log In
                                              </Button>
                                         </div>

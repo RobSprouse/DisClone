@@ -27,9 +27,10 @@ body {
 }
 @layer base {
      .font-outline-2 {
-       -webkit-text-stroke: .3px teal;
+          -webkit-text-stroke: 0.3px black;
      }
      .font-outline-4 {
-       -webkit-text-stroke: 4px teal;
+          -webkit-text-stroke: 4px teal;
      }
-   }
+}
+
