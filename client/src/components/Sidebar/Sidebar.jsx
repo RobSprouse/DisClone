@@ -1,15 +1,62 @@
 import { useEffect, useState, useCallback, useContext } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useSubscription } from "@apollo/client";
 import { GET_USER } from "../../utils/queries";
-import { Typography, Avatar, Tooltip } from "@material-tailwind/react";
+import { Typography, Avatar, Tooltip, Badge } from "@material-tailwind/react";
 import "./sidebar.css";
 import { MessageContext } from "../../utils/MessageContext.jsx";
+import MESSAGE_ADDED from "../../utils/subscriptions";
 
+function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
+     const { data: subscriptionData } = useSubscription(MESSAGE_ADDED, {
+          variables: { channelId },
+     });
+
+     useEffect(() => {
+          if (subscriptionData?.messageAdded) {
+               console.log(subscriptionData);
+               console.log("subscribe to channel", channelId);
+               // Check if the new message was sent by the current user
+               if (subscriptionData.messageAdded.user._id === currentUserId) {
+                    // If so, return without notifying
+                    return;
+               }
+               // Handle the new message data here
+               // You might want to add it to your messageData context
+               // Notify parent component of new message
+               onNewMessage(channelId);
+          }
+     }, [subscriptionData, channelId, onNewMessage, currentUserId]);
+
+     // Render nothing
+     return null;
+}
 const Sidebar = () => {
      const [user, setUser] = useState(null);
      const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "network-only" });
 
      const { messageData, setMessageData } = useContext(MessageContext);
+
+     // State to track new messages by channel ID
+     const [newMessages, setNewMessages] = useState({});
+
+     // Callback to handle new messages
+     const handleNewMessage = useCallback((channelId) => {
+          setNewMessages((prev) => ({ ...prev, [channelId]: true }));
+     }, []);
+
+     // Callback to clear new message notification
+     const clearNewMessage = useCallback((channelId) => {
+          setNewMessages((prev) => {
+               const newMessages = { ...prev };
+               // Clear all channels except the one that was clicked
+               for (let id in newMessages) {
+                    if (id !== channelId) {
+                         newMessages[id] = false;
+                    }
+               }
+               return newMessages;
+          });
+     }, []);
 
      const retrieveMessages = useCallback(
           (id, type) => () => {
@@ -54,7 +101,7 @@ const Sidebar = () => {
           titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2 font-PressStart2P text-md",
           typography: "font-bold  text-lg ",
           outerContainer:
-               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]", 
+               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]",
           groupContainers:
                " custom-scrollbar flex-grow  flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5 shadow-lg",
           channelGroup:
@@ -82,7 +129,10 @@ const Sidebar = () => {
                                         <div
                                              className={style.channelGroup}
                                              key={channel._id}
-                                             onClick={retrieveMessages(channel._id, "channel")}
+                                             onClick={() => {
+                                                  retrieveMessages(channel._id, "channel")();
+                                                  clearNewMessage(channel._id);
+                                             }}
                                              onKeyDown={handleKeyDown(channel._id, "channel")}
                                              role="button"
                                              tabIndex={0}
@@ -95,11 +145,22 @@ const Sidebar = () => {
                                                   src={channel.image}
                                                   onError={handleImageError}
                                              />
+                                             {/* Render badge if new message has arrived */}
+                                             {newMessages[channel._id] && <Badge color="red" content="New" />}
                                              <Typography key={channel.id} className={style.typography}>
                                                   {channel.name}
                                              </Typography>
                                         </div>
                                    ))}
+                                   {data &&
+                                        data.user.channels.map((channel) => (
+                                             <ChannelSubscription
+                                                  key={channel._id}
+                                                  channelId={channel._id}
+                                                  onNewMessage={handleNewMessage}
+                                                  currentUserId={user._id.toString()} // Pass the userId of the current user
+                                             />
+                                        ))}
                               </div>
                          </div>
 
