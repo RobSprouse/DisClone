@@ -132,7 +132,7 @@ export default function NavigationBar() {
                                    <Link to="/users" className="font-medium px-4 py-2 rounded-lg hover:bg-sky-800 ">
                                         Users
                                    </Link>
-                                   <Link to="/add-channel" onClick={handleAddChannel} className="font-medium  px-4 py-2 rounded-lg hover:bg-blue-700">
+                                   <Link to="/add-channel" onClick={handleAddChannel} className="font-medium  px-4 py-2 rounded-lg hover:bg-sky-800">
                                     Add Channel
                                    </Link>
 

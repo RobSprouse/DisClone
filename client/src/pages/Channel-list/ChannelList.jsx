@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { GET_ALL_CHANNELS } from "../../utils/queries";
+import { Button } from "@material-tailwind/react";
 
 const ChannelList = () => {
      const { loading, error, data } = useQuery(GET_ALL_CHANNELS);
@@ -46,8 +47,11 @@ const ChannelList = () => {
                                    <p className={style.channelName}>{channel.name}</p>
                                    <img className={style.channelImage} src={channel.image} alt={channel.name} />
                               </div>
-                              <button onClick={() => handleAddChannel(channel._id, { key: "value" })}>
-                              </button>
+                              <div className=" text-2xl text-align-center mt-5 dark:text-teal-100 px-4 py-2 rounded-xl hover:bg-sky-800 dark:hover:bg-sky-800">
+                              <Button onClick={() => handleAddChannel(channel._id, { key: "value" })}>
+                                   Enter Channel
+                              </Button>
+                              </div>
                          </li>
                     ))}
                </ul>
