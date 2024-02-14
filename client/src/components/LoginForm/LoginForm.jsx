@@ -61,31 +61,32 @@ function LoginForm() {
                     <div className="backgroundImage"></div>
                     <div className="zIndex">
                          <div>
-                              <h2 className="text-3xl text-center mt-5 text-teal-100">
+                              <h2 id="typeAnimstion" className="text-3xl text-center mt-5 text-teal-100 text-shadow-[0_4px_8px_var(--tw-shadow-color)] shadow-light-blue-100 font-outline-2
+                              ">
                                    <TypeAnimation
                                         sequence={["Welcome to DISCLONE", 2000]}
                                         wrapper="span"
                                         speed={50}
                                         style={{ fontSize: "1em", display: "inline-block" }}
                                         repeat={0}
-                                        className="zIndex"
+                                        className="zIndex font-PressStart2P"
                                    />
                               </h2>
                          </div>
                          <div className="flex items-center justify-center mt-10">
                               <Card color="transparent" shadow={false}>
-                                   <Typography variant="h4" color="blue-gray" className="text-cyan-100 text-center">
+                                   <Typography variant="h3" color="blue-gray" className="text-teal-100 text-center">
                                         Log In
                                    </Typography>
                                    <Typography
                                         color="gray"
-                                        className="mt-10 font-normal text-cyan-100 shadow-2xl shadow-cyan-300 text-center"
+                                        className="mt-10 font-normal text-teal-100 shadow-2xl shadow-teal-100 text-center"
                                    >
                                         Nice to meet you! Enter your details to register.
                                    </Typography>
                                    <form
                                         onSubmit={handleSubmit}
-                                        className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-cyan-100 shadow-2xl shadow-cyan-300 rounded-3xl"
+                                        className="mt-10 mb-2 w-80 max-w-screen-lg sm:w-96 bg-teal-100 shadow-2xl shadow-cyan-300 rounded-3xl"
                                    >
                                         <div className="mb-1 flex flex-col gap-5 p-5 ">
                                              <Typography variant="h6" color="blue-gray" className="-mb-3">
@@ -98,7 +99,7 @@ function LoginForm() {
                                                   onChange={handleInputChange}
                                                   required
                                                   size="lg"
-                                                  placeholder="name@mail.com"
+                                                  placeholder="username"
                                                   autoComplete="username"
                                                   className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                                                   labelProps={{
@@ -124,7 +125,9 @@ function LoginForm() {
                                              />
                                         </div>
                                         <div className="flex justify-center">
-                                             <Button type="submit"  size="lg">
+                                             <Button 
+                                             className="hover:animate-pulse"
+                                             type="submit" size="lg">
                                                   Log In
                                              </Button>
                                         </div>

@@ -25,3 +25,11 @@ body {
      display: flex;
      flex-direction: column;
 }
+@layer base {
+     .font-outline-2 {
+       -webkit-text-stroke: .3px teal;
+     }
+     .font-outline-4 {
+       -webkit-text-stroke: 4px teal;
+     }
+   }
