@@ -108,6 +108,21 @@ async function seedData() {
           }
      }
 
+     for (let i = 0; i < conversations.length; i++) {
+          const numMessages = Math.floor(Math.random() * 51) + 50;
+          for (let j = 0; j < numMessages; j++) {
+               const message = new Message({
+                    text: faker.lorem.sentence(),
+                    userId: conversations[i].members[j % conversations[i].members.length],
+                    conversationId: conversations[i]._id,
+                    timestamp: faker.date.recent(),
+               });
+               await message.save();
+               conversations[i].messages.push(message._id);
+               await conversations[i].save();
+          }
+     }
+
      console.log("Data seeded successfully!");
      process.exit(0);
 }
