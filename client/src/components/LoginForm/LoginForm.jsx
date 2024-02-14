@@ -63,7 +63,7 @@ function LoginForm() {
                          <div>
                               <h2
                                    id="typeAnimation"
-                                   className="text-3xl text-center mt-5 text-teal-100 
+                                   className="text-3xl text-center mt-5 text-teal-100 shadow-2xl
                               "
                               >
                                    <TypeAnimation
@@ -72,7 +72,7 @@ function LoginForm() {
                                         speed={50}
                                         style={{display: "inline-block" }}
                                         repeat={0}
-                                        className="zIndex font-PressStart2P  "
+                                        className="zIndex font-PressStart2P "
                                    />
                               </h2>
                          </div>
