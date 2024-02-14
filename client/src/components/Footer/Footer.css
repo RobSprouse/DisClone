@@ -1,3 +1,14 @@
 footer {
      background-color: rgb(102, 100, 100);
 }
+
+@keyframes bounce {
+     0% { transform: translateY(0); }
+     50% { transform: translateY(-5px); }
+     100% { transform: translateY(0); }
+ }
+ 
+ .bouncing-icons {
+     animation: bounce 1s infinite;
+ }
+ 

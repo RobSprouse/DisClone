@@ -7,13 +7,13 @@ function Footer() {
           gap-5">
                <p>Created by: </p>
                <a href="https://github.com/RobSprouse" target="_blank" rel="noopener noreferrer">
-                    <IoLogoGithub className="size-6" />
+                    <IoLogoGithub className="size-6 bouncing-icons" />
                </a>
                <a href="https://github.com/underwoodjo" target="_blank" rel="noopener noreferrer">
-                    <IoLogoGithub className="size-6" />
+                    <IoLogoGithub className="size-6 bouncing-icons" />
                </a>
-               <a href="https://github.com/RobSprouse" target="_blank" rel="noopener noreferrer">
-                    <IoLogoGithub className="size-6" />
+               <a href="https://github.com/Devon2731" target="_blank" rel="noopener noreferrer">
+                    <IoLogoGithub className="size-6 bouncing-icons" />
                </a>
                
           </footer>
