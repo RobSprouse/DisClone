@@ -50,13 +50,15 @@ function ProfileMenu() {
                <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
                     <MenuHandler>
                          <Button variant="text" color="blue-gray" className="flex items-center gap-1 rounded-full ">
-                              <Avatar
-                                   variant="circular"
-                                   size="sm"
-                                   alt="tania andrew"
-                                   className="border border-gray-900 p-0.2"
-                                   src={data.user.image}
-                              />
+                              <div id="avatar" className="min-w-[40px]">
+                                   <Avatar
+                                        variant="circular"
+                                        size="sm"
+                                        alt="tania andrew"
+                                        className="border border-gray-900 p-0.2 md:size-8 sm:size-7 xs:size-6 "
+                                        src={data.user.image}
+                                   />
+                              </div>
                               <ChevronDownIcon
                                    strokeWidth={2.5}
                                    className={`h-3 w-3 transition-transform ${isMenuOpen ? "rotate-180" : ""}`}
@@ -119,23 +121,37 @@ export default function NavigationBar() {
 
      return (
           <>
-               <nav className="flex p-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100 font-PressStart2P text-md">
-                    <Link to="/" className="py-1.5 text-3xl ml-5">
-                         Disclone
-                    </Link>
+               <nav className="flex flex-row justify-between gap-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100 font-PressStart2P">
+                    <div>
+                         <Link
+                              to="/"
+                              className="py-1.5 2xl:text-3xl xl:text-2xl lg:text-2xl md:text-2xl sm:text-lg ml-5 flex"
+                         >
+                              Disclone
+                         </Link>
+                    </div>
                     {accessToken && (
                          <>
-                              <div className="flex justify-center gap-5 mt-1">
-                                   <Link to="/channels" className="text-sm px-4 py-2 rounded-lg hover:bg-sky-800">
+                              <div className="flex flex-row gap-3 mt-1">
+                                   <Link
+                                        to="/channels"
+                                        className="text-sm px-4 py-2 ml-5 rounded-lg hover:bg-sky-800 2xl:text-md xl:text-md lg:text-xs md:text-xs sm:text-xs"
+                                   >
                                         List of Channels
                                    </Link>
-                                   <Link to="/users" className="text-sm px-4 py-2 rounded-lg hover:bg-sky-800 ">
+                                   <Link
+                                        to="/users"
+                                        className="text-sm px-4 py-2 rounded-lg hover:bg-sky-800 2xl:text-md xl:text-md lg:text-xs md:text-xs sm:text-xs"
+                                   >
                                         Users
                                    </Link>
-                                   <Link to="/add-channel" onClick={handleAddChannel} className="text-sm  px-4 py-2 rounded-lg hover:bg-sky-800">
-                                    Add Channel
+                                   <Link
+                                        to="/add-channel"
+                                        onClick={handleAddChannel}
+                                        className="text-sm  px-4 py-2 rounded-lg hover:bg-sky-800 2xl:text-md xl:text-md lg:text-xs md:text-xs sm:text-xs"
+                                   >
+                                        Add Channel
                                    </Link>
-
                               </div>
                               <HiOutlineLightBulb
                                    className="size-6 cursor-pointer"
