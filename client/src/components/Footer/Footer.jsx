@@ -1,7 +1,7 @@
 import "./Footer.css";
 function Footer() {
      return (
-          <footer className="bg-teal-100 rounded-lg dark:bg-sky-950 dark:text-teal-100">
+          <footer className="bg-teal-100 rounded-lg dark:bg-sky-950 dark:text-teal-100 mt-4">
                <p className="ml-5">Footer</p>
           </footer>
      );

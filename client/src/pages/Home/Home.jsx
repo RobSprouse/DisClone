@@ -7,11 +7,9 @@ import "./home.css";
 import { MessageProvider } from "../../utils/MessageContext.jsx";
 
 const Home = () => {
-
-     
      return (
           <MessageProvider>
-               <div className="flex flex-row flew-grow shrink-0 max-h-[81vh] min-h-[1000px] ">
+               <div className="flex flex-row max-h-[90vh]">
                     <Sidebar />
                     <Messages />
                </div>
