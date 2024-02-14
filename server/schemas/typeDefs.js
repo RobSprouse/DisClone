@@ -74,10 +74,11 @@ const typeDefs = gql`
           logout: Boolean!
           addChannel(name: String!, image: String): Channel
           addMessage(text: String!, id: ID!, type: String!): Message!
+          addChannelMember(channelId: ID!): Channel
      }
 
      type Subscription {
-          messageAdded(channelId: ID!, conversationId: ID!): Message!
+          messageAdded(channelId: ID, conversationId: ID): Message!
      }
 `;
 

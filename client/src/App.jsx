@@ -8,6 +8,7 @@ import AccessTokenContext from "./utils/AccessTokenContext";
 import NavigationBar from "./components/Navbar/Navbar.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import { REFRESH_TOKEN_QUERY } from "./utils/queries.js";
+import { MessageProvider } from "./utils/MessageContext.jsx";
 
 import "./app.css";
 
@@ -47,16 +48,18 @@ function App() {
           <ApolloProvider client={client}>
                <AccessTokenContext.Provider value={contextValue}>
                     <React.StrictMode>
-                         <ThemeProvider>
-                              <div className="flex flex-row justify-center dark:bg-slate-950 rootDiv">
-                                   <div className="flex flex-col appDiv">
-                                        <NavigationBar />
-                                        <Outlet />
-                                        <Footer />
-                                        <RefreshTokenComponent />
+                         <MessageProvider>
+                              <ThemeProvider>
+                                   <div className="flex flex-row justify-center dark:bg-slate-950 rootDiv">
+                                        <div className="flex flex-col appDiv">
+                                             <NavigationBar />
+                                             <Outlet />
+                                             <Footer />
+                                             <RefreshTokenComponent />
+                                        </div>
                                    </div>
-                              </div>
-                         </ThemeProvider>
+                              </ThemeProvider>
+                         </MessageProvider>
                     </React.StrictMode>
                </AccessTokenContext.Provider>
           </ApolloProvider>

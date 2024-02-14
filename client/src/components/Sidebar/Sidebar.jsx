@@ -1,15 +1,66 @@
 import { useEffect, useState, useCallback, useContext } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery, useSubscription } from "@apollo/client";
 import { GET_USER } from "../../utils/queries";
-import { Typography, Avatar, Tooltip } from "@material-tailwind/react";
+import { Typography, Avatar, Tooltip, Badge } from "@material-tailwind/react";
 import "./sidebar.css";
 import { MessageContext } from "../../utils/MessageContext.jsx";
+import MESSAGE_ADDED from "../../utils/subscriptions";
 
+function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
+     // COMMENT: ChannelSubscription
+     const { data: subscriptionData } = useSubscription(MESSAGE_ADDED, {
+          variables: { channelId },
+     });
+     const { messageData, setMessageData } = useContext(MessageContext);
+     useEffect(() => {
+          if (subscriptionData?.messageAdded) {
+               // console.log(subscriptionData);
+               // console.log("subscribe to channel", channelId);
+               // Check if the new message was sent by the current user
+               if (subscriptionData.messageAdded.user._id === currentUserId) {
+                    // If so, return without notifying
+                    return;
+               }
+               // setMessageData({ id: channelId, type: "channel" });
+               // Handle the new message data here
+               // You might want to add it to your messageData context
+               // Notify parent component of new message
+               onNewMessage(channelId);
+          }
+     }, [subscriptionData, channelId, onNewMessage, currentUserId]);
+
+     // Render nothing
+     return null;
+}
 const Sidebar = () => {
      const [user, setUser] = useState(null);
-     const { loading, error, data } = useQuery(GET_USER);
+     const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "network-only" });
 
-     const { setMessageData } = useContext(MessageContext);
+     const { messageData, setMessageData } = useContext(MessageContext);
+
+     // State to track new messages by channel ID
+     const [newMessages, setNewMessages] = useState({});
+
+     const handleNewMessage = useCallback(
+          // COMMENT: Handle new message
+          (channelId) => {
+               refetch(); // Refetch the data
+               setNewMessages((prev) => {
+                    const count = prev[channelId] ? prev[channelId] + 1 : 1;
+                    return { ...prev, [channelId]: count };
+               });
+          },
+          [refetch],
+     );
+
+     // Callback to clear new message notification
+     const clearNewMessage = useCallback((channelId) => {
+          setNewMessages((prev) => {
+               const newMessages = { ...prev };
+               delete newMessages[channelId];
+               return newMessages;
+          });
+     }, []);
 
      const retrieveMessages = useCallback(
           (id, type) => () => {
@@ -17,6 +68,9 @@ const Sidebar = () => {
           },
           [setMessageData],
      );
+     const handleImageError = (e) => {
+          e.target.src = "https://avatars.githubusercontent.com/u/47702913";
+     };
 
      const handleKeyDown = useCallback(
           (id, type) => (event) => {
@@ -34,6 +88,10 @@ const Sidebar = () => {
           }
      }, [data]);
 
+     useEffect(() => {
+          refetch();
+     }, [messageData, refetch]);
+
      if (loading) {
           return <div>Loading...</div>;
      }
@@ -47,7 +105,7 @@ const Sidebar = () => {
           titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2 font-PressStart2P text-md",
           typography: "font-bold  text-lg ",
           outerContainer:
-               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]", // bg-gradient-to-tr from-green-100 to-blue-900
+               "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]",
           groupContainers:
                " custom-scrollbar flex-grow  flex flex-col w-11/12 rounded-lg overflow-y-scroll overflow-hidden p-2 mt-1 pb-5 shadow-lg",
           channelGroup:
@@ -75,23 +133,45 @@ const Sidebar = () => {
                                         <div
                                              className={style.channelGroup}
                                              key={channel._id}
-                                             onClick={retrieveMessages(channel._id, "channel")}
+                                             onClick={() => {
+                                                  // COMMENT: On click
+                                                  retrieveMessages(channel._id, "channel")();
+                                                  clearNewMessage(channel._id);
+                                             }}
                                              onKeyDown={handleKeyDown(channel._id, "channel")}
                                              role="button"
                                              tabIndex={0}
                                         >
-                                             <Avatar
-                                                  key={channel._id}
-                                                  variant="circular"
-                                                  alt="user 1"
-                                                  className={style.avatar}
-                                                  src={channel.image}
-                                             />
-                                             <Typography key={channel.id} className={style.typography}>
-                                                  {channel.name}
-                                             </Typography>
+                                             <>
+                                                  <Avatar
+                                                       variant="circular"
+                                                       alt={channel.name}
+                                                       className={style.avatar}
+                                                       src={channel.image}
+                                                       onError={handleImageError}
+                                                  />
+                                                  {newMessages[channel._id] && (
+                                                       <Badge
+                                                            color="red"
+                                                            content={newMessages[channel._id]}
+                                                            placement="top "
+                                                            className="p-1 animate-pulse absolute -top-4 right-2 "
+                                                       />
+                                                  )}
+                                             </>
+
+                                             <Typography className={style.typography}>{channel.name}</Typography>
                                         </div>
                                    ))}
+                                   {data &&
+                                        data.user.channels.map((channel) => (
+                                             <ChannelSubscription
+                                                  key={channel._id}
+                                                  channelId={channel._id}
+                                                  onNewMessage={handleNewMessage}
+                                                  currentUserId={user._id.toString()} // Pass the userId of the current user
+                                             />
+                                        ))}
                               </div>
                          </div>
 
@@ -106,8 +186,8 @@ const Sidebar = () => {
                                              role="button"
                                              tabIndex={0}
                                         >
-                                             <div key={conversation._id} className={style.groupedAvatars}>
-                                                  <div key={conversation._id} className={style.overlappedAvatars}>
+                                             <div className={style.groupedAvatars}>
+                                                  <div className={style.overlappedAvatars}>
                                                        {conversation.members
                                                             .filter((member) => member._id !== user._id)
                                                             .map((member, index) => (
@@ -127,6 +207,7 @@ const Sidebar = () => {
                                                                                      style.conversationMember)
                                                                                 }
                                                                                 src={member.image}
+                                                                                onError={handleImageError}
                                                                            />
                                                                       </Tooltip>
                                                                  </div>

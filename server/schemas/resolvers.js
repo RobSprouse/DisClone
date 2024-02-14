@@ -112,17 +112,35 @@ const resolvers = {
                }
                return populatedMessage;
           }),
+          addChannelMember: auth(async (_, { channelId }, { payLoad }) => {
+               const userId = payLoad.data._id;
+               const channel = await Channel.findById(channelId);
+               channel.members.push(userId);
+               await channel.save();
+               return channel;
+          }),
      },
      Subscription: {
           messageAdded: {
                subscribe: withFilter(
                     () => pubsub.asyncIterator("MESSAGE_ADDED"),
                     (payload, variables) => {
-                         console.log("Filtering MESSAGE_ADDED with payload:", payload, "and variables:", variables);
-                         return (
-                              payload.messageAdded.channelId === variables.channelId ||
-                              payload.messageAdded.conversationId === variables.conversationId
-                         );
+                         const shouldSendUpdate =
+                              (variables.channelId &&
+                                   payload.messageAdded.channelId.toString() === variables.channelId) ||
+                              (variables.conversationId &&
+                                   payload.messageAdded.conversationId.toString() === variables.conversationId);
+
+                         if (shouldSendUpdate) {
+                              console.log(
+                                   "Sending MESSAGE_ADDED update with payload:",
+                                   payload,
+                                   "and variables:",
+                                   variables,
+                              );
+                         }
+
+                         return shouldSendUpdate;
                     },
                ),
           },
