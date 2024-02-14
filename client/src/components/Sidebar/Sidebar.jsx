@@ -7,10 +7,11 @@ import { MessageContext } from "../../utils/MessageContext.jsx";
 import MESSAGE_ADDED from "../../utils/subscriptions";
 
 function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
+     // COMMENT: ChannelSubscription
      const { data: subscriptionData } = useSubscription(MESSAGE_ADDED, {
           variables: { channelId },
      });
-
+     const { messageData, setMessageData } = useContext(MessageContext);
      useEffect(() => {
           if (subscriptionData?.messageAdded) {
                // console.log(subscriptionData);
@@ -20,7 +21,7 @@ function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
                     // If so, return without notifying
                     return;
                }
-               
+               // setMessageData({ id: channelId, type: "channel" });
                // Handle the new message data here
                // You might want to add it to your messageData context
                // Notify parent component of new message
@@ -41,14 +42,13 @@ const Sidebar = () => {
      const [newMessages, setNewMessages] = useState({});
 
      const handleNewMessage = useCallback(
+          // COMMENT: Handle new message
           (channelId) => {
+               refetch(); // Refetch the data
                setNewMessages((prev) => {
                     const count = prev[channelId] ? prev[channelId] + 1 : 1;
                     return { ...prev, [channelId]: count };
                });
-
-          // TODO: how can i set the messageData here if the channel id is of the channel that was last clicked on?
-               refetch(); // Refetch the data
           },
           [refetch],
      );
@@ -134,6 +134,7 @@ const Sidebar = () => {
                                              className={style.channelGroup}
                                              key={channel._id}
                                              onClick={() => {
+                                                  // COMMENT: On click
                                                   retrieveMessages(channel._id, "channel")();
                                                   clearNewMessage(channel._id);
                                              }}
@@ -155,8 +156,6 @@ const Sidebar = () => {
                                                             content={newMessages[channel._id]}
                                                             placement="top "
                                                             className="p-1 animate-pulse absolute -top-4 right-2 "
-                                                            
-                                                            
                                                        />
                                                   )}
                                              </>
