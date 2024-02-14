@@ -119,20 +119,20 @@ export default function NavigationBar() {
 
      return (
           <>
-               <nav className="flex justify-between p-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100">
-                    <Link to="/" className="py-1.5 text-3xl font-bold ml-5">
+               <nav className="flex p-2 rounded-full bg-teal-100 items-center text-blue-gray-900 dark:bg-sky-950 dark:text-teal-100 font-PressStart2P text-md">
+                    <Link to="/" className="py-1.5 text-3xl ml-5">
                          Disclone
                     </Link>
                     {accessToken && (
                          <>
-                              <div className="flex gap-7 mt-1">
-                                   <Link to="/channels" className="font-medium px-4 py-2 rounded-lg hover:bg-sky-800">
+                              <div className="flex justify-center gap-5 mt-1">
+                                   <Link to="/channels" className="text-sm px-4 py-2 rounded-lg hover:bg-sky-800">
                                         List of Channels
                                    </Link>
-                                   <Link to="/users" className="font-medium px-4 py-2 rounded-lg hover:bg-sky-800 ">
+                                   <Link to="/users" className="text-sm px-4 py-2 rounded-lg hover:bg-sky-800 ">
                                         Users
                                    </Link>
-                                   <Link to="/add-channel" onClick={handleAddChannel} className="font-medium  px-4 py-2 rounded-lg hover:bg-sky-800">
+                                   <Link to="/add-channel" onClick={handleAddChannel} className="text-sm  px-4 py-2 rounded-lg hover:bg-sky-800">
                                     Add Channel
                                    </Link>
 

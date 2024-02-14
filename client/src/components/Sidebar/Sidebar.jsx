@@ -44,8 +44,8 @@ const Sidebar = () => {
 
      const style = {
           sidebar: "flex flex-col flex-grow min-w-[250px] max-w-[25%] bg-teal-100 mt-3 pl-3 m-3 pr-3 rounded-lg pb-3 dark:bg-sky-950 dark:text-teal-100 min-h-[89vh] shadow-lg overflow-hidden overflow-y-scroll xCustom-scrollbar",
-          titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2",
-          typography: "font-bold  text-lg  ",
+          titles: "block font-sans text-2xl antialiased font-semibold leading-tight tracking-normal bg-gradient-to-tr from-blue-500 to-green-500 bg-clip-text text-center mb-2 mt-2 font-PressStart2P text-md",
+          typography: "font-bold  text-lg ",
           outerContainer:
                "flex flex-col flex-grow bg-gradient-to-tr from-green-100 to-sky-900 rounded-lg items-center overflow-hidden pt-1 pb-2 shadow-inset shadow-2xl inner dark:bg-gradient-to-tr dark:from-sky-950 dark:to-sky-900 min-h-[30%]", // bg-gradient-to-tr from-green-100 to-blue-900
           groupContainers:
