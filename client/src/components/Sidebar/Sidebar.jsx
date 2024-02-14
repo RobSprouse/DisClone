@@ -34,7 +34,7 @@ function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
 }
 const Sidebar = () => {
      const [user, setUser] = useState(null);
-     const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "network-only" });
+     const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "cache-and-network" });
 
      const { messageData, setMessageData } = useContext(MessageContext);
 

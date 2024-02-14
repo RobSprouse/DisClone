@@ -28,7 +28,11 @@ app.use(express.json());
 app.use(cookieParser()); // COMMENT: adds cookie parser
 app.use(
      cors({
-          origin: ["http://localhost:3001", "https://studio.apollographql.com"], // allow requests from both origins // FIXME: change to the production URL when deploying
+          origin: [
+               "http://localhost:3001",
+               "https://studio.apollographql.com",
+               "https://radiant-crag-99170-330c9e6a9c97.herokuapp.com/",
+          ],
           credentials: true,
      }),
 );
@@ -39,13 +43,17 @@ const server = new ApolloServer({
      typeDefs: typeDefs,
      resolvers: resolvers,
      cors: {
-          origin: "http://localhost:3001",
+          origin: [
+               "http://localhost:3001",
+               "https://studio.apollographql.com",
+               "https://radiant-crag-99170-330c9e6a9c97.herokuapp.com/",
+          ],
           credentials: true,
      },
      context: ({ req, res }) => {
           const accessToken = req.accessToken || null;
           const context = { req, res, pubsub };
-          context.payLoad = verifyToken(accessToken); // FIXME:  get rid of and uncomment to implement authentication
+          context.payLoad = verifyToken(accessToken); 
           try {
                if (accessToken) {
                     context.payLoad = verifyToken(accessToken);

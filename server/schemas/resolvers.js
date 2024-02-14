@@ -66,12 +66,10 @@ const resolvers = {
           // COMMENT: login resolver, takes in the username and password and returns the access and refresh tokens
           login: async (_, { username, password }, { res }) => {
                const user = await User.findOne({ username });
-               /* FIXME: uncomment to implement authentication
-                     const valid = user && (await bcrypt.compare(password, user.password));
-      
-                     if (!user || !valid) {
-                          throw new UserInputError("Invalid username or password");
-                     } */
+               const valid = user && (await bcrypt.compare(password, user.password));
+               if (!user || !valid) {
+                    throw new UserInputError("Invalid username or password");
+               }
                const { accessToken } = signToken(user, res);
                return { accessToken };
           },
