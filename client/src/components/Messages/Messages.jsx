@@ -62,7 +62,7 @@ const Messages = () => {
 
      const { loading, error, data } = useQuery(GET_MESSAGES, {
           variables: messageData,
-          fetchPolicy: "cache-and-network",
+          fetchPolicy: "network-only",
           skip: !messageData,
      });
 

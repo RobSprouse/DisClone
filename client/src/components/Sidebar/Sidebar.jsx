@@ -130,7 +130,7 @@ const Sidebar = () => {
                                                                            />
                                                                       </Tooltip>
                                                                  </div>
-                                                            ))}
+                                                      ))}
                                                   </div>
                                              </div>
                                         </div>
