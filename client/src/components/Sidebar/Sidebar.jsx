@@ -13,13 +13,14 @@ function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
 
      useEffect(() => {
           if (subscriptionData?.messageAdded) {
-               console.log(subscriptionData);
-               console.log("subscribe to channel", channelId);
+               // console.log(subscriptionData);
+               // console.log("subscribe to channel", channelId);
                // Check if the new message was sent by the current user
                if (subscriptionData.messageAdded.user._id === currentUserId) {
                     // If so, return without notifying
                     return;
                }
+               
                // Handle the new message data here
                // You might want to add it to your messageData context
                // Notify parent component of new message
@@ -39,21 +40,24 @@ const Sidebar = () => {
      // State to track new messages by channel ID
      const [newMessages, setNewMessages] = useState({});
 
-     // Callback to handle new messages
-     const handleNewMessage = useCallback((channelId) => {
-          setNewMessages((prev) => ({ ...prev, [channelId]: true }));
-     }, []);
+     const handleNewMessage = useCallback(
+          (channelId) => {
+               setNewMessages((prev) => {
+                    const count = prev[channelId] ? prev[channelId] + 1 : 1;
+                    return { ...prev, [channelId]: count };
+               });
+
+          // TODO: how can i set the messageData here if the channel id is of the channel that was last clicked on?
+               refetch(); // Refetch the data
+          },
+          [refetch],
+     );
 
      // Callback to clear new message notification
      const clearNewMessage = useCallback((channelId) => {
           setNewMessages((prev) => {
                const newMessages = { ...prev };
-               // Clear all channels except the one that was clicked
-               for (let id in newMessages) {
-                    if (id !== channelId) {
-                         newMessages[id] = false;
-                    }
-               }
+               delete newMessages[channelId];
                return newMessages;
           });
      }, []);
@@ -137,19 +141,27 @@ const Sidebar = () => {
                                              role="button"
                                              tabIndex={0}
                                         >
-                                             <Avatar
-                                                  key={channel._id}
-                                                  variant="circular"
-                                                  alt="user 1"
-                                                  className={style.avatar}
-                                                  src={channel.image}
-                                                  onError={handleImageError}
-                                             />
-                                             {/* Render badge if new message has arrived */}
-                                             {newMessages[channel._id] && <Badge color="red" content="New" />}
-                                             <Typography key={channel.id} className={style.typography}>
-                                                  {channel.name}
-                                             </Typography>
+                                             <>
+                                                  <Avatar
+                                                       variant="circular"
+                                                       alt={channel.name}
+                                                       className={style.avatar}
+                                                       src={channel.image}
+                                                       onError={handleImageError}
+                                                  />
+                                                  {newMessages[channel._id] && (
+                                                       <Badge
+                                                            color="red"
+                                                            content={newMessages[channel._id]}
+                                                            placement="top "
+                                                            className="p-1 animate-pulse absolute -top-4 right-2 "
+                                                            
+                                                            
+                                                       />
+                                                  )}
+                                             </>
+
+                                             <Typography className={style.typography}>{channel.name}</Typography>
                                         </div>
                                    ))}
                                    {data &&
@@ -175,8 +187,8 @@ const Sidebar = () => {
                                              role="button"
                                              tabIndex={0}
                                         >
-                                             <div key={conversation._id} className={style.groupedAvatars}>
-                                                  <div key={conversation._id} className={style.overlappedAvatars}>
+                                             <div className={style.groupedAvatars}>
+                                                  <div className={style.overlappedAvatars}>
                                                        {conversation.members
                                                             .filter((member) => member._id !== user._id)
                                                             .map((member, index) => (
