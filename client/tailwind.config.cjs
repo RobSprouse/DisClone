@@ -35,6 +35,25 @@ module.exports = withMT({
          
 
           },
+          screens: {
+               'xs': '400px',
+               'sm': '576px',
+               // => @media (min-width: 640px) { ... }
+         
+               'md': '768px',
+               // => @media (min-width: 768px) { ... }
+         
+               'lg': '1024px',
+               // => @media (min-width: 1024px) { ... }
+         
+               'xl': '1280px',
+               // => @media (min-width: 1280px) { ... }
+         
+               '2xl': '1440px',
+               // => @media (min-width: 1536px) { ... }
+               '3xl': '1536px',
+             },
+           },
           extend: {
                textShadow: {
                     sm: '0 1px 2px var(--tw-shadow-color)',
@@ -56,11 +75,10 @@ module.exports = withMT({
                }),
                fontFamily: {
                     'PressStart2P': ['"Press Start 2P"'],
-          },
-          
-         
-          },
      },
+
+     },
+     
      
      plugins: [require("tailwind-scrollbar"),
           plugin(function ({ matchUtilities, theme }) {
