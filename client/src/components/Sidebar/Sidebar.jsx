@@ -32,9 +32,26 @@ function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
      // Render nothing
      return null;
 }
+
+function ConversationSubscription({ conversationId, onNewMessage, currentUserId }) {
+     const { data: subscriptionData } = useSubscription(MESSAGE_ADDED, {
+          variables: { conversationId },
+     });
+     const { messageData, setMessageData } = useContext(MessageContext);
+     useEffect(() => {
+          if (subscriptionData?.messageAdded) {
+               if (subscriptionData.messageAdded.user._id === currentUserId) {
+                    return;
+               }
+               onNewMessage(conversationId);
+          }
+     }, [subscriptionData, conversationId, onNewMessage, currentUserId]);
+
+     return null;
+}
 const Sidebar = () => {
      const [user, setUser] = useState(null);
-     const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "cache-and-network" });
+     const { loading, error, data, refetch } = useQuery(GET_USER, { fetchPolicy: "network-only" });
 
      const { messageData, setMessageData } = useContext(MessageContext);
 
@@ -191,31 +208,51 @@ const Sidebar = () => {
                                                        {conversation.members
                                                             .filter((member) => member._id !== user._id)
                                                             .map((member, index) => (
-                                                                 <div key={index}>
-                                                                      <Tooltip
-                                                                           key={member._id}
-                                                                           content={member.username}
-                                                                           animate={style.tooltip}
-                                                                           className={style.tooltipStyle}
-                                                                      >
-                                                                           <Avatar
+                                                                 <>
+                                                                      <div key={index}>
+                                                                           <Tooltip
                                                                                 key={member._id}
-                                                                                variant="circular"
-                                                                                alt="user 1"
-                                                                                className={
-                                                                                     (style.avatar,
-                                                                                     style.conversationMember)
-                                                                                }
-                                                                                src={member.image}
-                                                                                onError={handleImageError}
+                                                                                content={member.username}
+                                                                                animate={style.tooltip}
+                                                                                className={style.tooltipStyle}
+                                                                           >
+                                                                                <Avatar
+                                                                                     key={member._id}
+                                                                                     variant="circular"
+                                                                                     alt="user 1"
+                                                                                     className={
+                                                                                          (style.avatar,
+                                                                                          style.conversationMember)
+                                                                                     }
+                                                                                     src={member.image}
+                                                                                     onError={handleImageError}
+                                                                                />
+                                                                           </Tooltip>
+                                                                      </div>
+                                                                      {newMessages[conversation._id] && (
+                                                                           <Badge
+                                                                                key={conversation._id}
+                                                                                color="red"
+                                                                                content={newMessages[conversation._id]}
+                                                                                placement="top "
+                                                                                className="p-1 animate-pulse absolute -top-4 right-2 "
                                                                            />
-                                                                      </Tooltip>
-                                                                 </div>
+                                                                      )}
+                                                                 </>
                                                             ))}
                                                   </div>
                                              </div>
                                         </div>
                                    ))}
+                                   {data &&
+                                        data.user.conversations.map((conversation) => (
+                                             <ConversationSubscription
+                                                  key={conversation._id}
+                                                  conversationId={conversation._id}
+                                                  onNewMessage={handleNewMessage}
+                                                  currentUserId={user._id.toString()} // Pass the userId of the current user
+                                             />
+                                        ))}
                               </div>
                          </div>
                     </div>
