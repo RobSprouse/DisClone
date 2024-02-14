@@ -48,11 +48,13 @@ function App() {
                <AccessTokenContext.Provider value={contextValue}>
                     <React.StrictMode>
                          <ThemeProvider>
-                              <div className="flex flex-col dark:bg-slate-950 min-h-screen">
-                                   <NavigationBar />
-                                   <Outlet />
-                                   <Footer />
-                                   <RefreshTokenComponent />
+                              <div className="flex flex-row justify-center dark:bg-slate-950 rootDiv">
+                                   <div className="flex flex-col appDiv">
+                                        <NavigationBar />
+                                        <Outlet />
+                                        <Footer />
+                                        <RefreshTokenComponent />
+                                   </div>
                               </div>
                          </ThemeProvider>
                     </React.StrictMode>
