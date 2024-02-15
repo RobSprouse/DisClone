@@ -104,7 +104,8 @@ const resolvers = {
                const populatedMessage = await Message.findById(message._id).populate("user");
                await Model.findByIdAndUpdate(id, { $push: { messages: message._id } });
                try {
-                    pubsub.publish("MESSAGE_ADDED", { messageAdded: populatedMessage });
+                    // Include the id in the payload when you publish the event
+                    pubsub.publish("MESSAGE_ADDED", { messageAdded: { ...populatedMessage._doc, [key]: id } });
                } catch (error) {
                     console.error("Error publishing message:", error);
                }

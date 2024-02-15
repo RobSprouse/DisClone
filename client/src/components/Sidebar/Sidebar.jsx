@@ -16,15 +16,11 @@ function ChannelSubscription({ channelId, onNewMessage, currentUserId }) {
           if (subscriptionData?.messageAdded) {
                // console.log(subscriptionData);
                // console.log("subscribe to channel", channelId);
-               // Check if the new message was sent by the current user
                if (subscriptionData.messageAdded.user._id === currentUserId) {
                     // If so, return without notifying
                     return;
                }
                // setMessageData({ id: channelId, type: "channel" });
-               // Handle the new message data here
-               // You might want to add it to your messageData context
-               // Notify parent component of new message
                onNewMessage(channelId);
           }
      }, [subscriptionData, channelId, onNewMessage, currentUserId]);
